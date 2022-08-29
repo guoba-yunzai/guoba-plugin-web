@@ -53,7 +53,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ],
     },
     server: {
-      https: true,
+      https: false,
       // Listening on all local IPs
       host: true,
       port: VITE_PORT,
@@ -67,17 +67,24 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       target: 'es2015',
       cssTarget: 'chrome80',
       outDir: OUTPUT_DIR,
-      // minify: 'terser',
+      minify: 'terser',
       /**
        * 当 minify=“minify:'terser'” 解开注释
        * Uncomment when minify="minify:'terser'"
        */
-      // terserOptions: {
-      //   compress: {
-      //     keep_infinity: true,
-      //     drop_console: VITE_DROP_CONSOLE,
-      //   },
-      // },
+      terserOptions: {
+        compress: {
+          keep_infinity: true,
+          drop_console: VITE_DROP_CONSOLE,
+        },
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: `assets/[name].js`,
+          chunkFileNames: `assets/[name].js`,
+          assetFileNames: `assets/[name].[ext]`,
+        },
+      },
       // Turning off brotliSize display can slightly reduce packaging time
       brotliSize: false,
       chunkSizeWarningLimit: 2000,
@@ -102,6 +109,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     plugins: createVitePlugins(viteEnv, isBuild),
 
     optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2020',
+      },
       // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
       include: [
         '@vue/runtime-core',
@@ -110,6 +120,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         'ant-design-vue/es/locale/zh_CN',
         'ant-design-vue/es/locale/en_US',
       ],
+      // exclude: ['vue-demi'],
     },
   };
 };
