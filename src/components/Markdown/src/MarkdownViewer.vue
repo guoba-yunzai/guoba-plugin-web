@@ -12,13 +12,14 @@
     value: { type: String },
     class: { type: String },
   });
+  const emit = defineEmits(['initOk']);
   const viewerRef = ref<ElRef>(null);
   const vditorPreviewRef = ref(null) as Ref<Nullable<VditorPreview>>;
   const { getDarkMode } = useRootSetting();
 
-  function init() {
+  async function init() {
     const viewerEl = unref(viewerRef) as HTMLElement;
-    vditorPreviewRef.value = VditorPreview.preview(viewerEl, props.value, {
+    vditorPreviewRef.value = await VditorPreview.preview(viewerEl, props.value, {
       mode: getTheme(getDarkMode.value, 'content'),
       theme: {
         // 设置内容主题
@@ -29,6 +30,7 @@
         style: getTheme(getDarkMode.value, 'code'),
       },
     });
+    emit('initOk');
   }
   watch(
     () => getDarkMode.value,
