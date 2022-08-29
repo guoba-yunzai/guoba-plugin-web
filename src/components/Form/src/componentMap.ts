@@ -81,3 +81,6 @@ export function del(compName: ComponentType) {
 }
 
 export { componentMap };
+
+import GSelectFriend from '/@/components/Guoba/src/GSelectFriend.vue';
+componentMap.set('GSelectFriend', GSelectFriend);

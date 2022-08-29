@@ -81,6 +81,7 @@ export interface ColEx {
 }
 
 export type ComponentType =
+  | 'GSelectFriend'
   | 'Input'
   | 'InputGroup'
   | 'InputPassword'

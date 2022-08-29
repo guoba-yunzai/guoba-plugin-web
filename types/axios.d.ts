@@ -25,12 +25,14 @@ export interface RequestOptions {
   withToken?: boolean;
   // 请求重试机制
   retryRequest?: RetryRequest;
+  // 【锅巴】是否拼接版本前缀，默认 false
+  joinVersion?: boolean;
 }
 
 export interface RetryRequest {
-  isOpenRetry: boolean;
-  count: number;
-  waitTime: number;
+  isOpenRetry?: boolean;
+  count?: number;
+  waitTime?: number;
 }
 export interface Result<T = any> {
   code: number;
