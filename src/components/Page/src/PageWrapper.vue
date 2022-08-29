@@ -6,6 +6,7 @@
       v-bind="omit($attrs, 'class')"
       ref="headerRef"
       v-if="getShowHeader"
+      style="position: sticky;z-index: 1;top: -60px;box-shadow: 0 0 5px -2px;/* TODO 改为配置 */"
     >
       <template #default>
         <template v-if="content">
@@ -19,7 +20,9 @@
     </PageHeader>
 
     <div class="overflow-hidden" :class="getContentClass" :style="getContentStyle" ref="contentRef">
-      <slot></slot>
+      <a-spin :spinning="loading">
+        <slot></slot>
+      </a-spin>
     </div>
 
     <PageFooter v-if="getShowFooter" ref="footerRef">
@@ -62,6 +65,7 @@
       contentClass: propTypes.string,
       fixedHeight: propTypes.bool,
       upwardSpace: propTypes.oneOfType([propTypes.number, propTypes.string]).def(0),
+      loading: propTypes.bool,
     },
     setup(props, { slots, attrs }) {
       const wrapperRef = ref(null);

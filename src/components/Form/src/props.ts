@@ -5,6 +5,8 @@ import type { TableActionType } from '/@/components/Table';
 import type { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
 import type { RowProps } from 'ant-design-vue/lib/grid/Row';
 import { propTypes } from '/@/utils/propTypes';
+import componentSetting from '/@/settings/componentSetting';
+const { form } = componentSetting;
 
 export const basicProps = {
   model: {
@@ -86,16 +88,22 @@ export const basicProps = {
   // 以下为默认props
   hideRequiredMark: propTypes.bool,
 
-  labelCol: Object as PropType<Partial<ColEx>>,
+  labelCol:{
+    type: Object as PropType<Partial<ColEx>>,
+    default: form.labelCol
+  },
 
   layout: propTypes.oneOf(['horizontal', 'vertical', 'inline']).def('horizontal'),
   tableAction: {
     type: Object as PropType<TableActionType>,
   },
 
-  wrapperCol: Object as PropType<Partial<ColEx>>,
+  wrapperCol: {
+    type:Object as PropType<Partial<ColEx>>,
+    default: form.wrapperCol
+  },
 
-  colon: propTypes.bool,
+  colon: propTypes.bool.def(form.colon),
 
   labelAlign: propTypes.string,
 

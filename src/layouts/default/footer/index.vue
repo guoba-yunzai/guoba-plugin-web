@@ -1,13 +1,20 @@
 <template>
   <Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
     <div :class="`${prefixCls}__links`">
-      <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>
+<!--      <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>-->
+      <a href="https://oicqjs.github.io/oicq/" target="_blank">OICQ文档</a>
 
-      <GithubFilled @click="openWindow(GITHUB_URL)" :class="`${prefixCls}__github`" />
+      <GithubFilled @click="openWindow('https://gitee.com/guoba-yunzai')" :class="`${prefixCls}__github`" />
 
-      <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
+      <a href="https://github.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a>
+<!--      <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>-->
     </div>
-    <div>Copyright &copy;2020 Vben Admin</div>
+    <div :class="`${prefixCls}__links`">
+      <span>Copyright &copy;2022</span> 
+      <a href="https://github.com/zolay-poi" target="_blank"> Zolay-poi </a>
+      <span> & </span>
+      <a href="https://github.com/vbenjs/vue-vben-admin" target="_blank"> Vben Admin </a>
+    </div>
   </Footer>
 </template>
 
@@ -69,14 +76,14 @@
   @hover-color: rgba(0, 0, 0, 0.85);
 
   .@{prefix-cls} {
-    color: @normal-color;
+    color: rgba(0, 0, 0, 0.45);
     text-align: center;
 
     &__links {
       margin-bottom: 8px;
 
       a {
-        color: @normal-color;
+        color: rgba(0, 0, 0, 0.45);
 
         &:hover {
           color: @hover-color;

@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls" class="relative w-full h-full px-4">
-    <div class="flex items-center absolute right-4 top-4">
+    <div v-if="false" class="flex items-center absolute right-4 top-4">
       <AppDarkModeToggle class="enter-x mr-2" v-if="!sessionTimeout" />
       <AppLocalePicker
         class="text-white enter-x xl:text-gray-600"
@@ -20,7 +20,7 @@
           <div class="my-auto">
             <img
               :alt="title"
-              src="../../../assets/svg/login-box-bg.svg"
+              src="../../../assets/images/yunzai-right.png"
               class="w-1/2 -mt-16 -enter-x"
             />
             <div class="mt-10 font-medium text-white -enter-x">
@@ -36,7 +36,12 @@
             :class="`${prefixCls}-form`"
             class="relative w-full px-5 py-8 mx-auto my-auto rounded-md shadow-md xl:ml-16 xl:bg-transparent sm:px-8 xl:p-4 xl:shadow-none sm:w-3/4 lg:w-2/4 xl:w-auto enter-x"
           >
-            <LoginForm />
+            <LoginForm v-if="false" />
+            <a-empty style="margin: 0 auto;">
+              <template #description>
+                请以主人的身份，向你的机器人发送“#锅巴登录”指令进行登录。
+              </template>
+            </a-empty>
             <ForgetPasswordForm />
             <RegisterForm />
             <MobileForm />

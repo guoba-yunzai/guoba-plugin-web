@@ -1,4 +1,4 @@
-import type { Router, RouteRecordRaw } from 'vue-router';
+import type { Router, RouteRecordRaw, RouteRecordName } from 'vue-router';
 
 import { usePermissionStoreWithOut } from '/@/store/modules/permission';
 
@@ -14,6 +14,7 @@ const LOGIN_PATH = PageEnum.BASE_LOGIN;
 const ROOT_PATH = RootRoute.path;
 
 const whitePathList: PageEnum[] = [LOGIN_PATH];
+const whiteNameList: RouteRecordName[] = ['MasterLogin'];
 
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut();
@@ -32,13 +33,13 @@ export function createPermissionGuard(router: Router) {
     const token = userStore.getToken;
 
     // Whitelist can be directly entered
-    if (whitePathList.includes(to.path as PageEnum)) {
+    if (whitePathList.includes(to.path as PageEnum) || whiteNameList.includes(to.name!)) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;
         try {
           await userStore.afterLoginAction();
           if (!isSessionTimeout) {
-            next((to.query?.redirect as string) || '/');
+            next((to.query?.redirect as string) || '/home');
             return;
           }
         } catch {}

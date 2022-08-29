@@ -14,6 +14,7 @@ import { setupStore } from '/@/store';
 import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
+import { registerGuoba } from '/@/components/Guoba';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -29,6 +30,8 @@ async function bootstrap() {
   // Register global components
   // 注册全局组件
   registerGlobComp(app);
+
+  registerGuoba(app);
 
   // Multilingual configuration
   // 多语言配置
