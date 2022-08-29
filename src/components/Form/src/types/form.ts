@@ -142,6 +142,8 @@ export interface FormSchema {
     | ((renderCallbackParams: RenderCallbackParams) => string | string[]);
   // BaseHelp component props
   helpComponentProps?: Partial<HelpComponentProps>;
+  // 底部帮助文本
+  bottomHelpMessage?: string;
   // Label width, if it is passed, the labelCol and WrapperCol configured by itemProps will be invalid
   labelWidth?: string | number;
   // Disable the adjustment of labelWidth with global settings of formModel, and manually set labelCol and wrapperCol by yourself

@@ -40,8 +40,7 @@
   import type { FormActionType, FormProps, FormSchema } from './types/form';
   import type { AdvanceState } from './types/hooks';
   import type { Ref } from 'vue';
-
-  import { defineComponent, reactive, ref, computed, unref, onMounted, watch, nextTick } from 'vue';
+  import { computed, defineComponent, nextTick, onMounted, reactive, ref, unref, watch } from 'vue';
   import { Form, Row } from 'ant-design-vue';
   import FormItem from './components/FormItem.vue';
   import FormAction from './components/FormAction.vue';
@@ -338,6 +337,10 @@
           align-items: center;
         }
       }
+      
+      .bottom-message {
+        color: #bfbfbf;
+      }
     }
 
     .ant-form-explain {
@@ -347,6 +350,16 @@
     &--compact {
       .ant-form-item {
         margin-bottom: 8px !important;
+      }
+    }
+  }
+
+  [data-theme='dark'] {
+    .@{prefix-cls} {
+      .ant-form-item {
+        .bottom-message {
+          color: #5C5C5C;
+        }
       }
     }
   }

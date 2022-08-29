@@ -318,7 +318,7 @@
       }
 
       function renderItem() {
-        const { itemProps, slot, render, field, suffix, component } = props.schema;
+        const { itemProps, slot, render, field, suffix, component, bottomHelpMessage } = props.schema;
         const { labelCol, wrapperCol } = unref(itemLabelWidthProp);
         const { colon } = props.formProps;
 
@@ -352,7 +352,10 @@
               wrapperCol={wrapperCol}
             >
               <div style="display:flex">
-                <div style="flex:1;">{getContent()}</div>
+                <div style="flex:1;">
+                  {getContent()}
+                  {bottomHelpMessage && <div class="bottom-message">{bottomHelpMessage}</div>}
+                </div>
                 {showSuffix && <span class="suffix">{getSuffix}</span>}
               </div>
             </Form.Item>
