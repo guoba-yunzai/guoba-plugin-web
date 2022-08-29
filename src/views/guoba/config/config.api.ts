@@ -1,4 +1,4 @@
-import { defHttp } from '/@/utils/http/axios'
+import { defHttp } from '/@/utils/http/axios';
 
 export enum Api {
   configTabs = '/config/tabs',
@@ -7,7 +7,7 @@ export enum Api {
 
 // 获取配置列表
 export function queryConfigTabs() {
-  return defHttp.get({ url: Api.configTabs })
+  return defHttp.get({ url: Api.configTabs });
 }
 
 /**
@@ -15,7 +15,7 @@ export function queryConfigTabs() {
  * @param key 配置文件key
  */
 export function queryConfigData(key: string) {
-  return defHttp.get({ url: Api.configData, params: { key } }, { errorMessageMode: 'modal' })
+  return defHttp.get({ url: Api.configData, params: { key } }, { errorMessageMode: 'modal' });
 }
 
 /**
@@ -24,5 +24,5 @@ export function queryConfigData(key: string) {
  * @param data
  */
 export function saveConfigData(key: string, data: Recordable) {
-  return defHttp.post({ url: Api.configData, params: { key, data } })
+  return defHttp.post({ url: Api.configData, params: { key, data } });
 }

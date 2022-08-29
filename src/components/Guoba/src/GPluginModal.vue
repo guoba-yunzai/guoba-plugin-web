@@ -69,10 +69,15 @@
           { label: '插件标题', field: 'title' },
           { label: '插件名称', field: 'name' },
           {
-            label: '插件作者', field: 'author',
+            label: '插件作者',
+            field: 'author',
             render: (_, record) => {
               if (record.authorLink) {
-                return <a href={record.authorLink} target="_blank">{record.author}</a>;
+                return (
+                  <a href={record.authorLink} target="_blank">
+                    {record.author}
+                  </a>
+                );
               } else {
                 return record.author;
               }
@@ -81,7 +86,11 @@
           {
             label: '插件链接',
             field: 'link',
-            render: val => <a href={val} target="_blank">{val}</a>,
+            render: (val) => (
+              <a href={val} target="_blank">
+                {val}
+              </a>
+            ),
           },
           { label: '插件说明', field: 'description' },
           {
@@ -218,6 +227,4 @@
       width: 100px;
     }
   }
-  
-
 </style>

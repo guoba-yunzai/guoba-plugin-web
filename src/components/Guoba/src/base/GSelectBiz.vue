@@ -9,28 +9,23 @@
           </template>
         </a-input>
         <a-select
-            v-else
-            ref="select"
-            v-model:value="selectValues.value"
-            :placeholder="placeholder"
-            :mode="multiple"
-            :open="false"
-            :disabled="disabled"
-            :options="options"
-            :maxTagCount="maxTagCount"
-            @change="handleChange"
-            style="width: 100%"
-            @click="!disabled && openModal(false)"
-            v-bind="attrs"
+          v-else
+          ref="select"
+          v-model:value="selectValues.value"
+          :placeholder="placeholder"
+          :mode="multiple"
+          :open="false"
+          :disabled="disabled"
+          :options="options"
+          :maxTagCount="maxTagCount"
+          @change="handleChange"
+          style="width: 100%"
+          @click="!disabled && openModal(false)"
+          v-bind="attrs"
         ></a-select>
       </a-col>
       <a-col v-if="showButton" class="right">
-        <a-button
-            type="primary"
-            :loading="loading"
-            :disabled="disabled"
-            @click="openModal(true)"
-        >
+        <a-button type="primary" :loading="loading" :disabled="disabled" @click="openModal(true)">
           <template #icon>
             <SearchOutlined />
           </template>
@@ -76,8 +71,8 @@
       const options = inject('selectOptions', ref<DefaultOptionType[]>([]));
       //接收选择的值
       const selectValues = inject(
-          'selectValues',
-          reactive<GSelectBizValues>({ value: [], change: false }),
+        'selectValues',
+        reactive<GSelectBizValues>({ value: [], change: false }),
       );
 
       /**

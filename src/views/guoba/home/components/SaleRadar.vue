@@ -1,7 +1,7 @@
 <template>
   <Card title="随机美图" :loading="loading">
-<!--    <div ref="chartRef" :style="{ width, height }"></div>-->
-    <PageCoding/>
+    <!--    <div ref="chartRef" :style="{ width, height }"></div>-->
+    <PageCoding />
   </Card>
 </template>
 <script lang="ts" setup>

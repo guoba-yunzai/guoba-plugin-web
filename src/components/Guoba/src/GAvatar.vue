@@ -24,7 +24,6 @@
       qs: propTypes.number.def(0),
     },
     setup(props) {
-
       const style = computed(() => {
         const { size } = props;
         if (size) {
@@ -44,7 +43,9 @@
       }
 
       function getGroupAvatarUrl(history = 0) {
-        return `https://p.qlogo.cn/gh/${props.id}/${props.id}${history ? '_' + history : ''}/` + props.qs;
+        return (
+          `https://p.qlogo.cn/gh/${props.id}/${props.id}${history ? '_' + history : ''}/` + props.qs
+        );
       }
 
       return {
@@ -55,6 +56,4 @@
   });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

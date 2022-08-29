@@ -13,7 +13,11 @@ export const columns: BasicColumn[] = [
     width: 200,
     customRender: ({ record }) => {
       if (record.name) {
-        return <a href={record.link} target="_blank">{record.name}</a>;
+        return (
+          <a href={record.link} target="_blank">
+            {record.name}
+          </a>
+        );
       }
       return record.name;
     },
@@ -24,7 +28,11 @@ export const columns: BasicColumn[] = [
     width: 180,
     customRender: ({ record }) => {
       if (record.authorLink) {
-        return <a href={record.authorLink} target="_blank">{record.author}</a>;
+        return (
+          <a href={record.authorLink} target="_blank">
+            {record.author}
+          </a>
+        );
       }
       return record.author;
     },

@@ -14,15 +14,13 @@
   import { Icon } from '/@/components/Icon';
   // TODO-guoba 改成接口
   const CardGrid = Card.Grid;
-
 </script>
 
 <style lang="less" scoped>
-
   .quick-nav-item {
     cursor: pointer;
     padding: 0;
-    
+
     & > a {
       padding: 24px;
       color: @text-color-base;

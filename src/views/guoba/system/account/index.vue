@@ -8,11 +8,8 @@
   export default {
     name: 'Account',
     components: { PageCoding },
-    setup() {
-    },
+    setup() {},
   };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

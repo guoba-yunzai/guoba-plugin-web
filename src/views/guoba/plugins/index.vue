@@ -10,7 +10,7 @@
     <BasicTable @register="registerTable" :searchInfo="searchInfo">
       <template #action="{ record }">
         <TableAction
-            :actions="[
+          :actions="[
             {
               icon: 'clarity:info-standard-line',
               tooltip: '查看插件详情',

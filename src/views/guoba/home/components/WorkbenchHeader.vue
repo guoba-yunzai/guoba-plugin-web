@@ -54,5 +54,4 @@
     let { type, low, high } = weather.forecast[0];
     return `${weather.city}今日${type}，最${low}，最${high}`;
   });
-  
 </script>

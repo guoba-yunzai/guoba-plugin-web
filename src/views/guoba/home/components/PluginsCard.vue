@@ -5,17 +5,19 @@
         <router-link to="/plugins">更多</router-link>
       </a-button>
     </template>
-    <template v-for="(item,idx) of plugins" :key="item.name">
-      <CardGrid v-if="idx<12" class="!md:w-1/3 !w-full plugin-item" @click="()=>onClick(item)">
+    <template v-for="(item, idx) of plugins" :key="item.name">
+      <CardGrid v-if="idx < 12" class="!md:w-1/3 !w-full plugin-item" @click="() => onClick(item)">
         <span class="flex">
           <Icon v-if="item.icon" :icon="item.icon" :color="item.color" size="30" />
           <Icon v-else icon="clarity:plugin-line" size="30" />
           <span class="text-lg ml-4 ellipsis" :title="item.title">
-            <span v-if="item.isDeleted" style="text-decoration: line-through;">{{ item.title }}</span>
+            <span v-if="item.isDeleted" style="text-decoration: line-through">{{
+              item.title
+            }}</span>
             <span v-else>{{ item.title }}</span>
           </span>
         </span>
-        <div class="flex mt-2 h-10 text-secondary ">
+        <div class="flex mt-2 h-10 text-secondary">
           <div class="ellipsis" :title="item.description">
             {{ item.description }}
           </div>

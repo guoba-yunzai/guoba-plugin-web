@@ -1,6 +1,11 @@
 <template>
   <Skeleton v-if="pageLoading" active />
-  <PageWrapper v-else title="配置管理" content="在这里可以配置机器人的基础设置以及原神相关设置" :loading="loading">
+  <PageWrapper
+    v-else
+    title="配置管理"
+    content="在这里可以配置机器人的基础设置以及原神相关设置"
+    :loading="loading"
+  >
     <template #footer>
       <Tabs v-model:activeKey="activeKey">
         <template v-for="tab in configTabs" :key="tab.key">
@@ -77,14 +82,14 @@
 
   .@{prefix-cls} {
   }
-    .fade-enter-active,
-    .fade-leave-active {
-      opacity: 1;
-      transition: opacity 0.5s;
-    }
+  .fade-enter-active,
+  .fade-leave-active {
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
 
-    .fade-enter,
-    .fade-leave-to {
-      opacity: 0;
-    }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
 </style>

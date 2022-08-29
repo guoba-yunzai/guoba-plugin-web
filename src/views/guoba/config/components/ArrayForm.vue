@@ -1,43 +1,47 @@
 <template>
   <a-card :title="card.title" :class="[prefixCls]" :bordered="false">
-
     <template #extra>
       <a-tooltip title="刷新">
-        <icon icon="ant-design:redo" style="cursor: pointer;" @click="()=> emit('redo', form)"/>
+        <icon icon="ant-design:redo" style="cursor: pointer" @click="() => emit('redo', form)" />
       </a-tooltip>
     </template>
 
     <a-spin :spinning="form.loading">
-      <div style="color: #333333;">
+      <div style="color: #333333">
         {{ card.desc }}
       </div>
       <div class="array-box">
-        <div class="array-item" v-for="(val,idx) of innerValue">
-          <a-input v-model:value="innerValue[idx]" style="max-width: 880px;"/>
-          <a-popconfirm title="确定要删除吗？" @confirm="()=>onRemove(idx)">
-            <a-button type="primary" pre-icon="ant-design:minus" size="small" shape="circle" danger/>
+        <div class="array-item" v-for="(val, idx) of innerValue">
+          <a-input v-model:value="innerValue[idx]" style="max-width: 880px" />
+          <a-popconfirm title="确定要删除吗？" @confirm="() => onRemove(idx)">
+            <a-button
+              type="primary"
+              pre-icon="ant-design:minus"
+              size="small"
+              shape="circle"
+              danger
+            />
           </a-popconfirm>
         </div>
         <a-button type="link" pre-icon="ant-design:plus" size="small" @click="onAdd">新增</a-button>
       </div>
 
-      <div style="text-align: center;">
+      <div style="text-align: center">
         <a-button type="primary" pre-icon="ant-design:save" @click="onSubmit">
           <span>保存</span>
         </a-button>
       </div>
     </a-spin>
-
   </a-card>
 </template>
 
 <script lang="ts">
-  import type { PropType } from 'vue'
-  import type { IConfigCard, FormType } from '../types'
-  import { defineComponent, ref, watch } from 'vue'
-  import { propTypes } from '/@/utils/propTypes'
-  import { BasicForm } from '/@/components/Form'
-  import { useDesign } from '/@/hooks/web/useDesign'
+  import type { PropType } from 'vue';
+  import type { IConfigCard, FormType } from '../types';
+  import { defineComponent, ref, watch } from 'vue';
+  import { propTypes } from '/@/utils/propTypes';
+  import { BasicForm } from '/@/components/Form';
+  import { useDesign } from '/@/hooks/web/useDesign';
 
   export default defineComponent({
     name: 'ArrayForm',
@@ -49,29 +53,32 @@
     },
     emits: ['redo', 'submit'],
     setup(props, { emit }) {
-      const { prefixCls } = useDesign('array-form')
+      const { prefixCls } = useDesign('array-form');
 
-      const innerValue = ref<any[]>(props.value)
+      const innerValue = ref<any[]>(props.value);
 
-      watch(() => props.value, () => innerValue.value = props.value)
+      watch(
+        () => props.value,
+        () => (innerValue.value = props.value),
+      );
 
       function onAdd() {
-        innerValue.value.push('')
+        innerValue.value.push('');
       }
 
       function onRemove(idx) {
-        innerValue.value.splice(idx, 1)
+        innerValue.value.splice(idx, 1);
       }
 
       function onSubmit() {
         if (!props.form?.actions) {
-          props.form!.actions = { validate } as any
+          props.form!.actions = { validate } as any;
         }
-        emit('submit', props.form)
+        emit('submit', props.form);
       }
 
       async function validate() {
-        return innerValue.value.filter((v) => !(v == null || v == ''))
+        return innerValue.value.filter((v) => !(v == null || v == ''));
       }
 
       return {
@@ -81,9 +88,9 @@
         onAdd,
         onRemove,
         onSubmit,
-      }
+      };
     },
-  })
+  });
 </script>
 
 <style lang="less">
@@ -107,5 +114,4 @@
       }
     }
   }
-
 </style>

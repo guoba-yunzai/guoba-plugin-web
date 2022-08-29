@@ -1,7 +1,12 @@
 <template>
   <div>
     <GSelectBiz @handleOpen="handleOpen" :loading="btnLoading || loadingEcho" v-bind="attrs" />
-    <SelectFriendModal :rowKey="rowKey" @register="registerModal" @getSelectResult="setValue" v-bind="getBindValue" />
+    <SelectFriendModal
+      :rowKey="rowKey"
+      @register="registerModal"
+      @getSelectResult="setValue"
+      v-bind="getBindValue"
+    />
   </div>
 </template>
 <script lang="ts">

@@ -21,7 +21,6 @@ export const selectModalProps = {
   modalTitle: propTypes.string.def('选择'),
 };
 
-
 export function useSelectModal(getList, props) {
   //接收下拉框选项
   const selectOptions = inject('selectOptions', ref<Array<object>>([]));

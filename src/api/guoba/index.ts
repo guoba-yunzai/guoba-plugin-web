@@ -22,7 +22,7 @@ export const sysApi = {
 };
 
 const enum HelperApi {
-  getCityWeather = '/helper/city_weather'
+  getCityWeather = '/helper/city_weather',
 }
 
 export const helperApi = {

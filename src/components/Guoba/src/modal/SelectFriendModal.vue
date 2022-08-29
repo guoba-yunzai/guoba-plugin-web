@@ -1,36 +1,36 @@
 <template>
   <FormItemRest>
     <BasicModal
-        width="900px"
-        :title="modalTitle"
-        @ok="handleOk"
-        @register="register"
-        @visible-change="visibleChange"
-        v-bind="$attrs"
+      width="900px"
+      :title="modalTitle"
+      @ok="handleOk"
+      @register="register"
+      @visible-change="visibleChange"
+      v-bind="$attrs"
     >
       <a-row>
         <a-col :span="showSelected ? 18 : 24">
           <BasicTable
-              ref="tableRef"
-              :columns="columns"
-              :scroll="tableScroll"
-              v-bind="getBindValue"
-              :useSearchForm="true"
-              :formConfig="formConfig"
-              :api="getFriendList"
-              :searchInfo="searchInfo"
-              :rowSelection="rowSelection"
-              :indexColumnProps="indexColumnProps"
+            ref="tableRef"
+            :columns="columns"
+            :scroll="tableScroll"
+            v-bind="getBindValue"
+            :useSearchForm="true"
+            :formConfig="formConfig"
+            :api="getFriendList"
+            :searchInfo="searchInfo"
+            :rowSelection="rowSelection"
+            :indexColumnProps="indexColumnProps"
           >
             <!--            <template #tableTitle></template>-->
           </BasicTable>
         </a-col>
         <a-col v-if="showSelected" :span="6">
           <BasicTable
-              v-bind="selectedTable"
-              :dataSource="selectRows"
-              :useSearchForm="true"
-              :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
+            v-bind="selectedTable"
+            :dataSource="selectRows"
+            :useSearchForm="true"
+            :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
           >
             <!--操作栏-->
             <template #action="{ record }">
@@ -118,7 +118,12 @@
         // labelWidth: 200,
         baseColProps: { xs: 24, sm: 8, md: 6, lg: 8, xl: 8, xxl: 8 },
         actionColOptions: {
-          xs: 24, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8,
+          xs: 24,
+          sm: 8,
+          md: 8,
+          lg: 8,
+          xl: 8,
+          xxl: 8,
           style: { paddingLeft: '8px', textAlign: 'left' },
         },
         labelCol: { xs: 24, sm: 6 },
@@ -134,7 +139,7 @@
           title: '头像',
           dataIndex: 'qq',
           width: 60,
-          customRender: ({ text }) => <g-avatar id={text} size={100} />,
+          customRender: ({ text }) => <g-avatar id={text} qs={100} />,
         },
         { title: 'QQ号', dataIndex: 'qq' },
         { title: '昵称', dataIndex: 'name' },
