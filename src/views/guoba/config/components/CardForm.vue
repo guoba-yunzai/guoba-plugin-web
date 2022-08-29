@@ -25,7 +25,7 @@
         <template v-if="isDefault">
           <a-divider type="vertical" />
           <a-button v-if="card.allowAdd" pre-icon="ant-design:plus" @click="onAddCard">
-            <span>{{ card.addBtnText ?? '新增' }}</span>
+            <span>{{ addBtnText }}</span>
           </a-button>
         </template>
       </div>
@@ -40,6 +40,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { BasicForm } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { usePrompt } from '/@/components/Guoba';
 
   export default defineComponent({
     name: 'CardForm',
@@ -53,8 +54,9 @@
       // 默认折叠
       defaultFold: propTypes.bool.def(false),
     },
-    emits: ['redo', 'submit'],
+    emits: ['redo', 'submit', 'addCard'],
     setup(props, { emit }) {
+      const { createPrompt } = usePrompt();
       const { prefixCls } = useDesign('card-form');
       const folded = ref<boolean>(!!props.defaultFold);
 
@@ -64,6 +66,8 @@
         // }
         return decodeTitle(props.card!, props.form!);
       });
+
+      const addBtnText = computed(() => props.card?.addBtnText ?? '新增');
 
       function decodeTitle(card: IConfigCard, form: FormType) {
         return card.title.replace(/{{([^}]+)}}/g, (_, $1) => {
@@ -77,13 +81,24 @@
         }
       }
 
-      function onAddCard() {}
+      function onAddCard() {
+        createPrompt({
+          title: addBtnText.value,
+          required: true,
+          ...props.card?.promptProps,
+          async onOk(value) {
+            emit('addCard', { form: props.form, key: value });
+          },
+        });
+      }
 
       return {
         emit,
         prefixCls,
         folded,
         cardTitle,
+        addBtnText,
+
         onClickTitle,
         onAddCard,
       };

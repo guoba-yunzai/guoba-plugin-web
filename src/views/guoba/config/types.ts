@@ -1,4 +1,5 @@
-import type { FormSchema, FormActionType } from '/@/components/Form'
+import type { FormSchema, FormActionType } from '/@/components/Form';
+import type { PromptProps } from '/@/components/Guoba/src/Prompt/typing';
 
 export interface IConfigTab {
   key: string;
@@ -8,10 +9,17 @@ export interface IConfigTab {
 
 export interface IConfigCard {
   key: string;
-  type?: 'keyFormCard' | 'arrayFormCard' | string,
+  type?: 'keyFormCard' | 'arrayFormCard' | string;
   title: string;
   desc: string;
   schemas: FormSchema[];
+  // 当type为keyFormCard或arrayFormCard时，是否允许添加
+  allowAdd?: boolean;
+  // 当type为keyFormCard或arrayFormCard时，是否允许删除
+  allowDel?: boolean;
+  // 当type为keyFormCard时的新增按钮文本
+  addBtnText?: string;
+  promptProps?: PromptProps;
 }
 
 export type ConfigTabs = IConfigTab[];
@@ -28,4 +36,4 @@ export interface FormType {
   card?: any;
 }
 
-export type FormsType = FormType[]
+export type FormsType = FormType[];

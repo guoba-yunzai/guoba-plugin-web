@@ -65,11 +65,14 @@
           title: (opt.title ?? 'prompt') as string,
           visible: unref(visible),
           confirmLoading: unref(loading),
+          wrapClassName: 'guoba-prompt-modal',
         };
         let finalProps: Recordable = {
           ...modalProps,
           ...props,
           ...opt,
+          okText: opt.okText ?? '确定',
+          cancelText: opt.cancelText ?? '取消',
           onOk: onSubmit,
           onCancel() {
             if (typeof options.value.onCancel === 'function') {
@@ -158,3 +161,15 @@
     },
   });
 </script>
+<style lang="less">
+  .guoba-prompt-modal {
+    .ant-modal {
+      &-close-x {
+        width: 56px;
+      }
+      form .ant-col {
+        flex: 1;
+      }
+    }
+  }
+</style>
