@@ -28,6 +28,14 @@
             <span>{{ addBtnText }}</span>
           </a-button>
         </template>
+        <template v-else>
+          <a-divider type="vertical" />
+          <a-popconfirm title="确定要删除当前配置吗？" @confirm="onRemoveCard">
+            <a-button v-if="card.allowDel" pre-icon="ant-design:minus" danger>
+              <span>删除当前配置</span>
+            </a-button>
+          </a-popconfirm>
+        </template>
       </div>
     </a-spin>
   </a-card>
@@ -54,7 +62,7 @@
       // 默认折叠
       defaultFold: propTypes.bool.def(false),
     },
-    emits: ['redo', 'submit', 'addCard'],
+    emits: ['redo', 'submit', 'addCard', 'delCard'],
     setup(props, { emit }) {
       const { createPrompt } = usePrompt();
       const { prefixCls } = useDesign('card-form');
@@ -92,6 +100,10 @@
         });
       }
 
+      function onRemoveCard() {
+        emit('delCard', { form: props.form });
+      }
+
       return {
         emit,
         prefixCls,
@@ -101,6 +113,7 @@
 
         onClickTitle,
         onAddCard,
+        onRemoveCard,
       };
     },
   });

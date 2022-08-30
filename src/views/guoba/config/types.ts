@@ -19,6 +19,10 @@ export interface IConfigCard {
   allowDel?: boolean;
   // 当type为keyFormCard时的新增按钮文本
   addBtnText?: string;
+  // 当type为arrayFormCard时的最小长度
+  lengthMin?: number;
+  // 当type为arrayFormCard时的最大长度
+  lengthMax?: number;
   promptProps?: PromptProps;
 }
 
@@ -34,6 +38,7 @@ export interface FormType {
   isArrayForm?: boolean;
   schemas?: any;
   card?: any;
+  fieldKey?: string;
 }
 
 export type FormsType = FormType[];

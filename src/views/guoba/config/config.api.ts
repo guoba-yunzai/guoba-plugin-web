@@ -3,6 +3,7 @@ import { defHttp } from '/@/utils/http/axios';
 export enum Api {
   configTabs = '/config/tabs',
   configData = '/config/data',
+  configCardForm = '/config/card-Form',
 }
 
 // 获取配置列表
@@ -25,4 +26,16 @@ export function queryConfigData(key: string) {
  */
 export function saveConfigData(key: string, data: Recordable) {
   return defHttp.post({ url: Api.configData, params: { key, data } });
+}
+
+/**
+ * 删除cardForm某一项配置
+ * @param formKey
+ * @param cardKey
+ */
+export function removeCardForm(formKey: string, cardKey: string) {
+  return defHttp.delete(
+    { url: Api.configCardForm, params: { formKey, cardKey } },
+    { errorMessageMode: 'modal' },
+  );
 }

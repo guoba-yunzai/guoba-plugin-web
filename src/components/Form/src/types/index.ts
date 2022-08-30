@@ -81,6 +81,7 @@ export interface ColEx {
 }
 
 export type ComponentType =
+  | 'GTags'
   | 'GSelectFriend'
   | 'Input'
   | 'InputGroup'

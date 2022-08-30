@@ -2,7 +2,7 @@
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
       <!--<img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" alt=""/>-->
-      <GAvatar :class="`${prefixCls}__header`" :id="getUserInfo.userId" :qs="100" :size="24"/>
+      <GAvatar :class="`${prefixCls}__header`" :id="getUserInfo.userId" :qs="100" :size="24" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
           {{ getUserInfo.realName }}
@@ -55,14 +55,12 @@
   import { openWindow } from '/@/utils';
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-  import { GAvatar } from '/@/components/Guoba';
 
   type MenuEvent = 'logout' | 'doc' | 'lock';
 
   export default defineComponent({
     name: 'UserDropdown',
     components: {
-      GAvatar,
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),

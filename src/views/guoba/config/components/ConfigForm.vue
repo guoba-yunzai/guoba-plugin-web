@@ -12,6 +12,7 @@
             @redo="onRedo"
             @submit="onSubmit"
             @addCard="onAddCard"
+            @delCard="onDelCard"
           />
         </template>
       </template>
@@ -36,7 +37,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { ScrollContainer } from '/@/components/Container';
-  import { queryConfigData, saveConfigData } from '../config.api';
+  import { queryConfigData, saveConfigData, removeCardForm } from '../config.api';
   import CardForm from './CardForm.vue';
   import ArrayForm from './ArrayForm.vue';
 
@@ -137,7 +138,7 @@
                     };
                   }),
                 },
-                { isKeyForm: form.isKeyForm, card: form.card },
+                { fieldKey, isKeyForm: form.isKeyForm, card: form.card },
               );
               let _register = keyForm.register!;
               keyForm.register = function (...args) {
@@ -216,9 +217,22 @@
           // @ts-ignored
           actions: {
             ...form.actions,
-            validate: async () => ({ ['INTEGER__' + key]: null }),
+            validate: async () => ({ ['INTEGER__' + key]: { __place__: 0 } }),
           },
         });
+      }
+
+      async function onDelCard({ form }: { form: FormType }) {
+        try {
+          form.loading = true;
+          let formKey = form.fieldKey!;
+          let cardKey = form.card.key;
+          await removeCardForm(formKey, cardKey);
+          createMessage.success('删除成功~');
+          await onRedo(form);
+        } finally {
+          form.loading = false;
+        }
       }
 
       return {
@@ -228,6 +242,7 @@
         onRedo,
         onSubmit,
         onAddCard,
+        onDelCard,
       };
     },
   });

@@ -13,7 +13,7 @@
       <div class="array-box">
         <div class="array-item" v-for="(val, idx) of innerValue">
           <a-input v-model:value="innerValue[idx]" style="max-width: 880px" />
-          <a-popconfirm title="确定要删除吗？" @confirm="() => onRemove(idx)">
+          <a-popconfirm v-if="card.allowDel" title="确定要删除吗？" @confirm="() => onRemove(idx)">
             <a-button
               type="primary"
               pre-icon="ant-design:minus"
@@ -23,7 +23,15 @@
             />
           </a-popconfirm>
         </div>
-        <a-button type="link" pre-icon="ant-design:plus" size="small" @click="onAdd">新增</a-button>
+        <a-button
+          v-if="card.allowAdd"
+          type="link"
+          pre-icon="ant-design:plus"
+          size="small"
+          @click="onAdd"
+        >
+          <span>{{ addBtnText }}</span>
+        </a-button>
       </div>
 
       <div style="text-align: center">
@@ -37,11 +45,12 @@
 
 <script lang="ts">
   import type { PropType } from 'vue';
+  import { defineComponent, ref, watch, computed } from 'vue';
   import type { IConfigCard, FormType } from '../types';
-  import { defineComponent, ref, watch } from 'vue';
   import { propTypes } from '/@/utils/propTypes';
   import { BasicForm } from '/@/components/Form';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     name: 'ArrayForm',
@@ -54,8 +63,10 @@
     emits: ['redo', 'submit'],
     setup(props, { emit }) {
       const { prefixCls } = useDesign('array-form');
+      const { createMessage } = useMessage();
 
       const innerValue = ref<any[]>(props.value);
+      const addBtnText = computed(() => props.card?.addBtnText ?? '新增');
 
       watch(
         () => props.value,
@@ -63,10 +74,20 @@
       );
 
       function onAdd() {
+        let lengthMax = props.card?.lengthMax;
+        if (lengthMax != null && innerValue.value.length >= lengthMax) {
+          createMessage.warn(`最多只能添加${lengthMax}个`);
+          return;
+        }
         innerValue.value.push('');
       }
 
       function onRemove(idx) {
+        let lengthMin = props.card?.lengthMin;
+        if (lengthMin != null && innerValue.value.length <= lengthMin) {
+          createMessage.warn(`至少要留${lengthMin}个`);
+          return;
+        }
         innerValue.value.splice(idx, 1);
       }
 
@@ -85,6 +106,7 @@
         emit,
         prefixCls,
         innerValue,
+        addBtnText,
         onAdd,
         onRemove,
         onSubmit,

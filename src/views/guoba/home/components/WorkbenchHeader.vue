@@ -26,7 +26,6 @@
   import { computed } from 'vue';
   import { useUserStore } from '/@/store/modules/user';
   import { propTypes } from '/@/utils/propTypes';
-  import { GAvatar } from '/@/components/Guoba';
   import { timeFix, welcome } from '/@/utils/common';
 
   const props = defineProps({
