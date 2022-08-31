@@ -106,6 +106,9 @@
               if (record.isV3) {
                 status.push(<a-tag color="blue">V3</a-tag>);
               }
+              if (record.isV2) {
+                status.push(<a-tag color="orange">V2</a-tag>);
+              }
               if (record.isDeleted) {
                 status.push(<a-tag color="red">已失效</a-tag>);
               }
