@@ -29,8 +29,8 @@
     },
     props: {
       value: propTypes.array,
-      rowKey: propTypes.string.def('qq'),
-      labelKey: propTypes.string.def('name'),
+      rowKey: propTypes.string.def('user_id'),
+      labelKey: propTypes.string.def('nickname'),
       params: propTypes.object.def(() => ({})),
     },
     emits: ['options-change', 'change', 'update:value'],

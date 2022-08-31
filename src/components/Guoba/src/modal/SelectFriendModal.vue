@@ -1,7 +1,7 @@
 <template>
   <FormItemRest>
     <BasicModal
-      width="900px"
+      width="800px"
       :title="modalTitle"
       @ok="handleOk"
       @register="register"
@@ -53,16 +53,10 @@
   import { propTypes } from '/@/utils/propTypes';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { selectModalProps, useSelectModal } from '../hooks/useSelectModal';
+  import { defHttp } from '/@/utils/http/axios';
 
-  //TODO 接口
-  async function getFriendList() {
-    return {
-      records: [
-        { name: '牧星长', qq: 1356496272 },
-        { name: '槑', qq: 47977659 },
-        { name: '三叶', qq: 3523033566 },
-      ],
-    };
+  function getFriendList(params) {
+    return defHttp.get({ url: '/oicq/friend/list', params });
   }
 
   export default defineComponent({
@@ -129,25 +123,31 @@
         labelCol: { xs: 24, sm: 6 },
         wrapperCol: { xs: 24, sm: 18 },
         schemas: [
-          { label: 'QQ号', field: 'qq', component: 'Input' },
-          { label: '昵称', field: 'name', component: 'Input' },
+          { label: 'QQ号', field: 'query_qq', component: 'Input' },
+          { label: '昵称', field: 'query_name', component: 'Input' },
         ],
       };
       //定义表格列
       const columns: BasicColumn[] = [
         {
           title: '头像',
-          dataIndex: 'qq',
+          dataIndex: 'user_id',
           width: 60,
           customRender: ({ text }) => <g-avatar id={text} qs={100} />,
         },
-        { title: 'QQ号', dataIndex: 'qq' },
-        { title: '昵称', dataIndex: 'name' },
-        { title: '性别', dataIndex: 'sex' },
+        { title: 'QQ号', dataIndex: 'user_id' },
+        { title: '昵称', dataIndex: 'nickname' },
+        {
+          title: '性别',
+          dataIndex: 'sex',
+          customRender({ text }) {
+            return text === 'female' ? '女' : text === 'male' ? '男' : text;
+          },
+        },
       ];
       //已选择的table信息
       const selectedTable = {
-        rowKey: 'qq',
+        rowKey: 'user_id',
         size: 'small',
         bordered: true,
         scroll: { y: 390 },
