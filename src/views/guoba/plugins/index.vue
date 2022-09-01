@@ -2,7 +2,7 @@
   <PageWrapper title="插件管理">
     <template #headerContent>
       插件列表来源：
-      <a href="https://gitee.com/Hikari666/Yunzai-Bot-plugins-index" target="_blank">
+      <a href="https://gitee.com/yhArcadia/Yunzai-Bot-plugins-index" target="_blank">
         Yunzai-Bot插件索引
       </a>
     </template>
