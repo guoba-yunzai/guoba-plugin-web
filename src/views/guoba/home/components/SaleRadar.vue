@@ -32,11 +32,11 @@
       imgSrc.value = URL.createObjectURL(res.data);
       img.src = imgSrc.value;
       await new Promise((resolve) => (img.onload = resolve));
-      let height = img.height;
-      if (height > 500) {
-        height = 500;
-      }
-      imgHeight.value = height;
+      // let height = img.height;
+      // if (height > 500 || height < 500) {
+      //   height = 500;
+      // }
+      imgHeight.value = 500;
     } finally {
       loading.value = false;
     }
