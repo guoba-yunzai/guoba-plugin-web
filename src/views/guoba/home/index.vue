@@ -53,9 +53,9 @@
       async function getHomeData() {
         try {
           loading.value = true;
-          homeData.value = await sysApi.getHomeData();
-          weather.value = await helperApi.getCityWeather();
-          plugins.value = await guobaStore.getPlugins();
+          homeData.value = await sysApi.getHomeData().catch(console.error);
+          weather.value = await helperApi.getCityWeather().catch(console.error);
+          plugins.value = await guobaStore.getPlugins().catch(console.error);
         } finally {
           loading.value = false;
         }
