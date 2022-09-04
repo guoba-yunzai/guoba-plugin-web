@@ -68,7 +68,11 @@ export function useModal(): UseModalReturnType {
     },
 
     getVisible: computed((): boolean => {
-      return visibleData[~~unref(uid)];
+      let visible = unref(modal.value?.visibleRef);
+      if (visible == null) {
+        return visibleData[~~unref(uid)];
+      }
+      return visible;
     }),
 
     redoModalHeight: () => {
@@ -139,7 +143,11 @@ export const useModalInner = (callbackFn?: Fn): UseModalInnerReturnType => {
         getInstance()?.setModalProps({ loading });
       },
       getVisible: computed((): boolean => {
-        return visibleData[~~unref(uidRef)];
+        let visible = unref<boolean>(modalInstanceRef.value?.visibleRef!);
+        if (visible == null) {
+          return visibleData[~~unref(uidRef)];
+        }
+        return visible;
       }),
 
       changeOkLoading: (loading = true) => {

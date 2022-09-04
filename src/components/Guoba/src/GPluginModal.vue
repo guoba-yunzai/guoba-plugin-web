@@ -6,6 +6,9 @@
         <a-tab-pane tab="详情" key="desc">
           <Description @register="registerDesc" :data="plugin" />
         </a-tab-pane>
+        <a-tab-pane v-if="plugin?.hasConfig" tab="配置" key="config">
+          <PluginConfigForm v-if="showConfigForm" ref="configFormRef" :plugin="plugin" />
+        </a-tab-pane>
         <a-tab-pane tab="README" key="readme">
           <div v-if="loading"></div>
           <a-empty v-else-if="!readme" description="README读取失败" />
@@ -16,11 +19,20 @@
     <template #footer>
       <a-row type="flex" justify="space-between">
         <a-col>
-          <a-button v-if="!plugin?.installed" type="primary" @click="installNow">立即安装</a-button>
-          <a-button v-else type="primary" danger @click="installNow">卸载</a-button>
+          <template v-if="['desc'].includes(activeKey)">
+            <a-button v-if="!plugin?.installed" type="primary" @click="installNow">
+              立即安装
+            </a-button>
+            <a-button v-else type="primary" danger @click="installNow">卸载</a-button>
+          </template>
         </a-col>
         <a-col>
-          <a-button @click="close">关闭</a-button>
+          <template v-if="['desc', 'readme'].includes(activeKey)">
+            <a-button @click="close">关闭</a-button>
+          </template>
+          <template v-if="['config'].includes(activeKey)">
+            <a-button type="primary" preIcon="ant-design:save" @click="saveConfig">保存</a-button>
+          </template>
         </a-col>
       </a-row>
     </template>
@@ -31,7 +43,7 @@
   import type { Plugin } from '/#/guoba';
   import type { ModalProps } from '/@/components/Modal';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { ref, defineComponent, computed, unref, watch, VNode } from 'vue';
+  import { ref, defineComponent, computed, unref, watch } from 'vue';
   import { Description, useDescription } from '/@/components/Description';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -39,10 +51,14 @@
   import { pluginApi } from '/@/api/guoba';
   import { MarkdownViewer } from '/@/components/Markdown';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { getStatusTags } from '/@/hooks/guoba';
+  import PluginConfigForm from './components/PluginConfigForm.vue';
+  import { sleep } from '/@/utils/common';
 
   export default defineComponent({
     name: 'GPluginModal',
     components: {
+      PluginConfigForm,
       Scrollbar,
       BasicModal,
       Description,
@@ -50,6 +66,7 @@
     },
     emits: ['register', 'success'],
     setup(props) {
+      const configFormRef = ref();
       const attrs = useAttrs();
       const { prefixCls } = useDesign('g-plugin-modal');
       const { createMessage: $message } = useMessage();
@@ -61,7 +78,7 @@
       const plugin = ref<Plugin>();
       const readme = ref('');
       // 注册弹窗
-      const [registerModal, { closeModal, setModalProps }] = useModalInner(open);
+      const [registerModal, { closeModal, setModalProps, getVisible }] = useModalInner(open);
       // 注册表单
       const [registerDesc, {}] = useDescription({
         column: 1,
@@ -96,24 +113,7 @@
           {
             label: '状态',
             field: 'installed',
-            render: (_, record) => {
-              let status: VNode[] = [];
-              if (record.installed) {
-                status.push(<a-tag color="green">已安装</a-tag>);
-              } else {
-                status.push(<a-tag>未安装</a-tag>);
-              }
-              if (record.isV3) {
-                status.push(<a-tag color="blue">V3</a-tag>);
-              }
-              if (record.isV2) {
-                status.push(<a-tag color="orange">V2</a-tag>);
-              }
-              if (record.isDeleted) {
-                status.push(<a-tag color="red">已失效</a-tag>);
-              }
-              return <span>{status}</span>;
-            },
+            render: (_, record) => getStatusTags(record as Plugin, 0),
           },
           // { label: '图标', field: 'icon' },
           // { label: '图标颜色', field: 'color' },
@@ -147,6 +147,18 @@
         }
       });
 
+      const showConfigForm = ref(false);
+
+      watch(getVisible!, async (val) => {
+        if (val) {
+          await sleep(300);
+          showConfigForm.value = true;
+        } else {
+          await sleep(300);
+          showConfigForm.value = false;
+        }
+      });
+
       /** 弹窗开启 */
       async function open(data) {
         readme.value = '';
@@ -157,6 +169,15 @@
       /** 弹窗关闭 */
       function close() {
         closeModal();
+      }
+
+      async function saveConfig() {
+        try {
+          setLoading(true);
+          await configFormRef.value!.savePluginConfigData();
+        } finally {
+          setLoading(false);
+        }
       }
 
       /** 设置加载状态*/
@@ -200,6 +221,7 @@
       }
 
       return {
+        configFormRef,
         registerDesc,
         getProps,
         initOk,
@@ -208,8 +230,10 @@
         plugin,
         readme,
         activeKey,
+        showConfigForm,
 
         close,
+        saveConfig,
         installNow,
         onInitOk,
       };

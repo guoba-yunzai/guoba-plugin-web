@@ -5,6 +5,7 @@
     title="配置管理"
     content="在这里可以配置机器人的基础设置以及原神相关设置"
     :loading="loading"
+    sticky
   >
     <template #footer>
       <Tabs v-model:activeKey="activeKey">

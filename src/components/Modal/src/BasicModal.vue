@@ -98,6 +98,7 @@
             }
           });
         },
+        visibleRef,
       };
 
       const instance = getCurrentInstance();

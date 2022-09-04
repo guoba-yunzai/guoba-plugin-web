@@ -6,7 +6,7 @@
       v-bind="omit($attrs, 'class')"
       ref="headerRef"
       v-if="getShowHeader"
-      style="position: sticky;z-index: 1;top: -60px;box-shadow: 0 0 5px -2px;/* TODO 改为配置 */"
+      :style="getHeaderStyle"
     >
       <template #default>
         <template v-if="content">
@@ -66,6 +66,10 @@
       fixedHeight: propTypes.bool,
       upwardSpace: propTypes.oneOfType([propTypes.number, propTypes.string]).def(0),
       loading: propTypes.bool,
+      // 是否吸顶
+      sticky: propTypes.bool,
+      // 吸顶高度
+      stickyTop: propTypes.string,
     },
     setup(props, { slots, attrs }) {
       const wrapperRef = ref(null);
@@ -106,6 +110,17 @@
       const getShowHeader = computed(
         () => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length,
       );
+
+      const getHeaderStyle = computed(() => {
+        let style: Recordable = {};
+        if (props.sticky) {
+          style.position = 'sticky';
+          style.zIndex = 1;
+          style.top = props.stickyTop ?? '-60px';
+          style.boxShadow = '0 0 5px -2px';
+        }
+        return style
+      });
 
       const getShowFooter = computed(() => slots?.leftFooter || slots?.rightFooter);
 
@@ -159,6 +174,7 @@
         getHeaderSlots,
         prefixCls,
         getShowHeader,
+        getHeaderStyle,
         getShowFooter,
         omit,
         getContentClass,

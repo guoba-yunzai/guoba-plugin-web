@@ -8,7 +8,8 @@
     <template v-for="(item, idx) of plugins" :key="item.name">
       <CardGrid v-if="idx < 12" class="!md:w-1/3 !w-full plugin-item" @click="() => onClick(item)">
         <span class="flex">
-          <Icon v-if="item.icon" :icon="item.icon" :color="item.color" size="30" />
+          <img v-if="item.iconPath" class="icon-image" :src="item.iconPath" alt="" />
+          <Icon v-else-if="item.icon" :icon="item.icon" :color="item.iconColor" size="30" />
           <Icon v-else icon="clarity:plugin-line" size="30" />
           <span class="text-lg ml-4 ellipsis" :title="item.title">
             <span v-if="item.isDeleted" style="text-decoration: line-through">{{
@@ -24,8 +25,11 @@
         </div>
         <div class="flex justify-between text-secondary">
           <span>{{ item.author }}</span>
-          <Tag v-if="item.installed" color="green">已安装</Tag>
-          <Tag v-else>未安装</Tag>
+          <span>
+            <Tag v-if="item.hasConfig" color="purple">可配置</Tag>
+            <Tag v-if="item.installed" color="green">已安装</Tag>
+            <Tag v-else>未安装</Tag>
+          </span>
         </div>
       </CardGrid>
     </template>
@@ -78,5 +82,10 @@
 
   .plugin-item {
     cursor: pointer;
+  }
+
+  .icon-image {
+    width: 30px;
+    height: 30px;
   }
 </style>
