@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-row class="g-select-row" type="flex">
+    <a-row class="g-select-row" type="flex" :gutter="8">
       <a-col class="left" :class="{ full: !showButton }">
         <!-- 显示加载效果 -->
         <a-input v-if="loading" readOnly placeholder="加载中…">
@@ -29,6 +29,7 @@
           <template #icon>
             <SearchOutlined />
           </template>
+          <span>选择</span>
         </a-button>
       </a-col>
     </a-row>
@@ -103,16 +104,14 @@
 </script>
 <style lang="less" scoped>
   .g-select-row {
-    @width: 32px;
+    @rightWidth: 82px;
 
     .left {
-      flex: 1;
-
-      //width: calc(100% - @width - 8px);
+      width: calc(100% - @rightWidth - 8px);
     }
 
     .right {
-      width: @width;
+      width: @rightWidth;
     }
 
     .full {

@@ -123,9 +123,20 @@
         labelCol: { xs: 24, sm: 6 },
         wrapperCol: { xs: 24, sm: 18 },
         schemas: [
-          { label: 'QQ号', field: 'query_qq', component: 'Input' },
-          { label: '昵称', field: 'query_name', component: 'Input' },
+          {
+            label: 'QQ号',
+            field: 'query_qq',
+            component: 'Input',
+            componentProps: { placeholder: '请输入QQ号' },
+          },
+          {
+            label: '昵称',
+            field: 'query_name',
+            component: 'Input',
+            componentProps: { placeholder: '请输入昵称' },
+          },
         ],
+        autoSubmitOnEnter: true,
       };
       //定义表格列
       const columns: BasicColumn[] = [
@@ -135,11 +146,28 @@
           width: 60,
           customRender: ({ text }) => <g-avatar id={text} qs={100} />,
         },
-        { title: 'QQ号', dataIndex: 'user_id' },
-        { title: '昵称', dataIndex: 'nickname' },
+        { title: 'QQ号', dataIndex: 'user_id', width: 120 },
+        {
+          title: '昵称',
+          dataIndex: 'nickname',
+          ellipsis: true,
+          align: 'left',
+          customRender({ text, record }) {
+            if (record.remark !== text) {
+              return (
+                <span>
+                  <span>{record.remark}</span>
+                  <span style="color:#999;font-size:8px;">（{text}）</span>
+                </span>
+              );
+            }
+            return text;
+          },
+        },
         {
           title: '性别',
           dataIndex: 'sex',
+          width: 60,
           customRender({ text }) {
             return text === 'female' ? '女' : text === 'male' ? '男' : text;
           },

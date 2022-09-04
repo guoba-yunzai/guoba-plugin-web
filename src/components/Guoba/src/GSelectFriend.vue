@@ -1,6 +1,11 @@
 <template>
   <div>
-    <GSelectBiz @handleOpen="handleOpen" :loading="btnLoading || loadingEcho" v-bind="attrs" />
+    <GSelectBiz
+      @handleOpen="handleOpen"
+      :loading="btnLoading || loadingEcho"
+      showButton
+      v-bind="attrs"
+    />
     <SelectFriendModal
       :rowKey="rowKey"
       @register="registerModal"
