@@ -1,5 +1,5 @@
 <template>
-  <page-wrapper title="关于">
+  <PageWrapper title="关于" sticky dense>
     <template #headerContent>
       <div class="flex items-center justify-between">
         <span class="flex-1">
@@ -20,15 +20,15 @@
       </a-tabs>
     </template>
 
-    <div v-show="activeKey === 'about'" key="about">
+    <div v-show="activeKey === 'about'" key="about" class="p-4">
       <Description @register="infoRegister" class="enter-y" />
       <Description @register="register" class="my-4 enter-y" />
       <Description @register="registerDev" class="enter-y" />
     </div>
-    <div v-show="activeKey === 'todo'" key="todo">
-      <LoadGist />
+    <div v-show="activeKey === 'todo'" key="todo" class="p-4 bg-white">
+      <LoadGitee />
     </div>
-  </page-wrapper>
+  </PageWrapper>
 </template>
 
 <script lang="ts" setup>
@@ -37,10 +37,11 @@
   import { PageWrapper } from '/@/components/Page';
   import { Description, DescItem, useDescription } from '/@/components/Description';
   import { GITHUB_URL, SITE_URL, DOC_URL, GITEE_URL } from '/@/settings/siteSetting';
-  import LoadGist from './LoadGist.vue';
+  // import LoadGist from './LoadGist.vue';
+  import LoadGitee from './LoadGitee.vue';
 
   // noinspection JSUnusedGlobalSymbols
-  const _components = { PageWrapper, Description };
+  const _components = { PageWrapper, Description, LoadGitee };
 
   const { pkg, lastBuildTime } = __APP_INFO__;
   const { dependencies, devDependencies, name, version } = pkg;
