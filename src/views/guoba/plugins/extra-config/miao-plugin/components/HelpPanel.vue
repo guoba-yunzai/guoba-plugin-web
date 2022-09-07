@@ -301,6 +301,7 @@
 
   .copyright {
     font-size: 16px;
+    font-family: "Number", sans-serif;
     text-align: center;
     color: #fff;
     position: relative;

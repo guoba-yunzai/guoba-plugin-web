@@ -1,26 +1,22 @@
 <template>
-  <PageWrapper>
+  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px">
     <template #headerContent>
-      <EditMiaoHeader
-        @onSave="saveData"
-        @onRollback="todo('回滚')"
-        @onBackup="todo('备份')"
-      />
+      <EditMiaoHeader @save="saveData" @rollback="todo('回滚')" @backup="todo('备份')" />
     </template>
+    <div class="flex justify-center md:pt-4 my-4">
+      <Transition name="scroll-y-reverse-transition">
+        <HelpPanel
+          v-if="!loading"
+          v-model:helpCfg="helpCfg"
+          v-model:helpList="helpList"
+          v-model:bgB64="bgB64"
+          v-model:mainB64="mainB64"
+          v-model:iconB64List="iconB64List"
+          v-model:modelData="modelData"
+        />
+      </Transition>
+    </div>
   </PageWrapper>
-  <div class="flex justify-center md:pt-4">
-    <Transition name="scroll-y-reverse-transition">
-      <HelpPanel
-        v-if="!loading"
-        v-model:helpCfg="helpCfg"
-        v-model:helpList="helpList"
-        v-model:bgB64="bgB64"
-        v-model:mainB64="mainB64"
-        v-model:iconB64List="iconB64List"
-        v-model:modelData="modelData"
-      />
-    </Transition>
-  </div>
 </template>
 
 <script lang="ts">
@@ -35,11 +31,13 @@
   import EditMiaoHeader from "./components/MiaoHeader.vue";
   import HelpPanel from "./components/HelpPanel.vue";
   import temp from "./temp"
+  import { useDesign } from '/@/hooks/web/useDesign'
 
   export default defineComponent({
     name: 'MiaoPluginExtra',
     components: {HelpPanel, EditMiaoHeader, PageWrapper},
     setup() {
+      const {prefixCls} = useDesign('edit-miao-help')
       const loading = ref<boolean>(true)
       const helpCfg = ref<Nullable<helpCfgType>>(null);
       const helpList = ref<Nullable<helpListType>>(null);
@@ -61,7 +59,7 @@
           iconB64: await joinIcon(iconB64List),
           mainB64: mainB64.value
         }
-
+        // TODO-guoba 改为接口
         console.log(data);
       }
 
@@ -119,6 +117,7 @@
 
       const loadData = async () => {
         loading.value = true
+        // TODO-guoba 此处改为接口获取数据
         helpCfg.value = temp.helpCfg
         helpList.value = temp.helpList
         bgB64.value = await temp.bgB64
@@ -130,6 +129,7 @@
       loadData()
 
       return {
+        prefixCls,
         loading,
         helpCfg,
         helpList,
@@ -143,12 +143,22 @@
     }
   })
 </script>
-<style>
-  @media screen and (max-width: 800px) {
-    .size {
-      height: 0;
-      padding-top: 15.16%;
-      position: relative;
+<style lang="less">
+  //noinspection LessUnresolvedVariable
+  @prefix-cls: ~'@{namespace}-edit-miao-help';
+
+  .@{prefix-cls} {
+    .ant-page-header {
+      padding-right: 8px;
+      padding-bottom: 8px;
+    }
+
+    @media screen and (max-width: 800px) {
+      .size {
+        height: 0;
+        padding-top: 15.16%;
+        position: relative;
+      }
     }
   }
 </style>

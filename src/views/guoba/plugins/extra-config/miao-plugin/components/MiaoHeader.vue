@@ -1,10 +1,10 @@
 <template>
   <div class="lg:flex  justify-between">
-    <div class="text-lg text-md m-1">编辑喵喵帮助</div>
+    <div class="text-lg text-md m-1"></div>
     <div>
-      <a-button class="mr-4" type="primary" danger @click="rollback">回滚</a-button>
-      <a-button class="mr-4" type="primary" @click="backup">备份</a-button>
-      <a-button class="mr-4" type="success" @click="save">保存</a-button>
+      <a-button class="mr-2" type="primary" preIcon="ant-design:undo" danger @click="rollback">回滚</a-button>
+      <a-button class="mr-2" type="primary" preIcon="dashicons:backup" @click="backup">备份</a-button>
+      <a-button class="" type="success" preIcon="ant-design:save" @click="save">保存</a-button>
     </div>
   </div>
 </template>
@@ -12,21 +12,21 @@
 <script lang="ts" setup>
 
   const emits = defineEmits([
-    "onSave",
-    "onRollback",
-    "onBackup"
+    "save",
+    "rollback",
+    "backup"
   ])
 
   const save = () => {
-    emits("onSave")
+    emits("save")
   }
 
   const rollback = () => {
-    emits("onRollback")
+    emits("rollback")
   }
 
   const backup = () => {
-    emits("onBackup")
+    emits("backup")
   }
 </script>
 
