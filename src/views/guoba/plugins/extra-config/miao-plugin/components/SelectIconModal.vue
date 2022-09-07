@@ -1,6 +1,7 @@
 <template>
   <Modal
     v-model:visible="visible"
+    @cancel="closeModal"
     width="460px"
     :closable="false"
     :footer="null">
@@ -60,11 +61,15 @@
   ])
 
   const edit = ref<boolean>(false)
+
   const uploader = ref({
     show: false,
     selected: null
   })
 
+  const closeModal = () => {
+    emits("update:visible", false)
+  }
   const switchEdit = () => {
     edit.value = !edit.value
     if (edit.value) {
