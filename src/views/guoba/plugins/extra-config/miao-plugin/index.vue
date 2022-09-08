@@ -27,17 +27,20 @@
     modelDataType,
   } from './types'
 
+  import { useMessage } from '/@/hooks/web/useMessage'
   import {PageWrapper} from '/@/components/Page';
   import EditMiaoHeader from "./components/MiaoHeader.vue";
   import HelpPanel from "./components/HelpPanel.vue";
   import temp from "./temp"
   import { useDesign } from '/@/hooks/web/useDesign'
+  import { getMiaoHelpCfg, saveMiaoHelpCfg } from './miao.api'
 
   export default defineComponent({
     name: 'MiaoPluginExtra',
     components: {HelpPanel, EditMiaoHeader, PageWrapper},
     setup() {
       const {prefixCls} = useDesign('edit-miao-help')
+      const {createMessage : $message} = useMessage()
       const loading = ref<boolean>(true)
       const helpCfg = ref<Nullable<helpCfgType>>(null);
       const helpList = ref<Nullable<helpListType>>(null);
@@ -56,11 +59,17 @@
         let data = {
           helpCfg: helpCfg.value,
           helpList: helpList.value,
-          iconB64: await joinIcon(iconB64List),
-          mainB64: mainB64.value
+          // TODO 改为上传文件接口
+          // iconB64: await joinIcon(iconB64List),
+          // mainB64: mainB64.value
         }
-        // TODO-guoba 改为接口
-        console.log(data);
+        try {
+          loading.value = true
+          await saveMiaoHelpCfg(data)
+          $message.success('保存成功')
+        }finally {
+          loading.value = false
+        }
       }
 
       const todo = msg => {
@@ -117,13 +126,17 @@
 
       const loadData = async () => {
         loading.value = true
-        // TODO-guoba 此处改为接口获取数据
-        helpCfg.value = temp.helpCfg
-        helpList.value = temp.helpList
-        bgB64.value = await temp.bgB64
-        mainB64.value = await temp.mainB64
-        iconB64List.value = await splitIcon(await temp.iconB64)
-        loading.value = false
+        try {
+          let result = await getMiaoHelpCfg()
+          helpCfg.value = result.helpCfg
+          helpList.value = result.helpList
+          // TODO-guoba 此处改为接口获取数据
+          bgB64.value = await temp.bgB64
+          mainB64.value = await temp.mainB64
+          iconB64List.value = await splitIcon(await temp.iconB64)
+        } finally {
+          loading.value = false
+        }
       }
 
       loadData()
