@@ -51,9 +51,9 @@
 
       <div class="copyright">
         Created By Yunzai-Bot
-        <span class="version">2.2.1</span>
+        <span class="version">{{versions.yunzai}}</span>
         &amp; Miao-Plugin
-        <span class="version">1.9.1</span>
+        <span class="version">{{versions.miao}}</span>
       </div>
     </div>
 
@@ -99,7 +99,8 @@
     bgB64: String,
     mainB64: String,
     iconB64List: Array as PropType<string[]>,
-    modelData: Object as PropType<modelDataType>
+    modelData: Object as PropType<modelDataType>,
+    versions: Object as PropType<{ yunzai: string, miao: string }>,
   });
 
 

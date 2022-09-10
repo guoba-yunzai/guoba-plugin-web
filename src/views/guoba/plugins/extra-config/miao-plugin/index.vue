@@ -7,6 +7,7 @@
       <Transition name="scroll-y-reverse-transition">
         <HelpPanel
           v-if="!pageLoading"
+          :versions="versions"
           v-model:helpCfg="helpCfg"
           v-model:helpList="helpList"
           v-model:bgB64="bgB64"
@@ -21,7 +22,7 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, ref} from 'vue';
+  import {defineComponent, reactive, ref} from 'vue';
   import type {
     helpCfgType,
     helpListType,
@@ -56,6 +57,10 @@
       const bgB64 = ref<Nullable<string>>(null)
       const mainB64 = ref<Nullable<string>>(null)
       const iconB64List = ref<Nullable<string[]>>(null)
+      const versions = reactive({
+        miao: 'x.x.x',
+        yunzai: 'x.x.x',
+      })
       const modelData = ref<modelDataType>({
         show: false,
         cell: null,
@@ -82,6 +87,8 @@
           let result = await getMiaoHelpCfg()
           helpCfg.value = result.helpCfg
           helpList.value = result.helpList
+          versions.miao = result.miaoVersion
+          versions.yunzai = result.yunzaiVersion
           bgB64.value = await getThemeBgBase64()
           mainB64.value = await getThemeMainBase64()
           iconB64List.value = await getHelpIconList()
@@ -117,6 +124,7 @@
         bgB64,
         mainB64,
         iconB64List,
+        versions,
         modelData,
         onBackup,
         onRollback,
