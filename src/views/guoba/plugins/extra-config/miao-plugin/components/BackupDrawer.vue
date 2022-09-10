@@ -66,7 +66,7 @@
       // 抽屉最终props
       const getProps = computed(() => {
         let drawerProps: Partial<DrawerProps> = {
-          width: 800,
+          width: document.body.clientWidth >= 768 ? 700 : '100%',
           title: '喵喵帮助备份',
           confirmLoading: unref(loading),
         }
