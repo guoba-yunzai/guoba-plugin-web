@@ -1,12 +1,12 @@
 <template>
-  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px">
+  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px" :loading="loading">
     <template #headerContent>
-      <EditMiaoHeader @save="saveData" @rollback="todo('回滚')" @backup="todo('备份')" />
+      <EditMiaoHeader @save="saveData" @rollback="onRollback" @backup="onBackup" />
     </template>
     <div class="flex justify-center md:pt-4 my-4">
       <Transition name="scroll-y-reverse-transition">
         <HelpPanel
-          v-if="!loading"
+          v-if="!pageLoading"
           v-model:helpCfg="helpCfg"
           v-model:helpList="helpList"
           v-model:bgB64="bgB64"
@@ -16,6 +16,7 @@
         />
       </Transition>
     </div>
+    <BackupDrawer @register="registerDrawer" @reload="loadData" />
   </PageWrapper>
 </template>
 
@@ -31,16 +32,24 @@
   import {PageWrapper} from '/@/components/Page';
   import EditMiaoHeader from "./components/MiaoHeader.vue";
   import HelpPanel from "./components/HelpPanel.vue";
-  import temp from "./temp"
+  import BackupDrawer from "./components/BackupDrawer.vue";
   import { useDesign } from '/@/hooks/web/useDesign'
-  import { getMiaoHelpCfg, saveMiaoHelpCfg } from './miao.api'
+  import {
+    getHelpIconList,
+    getMiaoHelpCfg,
+    getThemeBgBase64,
+    getThemeMainBase64,
+    saveMiaoHelpCfg,
+  } from './miao.api'
+  import { useDrawer } from '/@/components/Drawer'
 
   export default defineComponent({
     name: 'MiaoPluginExtra',
-    components: {HelpPanel, EditMiaoHeader, PageWrapper},
+    components: {HelpPanel, EditMiaoHeader, PageWrapper, BackupDrawer},
     setup() {
       const {prefixCls} = useDesign('edit-miao-help')
-      const {createMessage : $message} = useMessage()
+      const {createMessage : $message, createConfirm} = useMessage()
+      const pageLoading = ref<boolean>(true)
       const loading = ref<boolean>(true)
       const helpCfg = ref<Nullable<helpCfgType>>(null);
       const helpList = ref<Nullable<helpListType>>(null);
@@ -54,104 +63,66 @@
         group: null,
         groupIndex: null
       })
+      const [registerDrawer, {openDrawer}] =useDrawer()
 
       const saveData = async () => {
-        let data = {
-          helpCfg: helpCfg.value,
-          helpList: helpList.value,
-          // TODO 改为上传文件接口
-          // iconB64: await joinIcon(iconB64List),
-          // mainB64: mainB64.value
-        }
         try {
           loading.value = true
-          await saveMiaoHelpCfg(data)
-          $message.success('保存成功')
+          // 保存配置
+          await saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64)
+          $message.success('保存成功~')
         }finally {
           loading.value = false
         }
       }
 
-      const todo = msg => {
-        console.log(msg);
-      }
-
-      const joinIcon = async iconB64List => new Promise<string>(resolve => {
-        let cvs = document.createElement("canvas")
-        cvs.width = 1000
-        cvs.height = 1000
-        let ctx = cvs.getContext("2d")
-        let x, y
-        for (let i = 0; i < 100; i++) {
-          let img = new Image;
-          y = Math.floor(i / 10)
-          x = i - 10 * y
-          img.src = iconB64List.value[i + 1];
-          let _x = x
-          let _y = y
-          let _i = i
-          img.onload = function () {
-            ctx!.drawImage(img, 100 * _x, 100 * _y, 100, 100);
-            if (_i === 99) {
-              resolve(cvs.toDataURL())
-            }
-          }
-        }
-      })
-
-      const splitIcon = async iconB64 => new Promise<Nullable<string[]>>(resolve => {
-        let img = new Image;
-        img.setAttribute("crossOrigin", 'Anonymous')
-        img.src = iconB64
-        img.onload = function () {
-          let cvs = document.createElement("canvas")
-          cvs.width = 100
-          cvs.height = 100
-          let ctx = cvs.getContext("2d")
-          if (!ctx) {
-            resolve(null)
-          } else {
-            let x, y, iconList = [] as string[]
-            for (let i = 0; i < 100; i++) {
-              y = Math.floor(i / 10)
-              x = i - 10 * y
-              ctx.drawImage(img, 100 * x, 100 * y, 100, 100, 0, 0, 100, 100);
-              iconList[i + 1] = cvs.toDataURL()
-              ctx.clearRect(0, 0, 100, 100)
-            }
-            resolve(iconList)
-          }
-        }
-      })
-
       const loadData = async () => {
-        loading.value = true
         try {
+          loading.value = true
           let result = await getMiaoHelpCfg()
           helpCfg.value = result.helpCfg
           helpList.value = result.helpList
-          // TODO-guoba 此处改为接口获取数据
-          bgB64.value = await temp.bgB64
-          mainB64.value = await temp.mainB64
-          iconB64List.value = await splitIcon(await temp.iconB64)
+          bgB64.value = await getThemeBgBase64()
+          mainB64.value = await getThemeMainBase64()
+          iconB64List.value = await getHelpIconList()
         } finally {
           loading.value = false
+          pageLoading.value = false
         }
       }
 
       loadData()
 
+      function onBackup() {
+        openDrawer(true, {})
+      }
+
+      function onRollback() {
+        createConfirm({
+          title: '提示',
+          iconType: 'warning',
+          content: '确定要放弃所有修改吗？',
+          onOk: () => {
+            loadData()
+          }
+        })
+      }
+
       return {
         prefixCls,
         loading,
+        pageLoading,
         helpCfg,
         helpList,
         bgB64,
         mainB64,
         iconB64List,
         modelData,
+        onBackup,
+        onRollback,
+        loadData,
         saveData,
-        todo
+        registerDrawer,
       }
     }
   })

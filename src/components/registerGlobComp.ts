@@ -16,6 +16,7 @@ import {
   Divider,
   Popconfirm,
   Space,
+  List,
 } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon'
 
@@ -33,6 +34,7 @@ export function registerGlobComp(app: App) {
     .use(Divider)
     .use(Popconfirm)
     .use(Space)
+    .use(List)
 
   app.component(Icon.name, Icon)
 }

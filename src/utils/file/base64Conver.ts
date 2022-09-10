@@ -39,3 +39,13 @@ export function urlToBase64(url: string, mineType?: string): Promise<string> {
     img.src = url;
   });
 }
+
+export function blobToDataUrl(blob: Blob) {
+  return new Promise<string>((resolve) => {
+    let render = new FileReader();
+    render.readAsDataURL(blob);
+    render.onload = function (e) {
+      resolve(e.target!.result as string);
+    };
+  });
+}
