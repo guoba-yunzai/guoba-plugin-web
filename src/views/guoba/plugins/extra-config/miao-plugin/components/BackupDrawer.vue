@@ -11,7 +11,7 @@
               <a-popconfirm title="确定要还原吗？" placement="left" @confirm="()=>onRollback(item.id)">
                 <a-button type="primary" shape="circle" preIcon="ant-design:undo"/>
               </a-popconfirm>
-              <a-popconfirm title="确定要删除吗？" placement="left" @confirm="()=>onDelete(item.id)">
+              <a-popconfirm title="确定要删除吗？" placement="left" @confirm="()=>onDelete(item)">
                 <a-button type="primary" shape="circle" danger preIcon="ant-design:delete"/>
               </a-popconfirm>
             </template>
@@ -35,6 +35,7 @@
   import { useAttrs } from '/@/hooks/core/useAttrs'
   import { usePrompt } from '/@/components/Guoba'
   import { addBackup, deleteBackup, getBackupList, restoreBackup } from '../miao.api'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   type BackupItem = {
     id: string;
@@ -42,6 +43,7 @@
     remark: string;
     // 备份时间
     time: string;
+    isInit: boolean;
   };
 
   export default defineComponent({
@@ -52,6 +54,7 @@
     emits: ['register', 'reload'],
     setup(props, { emit }) {
       const attrs = useAttrs()
+      const { createMessage: $message } = useMessage()
       const { createPrompt } = usePrompt()
       // 当前是否正在加载中
       const loading = ref(false)
@@ -64,7 +67,7 @@
       const getProps = computed(() => {
         let drawerProps: Partial<DrawerProps> = {
           width: 800,
-          title: '喵喵帮助备份333',
+          title: '喵喵帮助备份',
           confirmLoading: unref(loading),
         }
         let finalProps: Recordable = {
@@ -119,8 +122,12 @@
         }
       }
 
-      async function onDelete(id) {
+      async function onDelete(item: BackupItem) {
         try {
+          if (item.isInit) {
+            $message.warn('初始备份不可删除')
+            return
+          }
           setLoading(true)
           await deleteBackup(id)
           await loadData()
