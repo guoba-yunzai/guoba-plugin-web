@@ -4,17 +4,18 @@
          :style="{background: `url(${mainB64}) top left/100% auto no-repeat,url(${bgB64})`}">
 
       <div class="change-background">
-        <input type="file" id="upload2" style="display: none;" name="icon"
-               accept="image/bmp,image/jpeg,image/png">
-        <a-button
-          :style="`transform: scale(${1/scale()});transform-origin: right top;`"
-          type="primary"
-          shape="circle"
-          size="large"
-          @click="clickBackground"
-        >
-          <Icon icon="akar-icons:image"/>
-        </a-button>
+        <input type="file" id="upload-bg" style="display: none;" name="icon" accept="image/bmp,image/jpeg,image/png">
+        <input type="file" id="upload-icon" style="display: none;" name="icon" accept="image/png">
+        <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">
+          <a-button
+            :style="`transform: scale(${1/scale()});transform-origin: right top;`"
+            type="primary"
+            shape="circle"
+            size="large"
+          >
+            <Icon icon="akar-icons:image"/>
+          </a-button>
+        </Dropdown>
       </div>
 
       <div class="head-box" @click="clickHead">
@@ -92,6 +93,9 @@
   import EditBodyModal from "./EditBodyModal.vue"
   import {Modal, Switch} from 'ant-design-vue';
   import {helpCfgType, helpListItemType, helpListType, listItemType, modelDataType} from "../types";
+  import { Dropdown, DropMenu } from '/@/components/Dropdown'
+  import { getHelpIconList, MiaoApi } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   const props = defineProps({
     helpCfg: Object as PropType<helpCfgType>,
@@ -106,38 +110,59 @@
 
   const emits = defineEmits([
     "update:modelData",
-    "update:mainB64"
+    "update:mainB64",
+    "update:iconB64List"
   ])
+
+  const { createMessage: $message } = useMessage()
 
   const showHeadModal = ref<boolean>(false)
 
-  const clickBackground = () => {
-    let btn = document.getElementById("upload2")
-    if (btn!.bind === undefined) {
-      btn!.bind = true
-      btn!.addEventListener("change", ev => {
-        let files = ev!.target!.files
-        if (files.size !== 0) {
+  const dropMenuList = ref<DropMenu[]>([
+    {
+      event: 'changeBackground',
+      text: '更换背景',
+      icon: 'akar-icons:image',
+      onClick() {
+        getUploadBase64('upload-bg', (base64) => {
+          emits('update:mainB64', base64)
+        })
+      },
+    },
+    {
+      event: 'uploadIcon',
+      text: '上传图标',
+      icon: 'fontisto:nav-icon-grid',
+      onClick() {
+        getUploadBase64('upload-icon', async (base64) => {
+          let iconList = await getHelpIconList(base64)
+          emits('update:iconB64List', iconList)
+          $message.success('上传成功')
+        })
+      },
+    },
+  ])
+
+  const isBindEvent = {}
+
+  function getUploadBase64(inputId: string, callback: Fn) {
+    let input = document.getElementById(inputId) as HTMLInputElement
+    if (!isBindEvent[inputId]) {
+      isBindEvent[inputId] = true
+      input.addEventListener('change', ev => {
+        let files = (ev.target! as HTMLInputElement).files!
+        if (files.length !== 0) {
           let file = files[0]
           let Reader = new FileReader()
           Reader.readAsDataURL(file)
           Reader.onload = () => {
-            let img = new Image;
-            img.setAttribute("crossOrigin", 'Anonymous')
-            img.src = Reader.result
-            img.onload = function () {
-              let cvs = document.createElement("canvas")
-              cvs.width = img.width
-              cvs.height = img.height
-              let ctx = cvs.getContext("2d")
-              ctx!.drawImage(img, 0, 0)
-              emits("update:mainB64", cvs.toDataURL())
-            }
+            callback(Reader.result)
+            input.value = null
           }
         }
       })
     }
-    btn!.click()
+    input.click()
   }
 
   const clickHead = () => {

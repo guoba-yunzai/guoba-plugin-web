@@ -30,7 +30,7 @@
 
         <a-space class="add-icon" style="padding: 10px; width: 100%;">
           <a-button :type="edit?'danger':'success'" @click="switchEdit">{{edit?"完成":"替换图标"}}</a-button>
-          <a-button type="primary" @click="addLine">添加一行</a-button>
+          <a-button type="primary" @click="addLine">添加10个空图标</a-button>
         </a-space>
       </div>
     </div>
@@ -150,7 +150,7 @@
       }
     }
     if (flag) {
-      $message.info('仍有未利用的空白图标，无法添加新行')
+      $message.info('仍有未利用的空白图标，无法继续添加')
       return
     }
     iconB64List.push(...Array(10).fill(''))

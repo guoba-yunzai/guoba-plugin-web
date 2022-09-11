@@ -42,9 +42,12 @@ async function getImageBase64(url) {
   return await blobToDataUrl(blob)
 }
 
-export async function getHelpIconList() {
+export async function getHelpIconList(base64: string) {
+  if (!base64) {
+    base64 = await getImageBase64(MiaoApi.helpIcon)
+  }
   let img = new Image()
-  img.src = await getImageBase64(MiaoApi.helpIcon)
+  img.src = base64
   await waitOnload(img)
   return await splitIcon(img)
 }
