@@ -74,29 +74,27 @@
   }
 
   const submit = () => {
+    let selected = props.uploader!.selected
     cropper.getFile().then(file => {
-      let cvs = document.createElement("canvas")
+      let cvs = document.createElement('canvas')
       cvs.width = 100
       cvs.height = 100
 
-      let reader = new FileReader();
+      let reader = new FileReader()
       reader.onload = function () {
-        let ctx = cvs.getContext("2d")
-        let oldImg = new Image;
-        oldImg.src = props.iconB64List![props.uploader!.selected];
-        oldImg.onload = function () {
-          ctx!.drawImage(oldImg, 0, 0, 100, 100);
-          ctx!.clearRect(0, 0, 80, 80)
-          let newImg = new Image
-          newImg.src = reader.result
-          newImg.onload = function () {
-            ctx!.drawImage(newImg, 0, 0, 80, 80);
-            props.iconB64List![props.uploader!.selected] = cvs.toDataURL()
-            pic.value = null
-          }
+        let ctx = cvs.getContext('2d')!
+        let newImg = new Image
+        newImg.src = reader.result as string
+        newImg.onload = function () {
+          ctx.textAlign = 'center'
+          ctx.font = 'bold 14px sans-serif'
+          ctx.drawImage(newImg, 0, 0, 80, 80)
+          ctx.fillText(selected, 40, 95)
+          props.iconB64List![selected] = cvs.toDataURL()
+          pic.value = null
         }
-      };
-      reader.readAsDataURL(file);
+      }
+      reader.readAsDataURL(file)
     })
   }
 

@@ -1,6 +1,7 @@
 import { unref } from 'vue'
 import { defHttp } from '/@/utils/http/axios'
 import { blobToDataUrl, dataURLtoBlob } from '/@/utils/file/base64Conver'
+import { useMessage } from '/@/hooks/web/useMessage'
 
 export enum MiaoApi {
   help = '/plugin/miao/help',
@@ -44,7 +45,7 @@ async function getImageBase64(url) {
 export async function getHelpIconList() {
   let img = new Image()
   img.src = await getImageBase64(MiaoApi.helpIcon)
-  await new Promise((resolve) => (img.onload = resolve))
+  await waitOnload(img)
   return await splitIcon(img)
 }
 
@@ -58,44 +59,52 @@ function splitIcon(img: HTMLImageElement) {
     if (!ctx) {
       resolve(null)
     } else {
-      let x,
-        y,
-        iconList = [] as string[]
-      for (let i = 0; i < 100; i++) {
+      let x, y, iconList = [] as string[], length = Math.round(img.height / 10)
+      for (let i = 0; i < length; i++) {
         y = Math.floor(i / 10)
         x = i - 10 * y
         ctx.drawImage(img, 100 * x, 100 * y, 100, 100, 0, 0, 100, 100)
         iconList[i + 1] = cvs.toDataURL()
         ctx.clearRect(0, 0, 100, 100)
       }
-      // console.log(iconList)
       resolve(iconList)
     }
   })
 }
 
 async function joinIcon(iconB64List: string[]) {
-  return await new Promise<Blob>((resolve) => {
-    let cvs = document.createElement('canvas')
-    cvs.width = 1000
-    cvs.height = 1000
-    let ctx = cvs.getContext('2d')
-    let x, y
-    for (let i = 0; i < 100; i++) {
-      let img = new Image()
-      y = Math.floor(i / 10)
-      x = i - 10 * y
-      img.src = iconB64List[i + 1]
-      let _x = x
-      let _y = y
-      let _i = i
-      img.onload = function () {
-        ctx!.drawImage(img, 100 * _x, 100 * _y, 100, 100)
-        if (_i === 99) {
-          cvs.toBlob((blob) => resolve(blob!))
-        }
-      }
+  let { createMessage: $message } = useMessage()
+  let cvs = document.createElement('canvas')
+  cvs.width = 1000
+  // 高度向上取整
+  cvs.height = Math.ceil((iconB64List.length - 1) / 10) * 100
+  let ctx = cvs.getContext('2d')!
+  let x, y
+  for (let i = 0; i < iconB64List.length; i++) {
+    let base64 = iconB64List[i + 1]
+    if (!base64) {
+      continue
     }
+    let img = new Image()
+    y = Math.floor(i / 10)
+    x = i - 10 * y
+    img.src = base64
+    try {
+      await waitOnload(img)
+    } catch (e) {
+      console.error(e)
+      $message.error(`第 ${i + 1} 个图标保存失败`)
+      continue
+    }
+    ctx.drawImage(img, 100 * x, 100 * y, 100, 100)
+  }
+  return new Promise<Blob>((resolve) => cvs.toBlob(resolve as any))
+}
+
+async function waitOnload(img: HTMLImageElement) {
+  return new Promise((resolve, reject) => {
+    img.onload = resolve
+    img.onerror = reject
   })
 }
 

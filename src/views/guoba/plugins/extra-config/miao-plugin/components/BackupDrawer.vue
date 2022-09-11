@@ -129,7 +129,7 @@
             return
           }
           setLoading(true)
-          await deleteBackup(id)
+          await deleteBackup(item.id)
           await loadData()
         } finally {
           setLoading(false)

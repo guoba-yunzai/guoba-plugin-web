@@ -93,7 +93,7 @@
   ];
 
   const infoData = {
-    version,
+    version: window['__YUNZAI_BOT_CONF__']['GUOBA_VERSION'] || version,
     lastBuildTime,
     doc: DOC_URL,
     preview: SITE_URL,

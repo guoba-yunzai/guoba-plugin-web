@@ -2,7 +2,7 @@
   <Modal
     v-model:visible="visible"
     @cancel="closeModal"
-    width="460px"
+    width="420px"
     :closable="false"
     :footer="null">
     <template #title>
@@ -20,18 +20,18 @@
     <div class="icon-view-wrap">
       <div class="icon-view">
         <div :class="edit?'edit-icon':'medium-icon'"
-             v-for="(_,k) in new Array(100).toString().split(',')"
+             v-for="(_, idx) of iconB64List"
              :style="{
-              background: `url(${iconB64List[k+1]}) 0 0 no-repeat`,
+              background: `url(${iconB64List[idx+1]}) 0 0 no-repeat`,
               backgroundSize: '50px 50px'
               }"
-             @click="clickIcon(k)"
+             @click="clickIcon(idx)"
         />
 
-        <div class="add-icon">
-          <a-button :type="edit?'danger':'success'" @click="switchEdit">{{edit?"完成":"添加自定义图标"}}
-          </a-button>
-        </div>
+        <a-space class="add-icon" style="padding: 10px;">
+          <a-button :type="edit?'danger':'success'" @click="switchEdit">{{edit?"完成":"添加自定义图标"}}</a-button>
+          <a-button type="primary" @click="addLine">添加一行</a-button>
+        </a-space>
       </div>
     </div>
   </Modal>
@@ -49,6 +49,7 @@
   import {Modal, message} from 'ant-design-vue';
   import {listItemType} from "/@/views/guoba/plugins/extra-config/miao-plugin/types";
   import IconUploader from "./IconUploader.vue"
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   const props = defineProps({
     visible: Boolean,
@@ -59,6 +60,8 @@
   const emits = defineEmits([
     "update:visible"
   ])
+
+  const { createMessage: $message } = useMessage()
 
   const edit = ref<boolean>(false)
 
@@ -136,6 +139,23 @@
       transform: `translate(${transformX.value}px, ${transformY.value}px)`,
     };
   });
+
+  function addLine() {
+    let iconB64List = props.iconB64List!
+    let flag = false
+    for (let i = 1; i < iconB64List.length; i++) {
+      if (!iconB64List[i]) {
+        flag = true
+        break
+      }
+    }
+    if (flag) {
+      $message.info('仍有未利用的空白图标，无法添加新行')
+      return
+    }
+    iconB64List.push(...Array(10).fill(''))
+  }
+
 </script>
 
 <style scoped>
@@ -151,7 +171,7 @@
   }
 
   .icon-view-wrap {
-    width: 440px;
+    width: 410px;
     max-width: calc(100vw - 52px);
     margin: 10px;
     z-index: 100;
