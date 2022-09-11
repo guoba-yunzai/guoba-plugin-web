@@ -20,7 +20,7 @@
     <div class="icon-view-wrap">
       <div class="icon-view">
         <div :class="edit?'edit-icon':'medium-icon'"
-             v-for="(_, idx) of iconB64List"
+             v-for="(_, idx) of new Array(iconB64List.length - 1).toString().split(',')"
              :style="{
               background: `url(${iconB64List[idx+1]}) 0 0 no-repeat`,
               backgroundSize: '50px 50px'
@@ -28,8 +28,8 @@
              @click="clickIcon(idx)"
         />
 
-        <a-space class="add-icon" style="padding: 10px;">
-          <a-button :type="edit?'danger':'success'" @click="switchEdit">{{edit?"完成":"添加自定义图标"}}</a-button>
+        <a-space class="add-icon" style="padding: 10px; width: 100%;">
+          <a-button :type="edit?'danger':'success'" @click="switchEdit">{{edit?"完成":"替换图标"}}</a-button>
           <a-button type="primary" @click="addLine">添加一行</a-button>
         </a-space>
       </div>
@@ -191,6 +191,10 @@
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.2s;
+  }
+
+  .edit-icon {
+    box-shadow: 2px 2px 8px -4px #4ebaee;
   }
 
   .medium-icon:hover {
