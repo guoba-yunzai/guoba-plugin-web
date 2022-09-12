@@ -32,7 +32,7 @@
           {{group.group}}
         </div>
 
-        <div class="help-table">
+        <div v-if="group.list && group.list.length > 0" class="help-table">
           <div v-for="(result,row) in split(group.list)" class="tr" :key="row">
             <div class="td" v-for="(cell,col) in result" :key="col"
                  :class="cell===modelData.cell?'active':'inactive'"
