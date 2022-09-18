@@ -17,6 +17,8 @@ import {
   Popconfirm,
   Space,
   List,
+  Radio,
+  Checkbox,
 } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon'
 
@@ -35,6 +37,8 @@ export function registerGlobComp(app: App) {
     .use(Popconfirm)
     .use(Space)
     .use(List)
+    .use(Radio)
+    .use(Checkbox)
 
   app.component(Icon.name, Icon)
 }
