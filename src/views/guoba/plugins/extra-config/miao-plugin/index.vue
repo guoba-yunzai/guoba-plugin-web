@@ -14,6 +14,7 @@
       <Transition name="scroll-y-reverse-transition">
         <HelpPanel
           v-if="!pageLoading"
+          :cacheVer="cacheVer"
           :versions="versions"
           v-model:helpCfg="helpCfg"
           v-model:helpList="helpList"
@@ -38,13 +39,7 @@
   import HelpPanel from './components/HelpPanel.vue';
   import BackupDrawer from './components/BackupDrawer.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import {
-    getHelpIconList,
-    getMiaoHelpCfg,
-    getThemeBgBase64,
-    getThemeMainBase64,
-    saveMiaoHelpCfg,
-  } from './miao.api';
+  import { getHelpIconList, getMiaoHelpCfg, saveMiaoHelpCfg } from './miao.api';
   import { useDrawer } from '/@/components/Drawer';
 
   export default defineComponent({
@@ -55,6 +50,7 @@
       const { createMessage: $message, createConfirm } = useMessage();
       const pageLoading = ref<boolean>(true);
       const loading = ref<boolean>(true);
+      const cacheVer = ref<number>(0);
       const helpCfg = ref<Nullable<helpCfgType>>(null);
       const helpList = ref<Nullable<helpListType>>(null);
       const bgB64 = ref<Nullable<string>>(null);
@@ -78,6 +74,7 @@
           loading.value = true;
           // 保存配置
           await saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64);
+          await loadData();
           $message.success('保存成功~');
         } finally {
           loading.value = false;
@@ -92,12 +89,13 @@
           helpList.value = result.helpList;
           versions.miao = result.miaoVersion;
           versions.yunzai = result.yunzaiVersion;
-          bgB64.value = await getThemeBgBase64();
-          mainB64.value = await getThemeMainBase64();
+          bgB64.value = null;
+          mainB64.value = null;
           iconB64List.value = await getHelpIconList();
         } finally {
           loading.value = false;
           pageLoading.value = false;
+          cacheVer.value++;
         }
       };
 
@@ -127,6 +125,7 @@
         bgB64,
         mainB64,
         iconB64List,
+        cacheVer,
         versions,
         modelData,
         onBackup,

@@ -30,7 +30,7 @@
 
   const props = defineProps({
     data: propTypes.object.isRequired,
-    weather: propTypes.object.isRequired,
+    weather: propTypes.string.isRequired,
   });
 
   const userStore = useUserStore();
@@ -47,10 +47,9 @@
 
   const textSecondary = computed(() => {
     let { weather } = props;
-    if (!weather || !weather.forecast) {
+    if (!weather) {
       return 'loading…';
     }
-    let { type, low, high } = weather.forecast[0];
-    return `${weather.city}今日${type}，最${low}，最${high}`;
+    return weather;
   });
 </script>

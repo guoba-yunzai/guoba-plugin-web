@@ -6,7 +6,6 @@ import { useMessage } from '/@/hooks/web/useMessage';
 export enum MiaoApi {
   help = '/plugin/miao/help',
   helpIcon = '/plugin/miao/help/icon',
-  helpTheme = '/plugin/miao/help/theme',
   helpBackup = '/plugin/miao/help/backup',
 }
 
@@ -21,21 +20,22 @@ export async function saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64) {
   formData.append('helpCfg', JSON.stringify(unref(helpCfg), null, 2));
   formData.append('helpList', JSON.stringify(unref(helpList), null, 2));
   formData.append('icon', await joinIcon(unref(iconB64List)));
-  formData.append('main', await dataURLtoBlob(unref(mainB64)));
-  return defHttp.post({ url: MiaoApi.help, params: formData }, { errorMessageMode: 'modal' });
-}
-
-export function getThemeMainBase64() {
-  return getImageBase64(MiaoApi.helpTheme + '/main');
-}
-
-export function getThemeBgBase64() {
-  return getImageBase64(MiaoApi.helpTheme + '/bg');
+  if (unref(mainB64)) {
+    formData.append('main', await dataURLtoBlob(unref(mainB64)));
+  }
+  return defHttp.post(
+    {
+      url: MiaoApi.help,
+      params: formData,
+      timeout: -1,
+    },
+    { errorMessageMode: 'modal' },
+  );
 }
 
 async function getImageBase64(url) {
   let res = await defHttp.get(
-    { url, responseType: 'blob' },
+    { url, responseType: 'blob', timeout: -1 },
     { isTransformResponse: false, isReturnNativeResponse: true, errorMessageMode: 'modal' },
   );
   let blob = res.data as Blob;

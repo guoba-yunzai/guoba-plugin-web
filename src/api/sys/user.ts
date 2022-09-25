@@ -34,7 +34,10 @@ export function getUserInfo() {
 }
 
 export function getPermCode() {
-  return defHttp.get<string[]>({ url: Api.GetPermCode });
+  return defHttp.get<{
+    permCode: string[];
+    liteToken: string;
+  }>({ url: Api.GetPermCode });
 }
 
 export function doLogout() {

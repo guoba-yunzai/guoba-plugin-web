@@ -39,6 +39,8 @@ interface PermissionState {
   backMenuList: Menu[];
   // 菜单列表
   frontMenuList: Menu[];
+  // 弱Token
+  liteToken: string;
 }
 
 export const usePermissionStore = defineStore({
@@ -58,6 +60,8 @@ export const usePermissionStore = defineStore({
     // menu List
     // 菜单列表
     frontMenuList: [],
+    // 弱Token
+    liteToken: '',
   }),
   getters: {
     getPermCodeList(): string[] | number[] {
@@ -104,8 +108,9 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
+      const { permCode, liteToken } = await getPermCode();
+      this.liteToken = liteToken;
+      this.setPermCodeList(permCode);
     },
 
     // 构建路由

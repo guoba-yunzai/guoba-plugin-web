@@ -47,21 +47,40 @@
       const guobaStore = useGuobaStore();
       const loading = ref(true);
       const homeData = ref({});
-      const weather = ref({});
+      const weather = ref('');
       const plugins = ref<Plugins>([]);
 
-      async function getHomeData() {
+      async function loadData() {
         try {
           loading.value = true;
-          homeData.value = await sysApi.getHomeData().catch(console.error);
-          weather.value = await helperApi.getCityWeather().catch(console.error);
-          plugins.value = await guobaStore.getPlugins().catch(console.error);
+          await Promise.all([getHomeData(), getPlugins(), getWeather()]);
         } finally {
           loading.value = false;
         }
       }
 
-      getHomeData();
+      async function getHomeData() {
+        homeData.value = await sysApi.getHomeData().catch(console.error);
+      }
+
+      async function getPlugins() {
+        plugins.value = (await guobaStore.getPlugins().catch(console.error)) as Plugins;
+      }
+
+      async function getWeather() {
+        try {
+          let { ok, result, message } = await helperApi.getCityWeather();
+          if (ok) {
+            weather.value = result.weather;
+          } else {
+            weather.value = message;
+          }
+        } catch (e: any) {
+          weather.value = e.message || e;
+        }
+      }
+
+      loadData();
 
       return {
         homeData,

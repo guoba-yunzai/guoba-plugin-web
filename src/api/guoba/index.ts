@@ -27,7 +27,7 @@ const enum HelperApi {
 
 export const helperApi = {
   getCityWeather: () =>
-    defHttp.get({ url: HelperApi.getCityWeather }, { errorMessageMode: 'modal' }),
+    defHttp.get({ url: HelperApi.getCityWeather }, { isTransformResponse: false }),
 };
 
 const enum UserApi {

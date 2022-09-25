@@ -1,9 +1,6 @@
 <template>
-  <div :style="`transform: scale(${scale()});transform-origin: center top;`">
-    <div
-      class="wrap"
-      :style="{ background: `url(${mainB64}) top left/100% auto no-repeat,url(${bgB64})` }"
-    >
+  <div :style="`transform: scale(${scale});transform-origin: center top;`">
+    <div class="wrap" :style="wrapStyle">
       <div class="change-background">
         <input
           type="file"
@@ -15,7 +12,7 @@
         <input type="file" id="upload-icon" style="display: none" name="icon" accept="image/png" />
         <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">
           <a-button
-            :style="`transform: scale(${1 / scale()});transform-origin: right top;`"
+            :style="`transform: scale(${1 / scale});transform-origin: right top;`"
             type="primary"
             shape="circle"
             size="large"
@@ -94,32 +91,40 @@
       v-model:modelData="modelData"
       v-model:iconB64List="iconB64List"
     />
+    <UploadIconHelpModal @register="registerUihModal" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, defineEmits, ref } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
-  import { Modal, Switch } from 'ant-design-vue';
+  import { Modal } from 'ant-design-vue';
   import {
     helpCfgType,
     helpListItemType,
     helpListType,
     listItemType,
+    ListType,
     modelDataType,
   } from '../types';
   import { Dropdown, DropMenu } from '/@/components/Dropdown';
-  import {
-    getHelpIconList,
-    MiaoApi,
-  } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api';
+  import { getHelpIconList } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { createLocalStorage } from '/@/utils/cache';
+  import { usePermissionStore } from '/@/store/modules/permission';
+  import { useModal } from '/@/components/Modal';
+  import UploadIconHelpModal from './UploadIconHelpModal.vue';
+
+  const ls = createLocalStorage();
+  const permStore = usePermissionStore();
+  const [registerUihModal, uihModal] = useModal();
 
   const props = defineProps({
     helpCfg: Object as PropType<helpCfgType>,
     helpList: Object as PropType<helpListType>,
     bgB64: String,
     mainB64: String,
+    cacheVer: Number,
     iconB64List: Array as PropType<string[]>,
     modelData: Object as PropType<modelDataType>,
     versions: Object as PropType<{ yunzai: string; miao: string }>,
@@ -147,16 +152,36 @@
       text: '上传图标',
       icon: 'fontisto:nav-icon-grid',
       onClick() {
-        getUploadBase64('upload-icon', async (base64) => {
-          let iconList = await getHelpIconList(base64);
-          emits('update:iconB64List', iconList);
-          $message.success('上传成功');
-        });
+        let fn = () => {
+          getUploadBase64('upload-icon', async (base64) => {
+            let iconList = await getHelpIconList(base64);
+            emits('update:iconB64List', iconList);
+            $message.success('上传成功');
+          });
+        };
+        let flag = ls.get('hide-upload-icon-help-modal', false);
+        if (flag === true) {
+          fn();
+        } else {
+          uihModal.openModal(true, fn);
+        }
       },
     },
   ]);
 
   const isBindEvent = {};
+
+  const wrapStyle = computed(() => {
+    let style: Recordable = {};
+    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&_v=${props.cacheVer}`;
+    let themeBg = themePath.replace('$s', 'bg');
+    let themeMain = themePath.replace('$s', 'main');
+    if (props.mainB64) {
+      themeMain = props.mainB64;
+    }
+    style.background = `url(${themeMain}) top left/100% auto no-repeat,url(${themeBg})`;
+    return style;
+  });
 
   function getUploadBase64(inputId: string, callback: Fn) {
     let input = document.getElementById(inputId) as HTMLInputElement;
@@ -191,21 +216,21 @@
     emits('update:modelData', { show: true, cell, cellIndex, group, groupIndex });
   };
 
-  const split = (item_list) => {
-    let result = [];
+  const split = (item_list: ListType) => {
+    let result: listItemType[][] = [];
     for (let i = 0; i < item_list.length; i += 3) {
       result.push(item_list.slice(i, i + 3));
     }
     return result;
   };
 
-  const scale = () => {
+  const scale = computed<Number>(() => {
     if (document.body.clientWidth > 850) {
       return 1;
     } else {
       return document.body.clientWidth / 850;
     }
-  };
+  });
 </script>
 
 <style scoped>
