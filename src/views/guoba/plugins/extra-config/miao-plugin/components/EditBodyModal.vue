@@ -1,10 +1,7 @@
 <template>
-  <Modal
-    v-model:visible="modelData.show"
-    :closable="false"
-    :footer="null">
+  <Modal v-model:visible="modelData.show" :closable="false" :footer="null">
     <template #title>
-      <div  ref="modalTitleRef" style="width: 100%; cursor: move;margin: 0">
+      <div ref="modalTitleRef" style="width: 100%; cursor: move; margin: 0">
         编辑内容
         <span class="tip">按住这里可拖动</span>
       </div>
@@ -12,7 +9,7 @@
 
     <template #modalRender="{ originVNode }">
       <div :style="transformStyle">
-        <component :is="originVNode"/>
+        <component :is="originVNode" />
       </div>
     </template>
 
@@ -20,7 +17,7 @@
       <div class="row">
         <div>分组</div>
         <div class="flex-1">
-          <a-input v-model:value="modelData.group.group" placeholder="分组"/>
+          <a-input v-model:value="modelData.group.group" placeholder="分组" />
         </div>
       </div>
 
@@ -38,27 +35,28 @@
         <div class="flex justify-start">
           <a-button
             class="ml-4"
-            :disabled="modelData.groupIndex===0"
+            :disabled="modelData.groupIndex === 0"
             type="primary"
             shape="circle"
             size="medium"
-            @click="moveGroup(-1)">
-            <Icon icon="akar-icons:arrow-up"/>
+            @click="moveGroup(-1)"
+          >
+            <Icon icon="akar-icons:arrow-up" />
           </a-button>
 
           <a-button
             class="ml-4"
-            :disabled="modelData.groupIndex===helpList.length-1"
+            :disabled="modelData.groupIndex === helpList.length - 1"
             type="primary"
             shape="circle"
             size="medium"
-            @click="moveGroup(1)">
-            <Icon icon="akar-icons:arrow-down"/>
+            @click="moveGroup(1)"
+          >
+            <Icon icon="akar-icons:arrow-down" />
           </a-button>
         </div>
         <div class="flex flex-1 justify-end">
-          <a-button v-if="!modelData.cell" class="ml-4" @click="createCell">添加项目
-          </a-button>
+          <a-button v-if="!modelData.cell" class="ml-4" @click="createCell">添加项目 </a-button>
           <a-button class="ml-4" type="success" @click="createGroup">添加分组</a-button>
           <a-popconfirm title="确定删除？" @confirm="deleteGroup">
             <a-button class="ml-4" type="default" danger>删除该组</a-button>
@@ -67,23 +65,25 @@
       </div>
 
       <div v-if="modelData.cell">
-        <a-divider style="margin:16px 0"/>
+        <a-divider style="margin: 16px 0" />
 
-        <div class="icon"
-             @click="changeIcon"
-             :style="`background: url(${iconB64List[modelData.cell.icon]}) 0 0 no-repeat`"/>
+        <div
+          class="icon"
+          @click="changeIcon"
+          :style="`background: url(${iconB64List[modelData.cell.icon]}) 0 0 no-repeat`"
+        />
 
         <div class="row">
           <div>标题</div>
           <div class="flex-1">
-            <a-input v-model:value="modelData.cell.title" placeholder="标题"/>
+            <a-input v-model:value="modelData.cell.title" placeholder="标题" />
           </div>
         </div>
 
         <div class="row">
           <div>描述</div>
           <div class="flex-1">
-            <a-input v-model:value="modelData.cell.desc" placeholder="描述"/>
+            <a-input v-model:value="modelData.cell.desc" placeholder="描述" />
           </div>
         </div>
 
@@ -91,22 +91,24 @@
           <div class="flex justify-start">
             <a-button
               class="ml-4"
-              :disabled="modelData.cellIndex===0"
+              :disabled="modelData.cellIndex === 0"
               type="primary"
               shape="circle"
               size="medium"
-              @click="moveCell(-1)">
-              <Icon icon="akar-icons:arrow-left"/>
+              @click="moveCell(-1)"
+            >
+              <Icon icon="akar-icons:arrow-left" />
             </a-button>
 
             <a-button
               class="ml-4"
-              :disabled="modelData.cellIndex===helpList[modelData.groupIndex].list.length-1"
+              :disabled="modelData.cellIndex === helpList[modelData.groupIndex].list.length - 1"
               type="primary"
               shape="circle"
               size="medium"
-              @click="moveCell(1)">
-              <Icon icon="akar-icons:arrow-right"/>
+              @click="moveCell(1)"
+            >
+              <Icon icon="akar-icons:arrow-right" />
             </a-button>
           </div>
           <div class="flex flex-1 justify-end">
@@ -129,11 +131,11 @@
 </template>
 
 <script lang="ts" setup>
-  import {ref, watch, watchEffect, computed, CSSProperties} from "vue"
-  import {useDraggable} from '@vueuse/core';
-  import {Modal, Switch} from 'ant-design-vue';
-  import {helpListType, modelDataType} from "../types";
-  import SelectIconModal from "./SelectIconModal.vue"
+  import { ref, watch, watchEffect, computed, CSSProperties } from 'vue';
+  import { useDraggable } from '@vueuse/core';
+  import { Modal, Switch } from 'ant-design-vue';
+  import { helpListType, modelDataType } from '../types';
+  import SelectIconModal from './SelectIconModal.vue';
 
   const props = defineProps({
     helpList: Object as PropType<helpListType>,
@@ -141,64 +143,66 @@
     iconB64List: Array as PropType<string[]>,
   });
 
-  const showIconModal = ref<boolean>(false)
-
+  const showIconModal = ref<boolean>(false);
 
   const createGroup = () => {
-    let index = props.modelData!.groupIndex!
+    let index = props.modelData!.groupIndex!;
     props.helpList!.splice(index, 0, {
-      group: "未命名组别",
-      list: []
-    })
-    props.modelData!.group = props.helpList![index]
-    props.modelData!.cellIndex = props.modelData!.cell = null
-  }
+      group: '未命名组别',
+      list: [],
+    });
+    props.modelData!.group = props.helpList![index];
+    props.modelData!.cellIndex = props.modelData!.cell = null;
+  };
 
   const createCell = () => {
-    let index = props.modelData!.cellIndex ?? 0
+    let index = props.modelData!.cellIndex ?? 0;
     props.helpList![props.modelData!.groupIndex!].list.splice(index, 0, {
       icon: 1,
-      title: "未命名项目",
-      desc: "请添加描述"
-    })
-    props.modelData!.cell = props.helpList![props.modelData!.groupIndex!].list[index]
-    props.modelData!.cellIndex = index
-  }
+      title: '未命名项目',
+      desc: '请添加描述',
+    });
+    props.modelData!.cell = props.helpList![props.modelData!.groupIndex!].list[index];
+    props.modelData!.cellIndex = index;
+  };
 
-  const moveGroup = offset => {
-    let temp, array = props.helpList!, index = props.modelData!.groupIndex!
-    temp = array[index]
-    array[index] = array[index + offset]
-    array[index + offset] = temp
-    props.modelData!.groupIndex! += offset
-  }
+  const moveGroup = (offset) => {
+    let temp,
+      array = props.helpList!,
+      index = props.modelData!.groupIndex!;
+    temp = array[index];
+    array[index] = array[index + offset];
+    array[index + offset] = temp;
+    props.modelData!.groupIndex! += offset;
+  };
 
-  const moveCell = offset => {
-    let temp, array = props.helpList![props.modelData!.groupIndex!].list,
-      index = props.modelData!.cellIndex!
-    temp = array[index]
-    array[index] = array[index + offset]
-    array[index + offset] = temp
-    props.modelData!.cellIndex! += offset
-  }
+  const moveCell = (offset) => {
+    let temp,
+      array = props.helpList![props.modelData!.groupIndex!].list,
+      index = props.modelData!.cellIndex!;
+    temp = array[index];
+    array[index] = array[index + offset];
+    array[index + offset] = temp;
+    props.modelData!.cellIndex! += offset;
+  };
 
   const deleteGroup = () => {
-    props.helpList!.splice(props.modelData!.groupIndex!, 1)
-    props.modelData!.show = false
-  }
+    props.helpList!.splice(props.modelData!.groupIndex!, 1);
+    props.modelData!.show = false;
+  };
 
   const deleteCell = () => {
     props.helpList![props.modelData!.groupIndex!].list.splice(props.modelData!.cellIndex!, 1);
-    props.modelData!.show = false
-  }
+    props.modelData!.show = false;
+  };
 
   const changeIcon = () => {
-    showIconModal.value = true
-  }
+    showIconModal.value = true;
+  };
 
   const modalTitleRef = ref<Nullable<HTMLElement>>(null);
 
-  const {x, y, isDragging} = useDraggable(modalTitleRef);
+  const { x, y, isDragging } = useDraggable(modalTitleRef);
   const startX = ref<number>(0);
   const startY = ref<number>(0);
   const startedDrag = ref(false);
@@ -206,7 +210,7 @@
   const transformY = ref(0);
   const preTransformX = ref(0);
   const preTransformY = ref(0);
-  const dragRect = ref({left: 0, right: 0, top: 0, bottom: 0});
+  const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 });
 
   watch([x, y], () => {
     if (!startedDrag.value) {
@@ -283,7 +287,7 @@
   }
 
   .row > div:first-child:after {
-    content: ":";
+    content: ':';
     margin: 0 6px 0 2px;
     position: relative;
     top: -0.5px;

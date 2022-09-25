@@ -1,48 +1,61 @@
 <template>
   <div :style="`transform: scale(${scale()});transform-origin: center top;`">
-    <div class="wrap"
-         :style="{background: `url(${mainB64}) top left/100% auto no-repeat,url(${bgB64})`}">
-
+    <div
+      class="wrap"
+      :style="{ background: `url(${mainB64}) top left/100% auto no-repeat,url(${bgB64})` }"
+    >
       <div class="change-background">
-        <input type="file" id="upload-bg" style="display: none;" name="icon" accept="image/bmp,image/jpeg,image/png">
-        <input type="file" id="upload-icon" style="display: none;" name="icon" accept="image/png">
+        <input
+          type="file"
+          id="upload-bg"
+          style="display: none"
+          name="icon"
+          accept="image/bmp,image/jpeg,image/png"
+        />
+        <input type="file" id="upload-icon" style="display: none" name="icon" accept="image/png" />
         <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">
           <a-button
-            :style="`transform: scale(${1/scale()});transform-origin: right top;`"
+            :style="`transform: scale(${1 / scale()});transform-origin: right top;`"
             type="primary"
             shape="circle"
             size="large"
           >
-            <Icon icon="akar-icons:image"/>
+            <Icon icon="akar-icons:image" />
           </a-button>
         </Dropdown>
       </div>
 
       <div class="head-box" @click="clickHead">
         <div class="title">
-          {{helpCfg.title}}
+          {{ helpCfg.title }}
         </div>
         <div class="label">
-          {{helpCfg.subTitle}}
+          {{ helpCfg.subTitle }}
         </div>
       </div>
 
-      <div class="cont-box" v-for="(group,groupIndex) in helpList" :key="groupIndex">
-        <div class="help-group" @click="clickBody(null,null,group,groupIndex)">
-          {{group.group}}
+      <div class="cont-box" v-for="(group, groupIndex) in helpList" :key="groupIndex">
+        <div class="help-group" @click="clickBody(null, null, group, groupIndex)">
+          {{ group.group }}
         </div>
 
         <div v-if="group.list && group.list.length > 0" class="help-table">
-          <div v-for="(result,row) in split(group.list)" class="tr" :key="row">
-            <div class="td" v-for="(cell,col) in result" :key="col"
-                 :class="cell===modelData.cell?'active':'inactive'"
-                 @click="clickBody(cell,3*row+col,group,groupIndex)">
+          <div v-for="(result, row) in split(group.list)" class="tr" :key="row">
+            <div
+              class="td"
+              v-for="(cell, col) in result"
+              :key="col"
+              :class="cell === modelData.cell ? 'active' : 'inactive'"
+              @click="clickBody(cell, 3 * row + col, group, groupIndex)"
+            >
               <transition name="fade-transition">
                 <div>
-                  <div class="help-icon"
-                       :style="`background: url(${iconB64List[cell.icon]}) 0 0 no-repeat`"/>
-                  <div class="help-title"> {{cell.title}}</div>
-                  <div class="help-desc"> {{cell.desc}}</div>
+                  <div
+                    class="help-icon"
+                    :style="`background: url(${iconB64List[cell.icon]}) 0 0 no-repeat`"
+                  />
+                  <div class="help-title"> {{ cell.title }}</div>
+                  <div class="help-desc"> {{ cell.desc }}</div>
                 </div>
               </transition>
             </div>
@@ -52,29 +65,25 @@
 
       <div class="copyright">
         Created By Yunzai-Bot
-        <span class="version">{{versions.yunzai}}</span>
+        <span class="version">{{ versions.yunzai }}</span>
         &amp; Miao-Plugin
-        <span class="version">{{versions.miao}}</span>
+        <span class="version">{{ versions.miao }}</span>
       </div>
     </div>
 
-    <modal
-      v-model:visible="showHeadModal"
-      title="编辑标题"
-      :closable="false"
-      :footer="null">
+    <modal v-model:visible="showHeadModal" title="编辑标题" :closable="false" :footer="null">
       <div class="p-4">
         <div class="row">
           <div>主标题</div>
           <div class="flex-1">
-            <a-input v-model:value="helpCfg.title" placeholder="主标题"/>
+            <a-input v-model:value="helpCfg.title" placeholder="主标题" />
           </div>
         </div>
 
         <div class="row">
           <div>附标题</div>
           <div class="flex-1">
-            <a-input v-model:value="helpCfg.subTitle" placeholder="附标题"/>
+            <a-input v-model:value="helpCfg.subTitle" placeholder="附标题" />
           </div>
         </div>
       </div>
@@ -89,13 +98,22 @@
 </template>
 
 <script lang="ts" setup>
-  import {defineEmits, ref} from "vue"
-  import EditBodyModal from "./EditBodyModal.vue"
-  import {Modal, Switch} from 'ant-design-vue';
-  import {helpCfgType, helpListItemType, helpListType, listItemType, modelDataType} from "../types";
-  import { Dropdown, DropMenu } from '/@/components/Dropdown'
-  import { getHelpIconList, MiaoApi } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api'
-  import { useMessage } from '/@/hooks/web/useMessage'
+  import { computed, defineEmits, ref } from 'vue';
+  import EditBodyModal from './EditBodyModal.vue';
+  import { Modal, Switch } from 'ant-design-vue';
+  import {
+    helpCfgType,
+    helpListItemType,
+    helpListType,
+    listItemType,
+    modelDataType,
+  } from '../types';
+  import { Dropdown, DropMenu } from '/@/components/Dropdown';
+  import {
+    getHelpIconList,
+    MiaoApi,
+  } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const props = defineProps({
     helpCfg: Object as PropType<helpCfgType>,
@@ -104,19 +122,14 @@
     mainB64: String,
     iconB64List: Array as PropType<string[]>,
     modelData: Object as PropType<modelDataType>,
-    versions: Object as PropType<{ yunzai: string, miao: string }>,
+    versions: Object as PropType<{ yunzai: string; miao: string }>,
   });
 
+  const emits = defineEmits(['update:modelData', 'update:mainB64', 'update:iconB64List']);
 
-  const emits = defineEmits([
-    "update:modelData",
-    "update:mainB64",
-    "update:iconB64List"
-  ])
+  const { createMessage: $message } = useMessage();
 
-  const { createMessage: $message } = useMessage()
-
-  const showHeadModal = ref<boolean>(false)
+  const showHeadModal = ref<boolean>(false);
 
   const dropMenuList = ref<DropMenu[]>([
     {
@@ -125,8 +138,8 @@
       icon: 'akar-icons:image',
       onClick() {
         getUploadBase64('upload-bg', (base64) => {
-          emits('update:mainB64', base64)
-        })
+          emits('update:mainB64', base64);
+        });
       },
     },
     {
@@ -135,59 +148,64 @@
       icon: 'fontisto:nav-icon-grid',
       onClick() {
         getUploadBase64('upload-icon', async (base64) => {
-          let iconList = await getHelpIconList(base64)
-          emits('update:iconB64List', iconList)
-          $message.success('上传成功')
-        })
+          let iconList = await getHelpIconList(base64);
+          emits('update:iconB64List', iconList);
+          $message.success('上传成功');
+        });
       },
     },
-  ])
+  ]);
 
-  const isBindEvent = {}
+  const isBindEvent = {};
 
   function getUploadBase64(inputId: string, callback: Fn) {
-    let input = document.getElementById(inputId) as HTMLInputElement
+    let input = document.getElementById(inputId) as HTMLInputElement;
     if (!isBindEvent[inputId]) {
-      isBindEvent[inputId] = true
-      input.addEventListener('change', ev => {
-        let files = (ev.target! as HTMLInputElement).files!
+      isBindEvent[inputId] = true;
+      input.addEventListener('change', (ev) => {
+        let files = (ev.target! as HTMLInputElement).files!;
         if (files.length !== 0) {
-          let file = files[0]
-          let Reader = new FileReader()
-          Reader.readAsDataURL(file)
+          let file = files[0];
+          let Reader = new FileReader();
+          Reader.readAsDataURL(file);
           Reader.onload = () => {
-            callback(Reader.result)
-            input.value = null
-          }
+            callback(Reader.result);
+            input.value = null;
+          };
         }
-      })
+      });
     }
-    input.click()
+    input.click();
   }
 
   const clickHead = () => {
-    showHeadModal.value = true
-  }
+    showHeadModal.value = true;
+  };
 
-  const clickBody = (cell: listItemType, cellIndex: number, group: helpListItemType, groupIndex: number) => {
-    emits("update:modelData", {show: true, cell, cellIndex, group, groupIndex})
-  }
+  const clickBody = (
+    cell: listItemType,
+    cellIndex: number,
+    group: helpListItemType,
+    groupIndex: number,
+  ) => {
+    emits('update:modelData', { show: true, cell, cellIndex, group, groupIndex });
+  };
 
-  const split = item_list => {
+  const split = (item_list) => {
     let result = [];
     for (let i = 0; i < item_list.length; i += 3) {
       result.push(item_list.slice(i, i + 3));
     }
-    return result
-  }
+    return result;
+  };
 
   const scale = () => {
     if (document.body.clientWidth > 850) {
-      return 1
+      return 1;
     } else {
-      return document.body.clientWidth / 850
+      return document.body.clientWidth / 850;
     }
-  }
+  };
 </script>
 
 <style scoped>
@@ -227,9 +245,8 @@
   .label {
     font-size: 16px;
     text-shadow: 0 0 1px #000, 1px 1px 3px rgb(0 0 0 / 90%);
-    font-family: Number, "微软雅黑", sans-serif;
+    font-family: Number, '微软雅黑', sans-serif;
   }
-
 
   .cont-box {
     border-radius: 15px;
@@ -240,7 +257,7 @@
     box-shadow: 0 5px 10px 0 rgb(0 0 0 / 15%);
     position: relative;
     background: rgba(43, 52, 61, 0.8);
-    font-family: Number, "微软雅黑", sans-serif;
+    font-family: Number, '微软雅黑', sans-serif;
     color: white;
   }
 
@@ -255,7 +272,7 @@
 
   .help-group:hover {
     transform-origin: left;
-    color: #FAFAD2;
+    color: #fafad2;
   }
 
   .help-table {
@@ -287,13 +304,12 @@
     transition: all 0.2s;
   }
 
-
   .help-table .tr:nth-child(odd) {
-    background: rgba(34, 41, 51, .6)
+    background: rgba(34, 41, 51, 0.6);
   }
 
   .help-table .tr:nth-child(even) {
-    background: rgba(34, 41, 51, .3)
+    background: rgba(34, 41, 51, 0.3);
   }
 
   .help-table .tr:last-child .td {
@@ -327,7 +343,7 @@
 
   .copyright {
     font-size: 16px;
-    font-family: "Number", sans-serif;
+    font-family: 'Number', sans-serif;
     text-align: center;
     color: #fff;
     position: relative;
@@ -352,5 +368,4 @@
     background-color: #3983a3;
     z-index: 100;
   }
-
 </style>

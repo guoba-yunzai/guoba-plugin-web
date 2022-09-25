@@ -1,5 +1,12 @@
 <template>
-  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px" :loading="loading">
+  <PageWrapper
+    :class="[prefixCls]"
+    title="编辑喵喵帮助"
+    dense
+    sticky
+    stickyTop="-14px"
+    :loading="loading"
+  >
     <template #headerContent>
       <EditMiaoHeader @save="saveData" @rollback="onRollback" @backup="onBackup" />
     </template>
@@ -22,86 +29,82 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, reactive, ref} from 'vue';
-  import type {
-    helpCfgType,
-    helpListType,
-    modelDataType,
-  } from './types'
+  import { defineComponent, reactive, ref } from 'vue';
+  import type { helpCfgType, helpListType, modelDataType } from './types';
 
-  import { useMessage } from '/@/hooks/web/useMessage'
-  import {PageWrapper} from '/@/components/Page';
-  import EditMiaoHeader from "./components/MiaoHeader.vue";
-  import HelpPanel from "./components/HelpPanel.vue";
-  import BackupDrawer from "./components/BackupDrawer.vue";
-  import { useDesign } from '/@/hooks/web/useDesign'
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { PageWrapper } from '/@/components/Page';
+  import EditMiaoHeader from './components/MiaoHeader.vue';
+  import HelpPanel from './components/HelpPanel.vue';
+  import BackupDrawer from './components/BackupDrawer.vue';
+  import { useDesign } from '/@/hooks/web/useDesign';
   import {
     getHelpIconList,
     getMiaoHelpCfg,
     getThemeBgBase64,
     getThemeMainBase64,
     saveMiaoHelpCfg,
-  } from './miao.api'
-  import { useDrawer } from '/@/components/Drawer'
+  } from './miao.api';
+  import { useDrawer } from '/@/components/Drawer';
 
   export default defineComponent({
     name: 'MiaoPluginExtra',
-    components: {HelpPanel, EditMiaoHeader, PageWrapper, BackupDrawer},
+    components: { HelpPanel, EditMiaoHeader, PageWrapper, BackupDrawer },
     setup() {
-      const {prefixCls} = useDesign('edit-miao-help')
-      const {createMessage : $message, createConfirm} = useMessage()
-      const pageLoading = ref<boolean>(true)
-      const loading = ref<boolean>(true)
+      const { prefixCls } = useDesign('edit-miao-help');
+      const { createMessage: $message, createConfirm } = useMessage();
+      const pageLoading = ref<boolean>(true);
+      const loading = ref<boolean>(true);
       const helpCfg = ref<Nullable<helpCfgType>>(null);
       const helpList = ref<Nullable<helpListType>>(null);
-      const bgB64 = ref<Nullable<string>>(null)
-      const mainB64 = ref<Nullable<string>>(null)
-      const iconB64List = ref<Nullable<string[]>>(null)
+      const bgB64 = ref<Nullable<string>>(null);
+      const mainB64 = ref<Nullable<string>>(null);
+      const iconB64List = ref<Nullable<string[]>>(null);
       const versions = reactive({
         miao: 'x.x.x',
         yunzai: 'x.x.x',
-      })
+      });
       const modelData = ref<modelDataType>({
         show: false,
         cell: null,
         cellIndex: null,
         group: null,
-        groupIndex: null
-      })
-      const [registerDrawer, {openDrawer}] =useDrawer()
+        groupIndex: null,
+      });
+      const [registerDrawer, { openDrawer }] = useDrawer();
 
       const saveData = async () => {
         try {
-          loading.value = true
+          loading.value = true;
           // 保存配置
-          await saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64)
-          $message.success('保存成功~')
-        }finally {
-          loading.value = false
+          await saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64);
+          $message.success('保存成功~');
+        } finally {
+          loading.value = false;
         }
-      }
+      };
 
       const loadData = async () => {
         try {
-          loading.value = true
-          let result = await getMiaoHelpCfg()
-          helpCfg.value = result.helpCfg
-          helpList.value = result.helpList
-          versions.miao = result.miaoVersion
-          versions.yunzai = result.yunzaiVersion
-          bgB64.value = await getThemeBgBase64()
-          mainB64.value = await getThemeMainBase64()
-          iconB64List.value = await getHelpIconList()
+          loading.value = true;
+          let result = await getMiaoHelpCfg();
+          helpCfg.value = result.helpCfg;
+          helpList.value = result.helpList;
+          versions.miao = result.miaoVersion;
+          versions.yunzai = result.yunzaiVersion;
+          bgB64.value = await getThemeBgBase64();
+          mainB64.value = await getThemeMainBase64();
+          iconB64List.value = await getHelpIconList();
         } finally {
-          loading.value = false
-          pageLoading.value = false
+          loading.value = false;
+          pageLoading.value = false;
         }
-      }
+      };
 
-      loadData()
+      loadData();
 
       function onBackup() {
-        openDrawer(true, {})
+        openDrawer(true, {});
       }
 
       function onRollback() {
@@ -110,9 +113,9 @@
           iconType: 'warning',
           content: '确定要放弃所有修改吗？',
           onOk: () => {
-            loadData()
-          }
-        })
+            loadData();
+          },
+        });
       }
 
       return {
@@ -131,9 +134,9 @@
         loadData,
         saveData,
         registerDrawer,
-      }
-    }
-  })
+      };
+    },
+  });
 </script>
 <style lang="less">
   //noinspection LessUnresolvedVariable
