@@ -7,6 +7,7 @@ export interface Plugin {
   link: string;
   // 是否是只支持V3的插件
   isV3: boolean;
+  isV2: boolean;
   // 插件作者
   author: string;
   // 插件作者链接
@@ -21,6 +22,7 @@ export interface Plugin {
   icon?: string;
   // 图标颜色（可选）
   color?: string;
+  hasConfig: boolean;
 }
 
 export type Plugins = Plugin[];
