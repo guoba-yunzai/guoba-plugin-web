@@ -23,8 +23,10 @@
             {{ item.description }}
           </div>
         </div>
-        <div class="flex justify-between text-secondary">
-          <span>{{ item.author }}</span>
+        <div class="flex justify-between text-secondary ellipsis" style="max-width: 100%">
+          <span class="ellipsis" style="max-width: calc(100% - 100px)">
+            {{ parseAuthor(item.author) }}
+          </span>
           <span>
             <Tag v-if="item.hasConfig" color="purple">可配置</Tag>
             <Tag v-if="item.installed" color="green">已安装</Tag>
@@ -66,8 +68,20 @@
         openModal(true, { plugin });
       }
 
+      /**
+       * 兼容数组和字符串的情况
+       * @param author
+       */
+      function parseAuthor(author) {
+        if (Array.isArray(author)) {
+          return author.join(' ');
+        }
+        return author;
+      }
+
       return {
         onClick,
+        parseAuthor,
         registerModal,
       };
     },

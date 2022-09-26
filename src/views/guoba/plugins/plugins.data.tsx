@@ -1,6 +1,7 @@
 import type { Plugin } from '/#/guoba';
 import type { BasicColumn } from '/@/components/Table';
 import { getStatusTags } from '/@/hooks/guoba';
+import { parseAuthorLink } from '/@/utils/guoba';
 
 export const columns: BasicColumn[] = [
   {
@@ -28,14 +29,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'author',
     width: 180,
     customRender: ({ record }) => {
-      if (record.authorLink) {
-        return (
-          <a href={record.authorLink} target="_blank">
-            {record.author}
-          </a>
-        );
-      }
-      return record.author;
+      return parseAuthorLink(record);
     },
   },
   {

@@ -54,6 +54,7 @@
   import { getStatusTags } from '/@/hooks/guoba';
   import PluginConfigForm from './components/PluginConfigForm.vue';
   import { sleep } from '/@/utils/common';
+  import { parseAuthorLink } from '/@/utils/guoba';
 
   export default defineComponent({
     name: 'GPluginModal',
@@ -89,15 +90,7 @@
             label: '插件作者',
             field: 'author',
             render: (_, record) => {
-              if (record.authorLink) {
-                return (
-                  <a href={record.authorLink} target="_blank">
-                    {record.author}
-                  </a>
-                );
-              } else {
-                return record.author;
-              }
+              return parseAuthorLink(record);
             },
           },
           {

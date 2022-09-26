@@ -8,8 +8,9 @@
     </template>
 
     <BasicTable @register="registerTable" :searchInfo="searchInfo">
-      <template #action="{ record }">
+      <template #bodyCell="{ column, record }">
         <TableAction
+          v-if="column.key === 'action'"
           :actions="[
             {
               icon: 'clarity:info-standard-line',
@@ -57,7 +58,6 @@
           width: 80,
           title: '操作',
           dataIndex: 'action',
-          slots: { customRender: 'action' },
         },
       });
 
