@@ -11,6 +11,7 @@
   >
     <div style="text-indent: 2em">
       <p>注：该功能不是上传小图标，而是上传一整张的大图标文件，例如下图示例：</p>
+      <p>注：请严格按照每10个图标为一行、每个图标的大小为100×100的格式来上传。</p>
       <p>
         <img src="/resource/img/21ae6624.webp" alt="示例" style="margin: 0 auto" />
       </p>
@@ -55,6 +56,7 @@
 
   function onCancel() {
     hide.value = false;
+    closeModal();
   }
 </script>
 
