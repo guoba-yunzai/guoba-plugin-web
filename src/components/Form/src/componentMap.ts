@@ -35,6 +35,8 @@ import { CountdownInput } from '/@/components/CountDown';
 
 const componentMap = new Map<ComponentType, Component>();
 
+export type componentMapType = typeof componentMap;
+
 componentMap.set('Input', Input);
 componentMap.set('InputGroup', Input.Group);
 componentMap.set('InputPassword', Input.Password);
