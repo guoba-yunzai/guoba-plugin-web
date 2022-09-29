@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:visible="modelData.show" :closable="false" :footer="null">
+  <Modal v-model:visible="modelData.show" :closable="false" :footer="null" :mask="false">
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move; margin: 0">
         编辑内容

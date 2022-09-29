@@ -5,6 +5,7 @@
     width="420px"
     :closable="false"
     :footer="null"
+    :mask="false"
   >
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move">
@@ -148,7 +149,7 @@
       }
     }
     if (flag) {
-      $message.info('仍有未利用的空白图标，无法继续添加');
+      $message.warn('仍有未利用的空白图标，无法继续添加');
       return;
     }
     iconB64List.push(...Array(10).fill(''));
