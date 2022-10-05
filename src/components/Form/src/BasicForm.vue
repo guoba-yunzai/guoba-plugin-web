@@ -278,7 +278,7 @@
 
       onMounted(() => {
         initDefault();
-        emit('register', formActionType);
+        emit('register', formActionType, formModel);
       });
 
       return {

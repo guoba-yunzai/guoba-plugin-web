@@ -19,7 +19,7 @@ export function useModalDragMove(context: UseModalDragMoveContext) {
 
     if (!dialogHeaderEl || !dragDom || !unref(context.draggable)) return;
 
-    dialogHeaderEl.style.cursor = 'move';
+    dialogHeaderEl.classList.add('modal-allow-drag')
 
     dialogHeaderEl.onmousedown = (e: any) => {
       if (!e) return;
