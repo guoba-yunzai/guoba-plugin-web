@@ -78,7 +78,7 @@
         </div>
 
         <div class="row">
-          <div>附标题</div>
+          <div>副标题</div>
           <div class="flex-1">
             <a-input v-model:value="helpCfg.subTitle" placeholder="附标题" />
           </div>

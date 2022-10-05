@@ -1,5 +1,11 @@
 <template>
-  <Modal v-model:visible="modelData.show" :closable="false" :footer="null" :mask="false">
+  <Modal
+    v-model:visible="modelData.show"
+    :footer="null"
+    :mask="false"
+    :class="prefixCls"
+    wrapClassName="model-event-none"
+  >
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move; margin: 0">
         编辑内容
@@ -56,7 +62,7 @@
           </a-button>
         </div>
         <div class="flex flex-1 justify-end">
-          <a-button v-if="!modelData.cell" class="ml-4" @click="createCell">添加项目 </a-button>
+          <a-button v-if="!modelData.cell" class="ml-4" @click="createCell">添加项目</a-button>
           <a-button class="ml-4" type="success" @click="createGroup">添加分组</a-button>
           <a-popconfirm title="确定删除？" @confirm="deleteGroup">
             <a-button class="ml-4" type="default" danger>删除该组</a-button>
@@ -127,28 +133,41 @@
     v-model:visible="showIconModal"
     v-model:cell="modelData.cell"
     v-model:iconB64List="iconB64List"
+    :afterClose="iconModalAfter"
   />
 </template>
 
 <script lang="ts" setup>
-  import { ref, watch, watchEffect, computed, CSSProperties } from 'vue';
+  import {
+    ref,
+    watch,
+    watchEffect,
+    computed,
+    CSSProperties,
+    onDeactivated,
+    onUnmounted,
+  } from 'vue';
   import { useDraggable } from '@vueuse/core';
   import { Modal, Switch } from 'ant-design-vue';
   import { helpListType, modelDataType } from '../types';
   import SelectIconModal from './SelectIconModal.vue';
+  import { useDesign } from '/@/hooks/web/useDesign';
 
   const props = defineProps({
+    panelCls: String,
     helpList: Object as PropType<helpListType>,
     modelData: Object as PropType<modelDataType>,
     iconB64List: Array as PropType<string[]>,
   });
+  const { prefixCls } = useDesign('miao-plugin-edit-modal');
 
   const showIconModal = ref<boolean>(false);
+  let showIconModalAfter = false;
 
   const createGroup = () => {
     let index = props.modelData!.groupIndex!;
     props.helpList!.splice(index, 0, {
-      group: '未命名组别',
+      group: '未命名分组',
       list: [],
     });
     props.modelData!.group = props.helpList![index];
@@ -156,13 +175,17 @@
   };
 
   const createCell = () => {
+    let group = props.helpList![props.modelData!.groupIndex!];
+    if (!Array.isArray(group.list)) {
+      group.list = [];
+    }
     let index = props.modelData!.cellIndex ?? 0;
-    props.helpList![props.modelData!.groupIndex!].list.splice(index, 0, {
+    group.list.splice(index, 0, {
       icon: 1,
       title: '未命名项目',
       desc: '请添加描述',
     });
-    props.modelData!.cell = props.helpList![props.modelData!.groupIndex!].list[index];
+    props.modelData!.cell = group.list[index];
     props.modelData!.cellIndex = index;
   };
 
@@ -192,12 +215,25 @@
   };
 
   const deleteCell = () => {
-    props.helpList![props.modelData!.groupIndex!].list.splice(props.modelData!.cellIndex!, 1);
-    props.modelData!.show = false;
+    let group = props.helpList![props.modelData!.groupIndex!];
+    let cellIndex = props.modelData!.cellIndex!;
+    group.list.splice(cellIndex, 1);
+    if (group.list.length == 0) {
+      props.modelData!.cell = null;
+      props.modelData!.cellIndex = null;
+    } else {
+      let newIndex = cellIndex;
+      if (newIndex >= group.list.length) {
+        newIndex = group.list.length - 1;
+      }
+      props.modelData!.cell = group.list[newIndex];
+      props.modelData!.cellIndex = newIndex;
+    }
   };
 
   const changeIcon = () => {
     showIconModal.value = true;
+    showIconModalAfter = true;
   };
 
   const modalTitleRef = ref<Nullable<HTMLElement>>(null);
@@ -250,6 +286,33 @@
       transform: `translate(${transformX.value}px, ${transformY.value}px)`,
     };
   });
+
+  window.addEventListener('click', onGlobalClick);
+  onUnmounted(() => {
+    window.removeEventListener('click', onGlobalClick);
+  });
+
+  function onGlobalClick(event: PointerEvent) {
+    if (props.modelData?.show) {
+      if (showIconModalAfter) {
+        return;
+      }
+      let path = event.composedPath() as HTMLElement[];
+      for (let element of path) {
+        if (
+          element.classList?.contains(prefixCls) ||
+          element.classList?.contains(props.panelCls!)
+        ) {
+          return;
+        }
+      }
+      props.modelData!.show = false;
+    }
+  }
+
+  function iconModalAfter() {
+    showIconModalAfter = false;
+  }
 </script>
 
 <style scoped>

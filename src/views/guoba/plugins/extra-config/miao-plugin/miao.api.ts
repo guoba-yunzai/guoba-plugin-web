@@ -7,6 +7,9 @@ export enum MiaoApi {
   help = '/plugin/miao/help',
   helpIcon = '/plugin/miao/help/icon',
   helpBackup = '/plugin/miao/help/backup',
+  themeList = '/plugin/miao/help/theme/list',
+  themeConfig = '/plugin/miao/help/theme/config',
+  themeAction = '/plugin/miao/help/theme/action',
 }
 
 // 获取喵喵帮助配置
@@ -138,4 +141,80 @@ export function restoreBackup(id) {
 export function deleteBackup(id) {
   let url = MiaoApi.helpBackup + '/delete';
   return defHttp.delete({ url, params: { id } }, { errorMessageMode: 'modal' });
+}
+
+// 获取皮肤列表（一并返回配置）
+export function getThemeList() {
+  return defHttp.get({ url: MiaoApi.themeList }, { errorMessageMode: 'modal' });
+}
+
+// 获取皮肤配置
+export function getThemeConfig(themeName: string) {
+  return defHttp.get(
+    {
+      url: MiaoApi.themeConfig,
+      params: { themeName: themeName || 'default' },
+    },
+    { errorMessageMode: 'modal' },
+  );
+}
+
+// 保存皮肤配置
+export function saveThemeConfig(themeName: string, config) {
+  return defHttp.post(
+    {
+      url: MiaoApi.themeConfig,
+      params: { themeName, config },
+    },
+    { errorMessageMode: 'modal' },
+  );
+}
+
+/**
+ * 新增皮肤
+ * @param themeName
+ * @param mainPic
+ */
+export async function addThemeItem(themeName: string, mainPic) {
+  let formData = new FormData();
+  formData.append('themeName', themeName);
+  formData.append('mainPic', mainPic);
+  return defHttp.post(
+    {
+      url: MiaoApi.themeAction,
+      params: formData,
+      timeout: -1,
+    },
+    { errorMessageMode: 'modal' },
+  );
+}
+
+/**
+ * 修改皮肤底图
+ * @param themeName
+ * @param mainPic
+ */
+export async function putThemeItem(themeName: string, mainPic) {
+  let formData = new FormData();
+  formData.append('themeName', themeName);
+  formData.append('mainPic', mainPic);
+  return defHttp.post(
+    {
+      url: MiaoApi.themeAction + '_put',
+      params: formData,
+      timeout: -1,
+    },
+    { errorMessageMode: 'modal' },
+  );
+}
+
+/**
+ * 删除皮肤
+ * @param themeName
+ */
+export async function deleteThemeItem(themeName: string) {
+  return defHttp.delete(
+    { url: MiaoApi.themeAction, params: { themeName }, timeout: -1 },
+    { errorMessageMode: 'modal' },
+  );
 }

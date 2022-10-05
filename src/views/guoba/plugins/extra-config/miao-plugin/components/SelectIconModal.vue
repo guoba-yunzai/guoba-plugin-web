@@ -5,7 +5,8 @@
     width="420px"
     :closable="false"
     :footer="null"
-    :mask="false"
+    :maskStyle="{ background: 'rgba(0, 0, 0, 0.1)' }"
+    v-bind="$attrs"
   >
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move">
@@ -32,9 +33,9 @@
         />
 
         <a-space class="add-icon" style="padding: 10px; width: 100%">
-          <a-button :type="edit ? 'danger' : 'success'" @click="switchEdit">{{
-            edit ? '完成' : '替换图标'
-          }}</a-button>
+          <a-button :type="edit ? 'danger' : 'success'" @click="switchEdit">
+            {{ edit ? '完成' : '替换图标' }}
+          </a-button>
           <a-button type="primary" @click="addLine">添加10个空图标</a-button>
         </a-space>
       </div>
@@ -45,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineEmits, ref, watch, watchEffect, computed, CSSProperties } from 'vue';
+  import { ref, watch, watchEffect, computed, CSSProperties } from 'vue';
   import { useDraggable } from '@vueuse/core';
   import { Modal, message } from 'ant-design-vue';
   import { listItemType } from '/@/views/guoba/plugins/extra-config/miao-plugin/types';
@@ -57,20 +58,16 @@
     cell: Object as PropType<listItemType>,
     iconB64List: Array as PropType<string[]>,
   });
-
-  const emits = defineEmits(['update:visible']);
-
+  const emit = defineEmits(['update:visible']);
   const { createMessage: $message } = useMessage();
-
   const edit = ref<boolean>(false);
-
   const uploader = ref({
     show: false,
     selected: null,
   });
 
   const closeModal = () => {
-    emits('update:visible', false);
+    emit('update:visible', false);
   };
   const switchEdit = () => {
     edit.value = !edit.value;
@@ -82,7 +79,7 @@
   const clickIcon = (k) => {
     if (!edit.value) {
       props.cell!.icon = k + 1;
-      emits('update:visible', false);
+      emit('update:visible', false);
     } else {
       uploader.value.show = true;
       uploader.value.selected = k + 1;

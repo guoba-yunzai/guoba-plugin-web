@@ -1,7 +1,7 @@
 <template>
-  <div :style="`transform: scale(${scale});transform-origin: center top;`">
-    <div class="wrap" :style="wrapStyle">
-      <div class="change-background">
+  <div :class="[prefixCls]" :style="`transform: scale(${scale});transform-origin: center top;`">
+    <div class="container">
+      <div class="setting-box">
         <input
           type="file"
           id="upload-bg"
@@ -10,54 +10,46 @@
           accept="image/bmp,image/jpeg,image/png"
         />
         <input type="file" id="upload-icon" style="display: none" name="icon" accept="image/png" />
-        <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">
-          <a-button
-            :style="`transform: scale(${1 / scale});transform-origin: right top;`"
-            type="primary"
-            shape="circle"
-            size="large"
-          >
-            <Icon icon="akar-icons:image" />
-          </a-button>
-        </Dropdown>
+        <!--        <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">-->
+        <!--          <a-button-->
+        <!--            :style="`transform: scale(${1 / scale});transform-origin: right top;`"-->
+        <!--            type="primary"-->
+        <!--            shape="circle"-->
+        <!--            size="large"-->
+        <!--          >-->
+        <!--            <Icon icon="akar-icons:image" />-->
+        <!--          </a-button>-->
+        <!--        </Dropdown>-->
+        <a-button
+          :style="`transform: scale(${1 / scale});transform-origin: right top;`"
+          type="primary"
+          shape="circle"
+          size="large"
+          @click="onOpenSetting"
+        >
+          <Icon icon="ion:settings-outline" />
+        </a-button>
       </div>
 
-      <div class="head-box" @click="clickHead">
-        <div class="title">
-          {{ helpCfg.title }}
-        </div>
-        <div class="label">
-          {{ helpCfg.subTitle }}
+      <div class="info-box">
+        <div class="head-box type">
+          <div class="title">{{ helpCfg.title }}</div>
+          <div class="label">{{ helpCfg.subTitle }}</div>
         </div>
       </div>
 
       <div class="cont-box" v-for="(group, groupIndex) in helpList" :key="groupIndex">
         <div class="help-group" @click="clickBody(null, null, group, groupIndex)">
-          {{ group.group }}
+          <span>{{ group.group }}</span>
         </div>
-
-        <div v-if="group.list && group.list.length > 0" class="help-table">
-          <div v-for="(result, row) in split(group.list)" class="tr" :key="row">
-            <div
-              class="td"
-              v-for="(cell, col) in result"
-              :key="col"
-              :class="cell === modelData.cell ? 'active' : 'inactive'"
-              @click="clickBody(cell, 3 * row + col, group, groupIndex)"
-            >
-              <transition name="fade-transition">
-                <div>
-                  <div
-                    class="help-icon"
-                    :style="`background: url(${iconB64List[cell.icon]}) 0 0 no-repeat`"
-                  />
-                  <div class="help-title"> {{ cell.title }}</div>
-                  <div class="help-desc"> {{ cell.desc }}</div>
-                </div>
-              </transition>
-            </div>
-          </div>
-        </div>
+        <HelpTable
+          v-if="!!(group.list?.length || 0)"
+          :list="group.list"
+          :colCount="colCount"
+          :iconB64List="iconB64List"
+          :modelData="modelData"
+          @open="(cell, cellIndex) => clickBody(cell, cellIndex, group, groupIndex)"
+        />
       </div>
 
       <div class="copyright">
@@ -68,25 +60,8 @@
       </div>
     </div>
 
-    <modal v-model:visible="showHeadModal" title="编辑标题" :closable="false" :footer="null">
-      <div class="p-4">
-        <div class="row">
-          <div>主标题</div>
-          <div class="flex-1">
-            <a-input v-model:value="helpCfg.title" placeholder="主标题" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>附标题</div>
-          <div class="flex-1">
-            <a-input v-model:value="helpCfg.subTitle" placeholder="附标题" />
-          </div>
-        </div>
-      </div>
-    </modal>
-
     <EditBodyModal
+      :panelCls="prefixCls"
       v-model:helpList="helpList"
       v-model:modelData="modelData"
       v-model:iconB64List="iconB64List"
@@ -96,9 +71,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, defineEmits, ref } from 'vue';
+  import { defineEmits, ref, watch } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
-  import { Modal } from 'ant-design-vue';
   import {
     helpCfgType,
     helpListItemType,
@@ -106,18 +80,19 @@
     listItemType,
     ListType,
     modelDataType,
+    ThemeConfigType,
   } from '../types';
-  import { Dropdown, DropMenu } from '/@/components/Dropdown';
-  import { getHelpIconList } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api';
+  import lodash from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { createLocalStorage } from '/@/utils/cache';
   import { usePermissionStore } from '/@/store/modules/permission';
   import { useModal } from '/@/components/Modal';
+  import { useDesign } from '/@/hooks/web/useDesign';
+  import { cssExpand } from '/@/utils/common';
+  import { useDebounceFn } from '@vueuse/core';
+  import { HelpTable } from './HelpComps';
   import UploadIconHelpModal from './UploadIconHelpModal.vue';
-
-  const ls = createLocalStorage();
-  const permStore = usePermissionStore();
-  const [registerUihModal, uihModal] = useModal();
+  import { getHelpIconList, getThemeConfig } from '../miao.api';
 
   const props = defineProps({
     helpCfg: Object as PropType<helpCfgType>,
@@ -125,25 +100,68 @@
     bgB64: String,
     mainB64: String,
     cacheVer: Number,
+    themeName: String,
+    themeNames: Array as PropType<string[]>,
     iconB64List: Array as PropType<string[]>,
     modelData: Object as PropType<modelDataType>,
+    themeStyle: Object as PropType<ThemeConfigType>,
     versions: Object as PropType<{ yunzai: string; miao: string }>,
   });
 
-  const emits = defineEmits(['update:modelData', 'update:mainB64', 'update:iconB64List']);
+  const emit = defineEmits([
+    'update:themeStyle',
+    'update:modelData',
+    'update:mainB64',
+    'update:iconB64List',
+    'open-setting',
+  ]);
 
+  const ls = createLocalStorage();
+  const permStore = usePermissionStore();
+  const { prefixCls } = useDesign('miao-plugin-help-panel');
   const { createMessage: $message } = useMessage();
+  const [registerUihModal, uihModal] = useModal();
 
-  const showHeadModal = ref<boolean>(false);
+  const scale = ref(1);
+  const colCount = ref(3);
+  const boxWidth = ref(850);
 
-  const dropMenuList = ref<DropMenu[]>([
+  const watchCfgHandler = () => {
+    let config = genThemeConfig();
+    if (config.style) {
+      cssExpand(config.style, prefixCls);
+    }
+    boxWidth.value = config.width || 850;
+    colCount.value = config.colCount;
+  };
+  const watchCfgHandlerDebounce = useDebounceFn(watchCfgHandler, 300);
+
+  watch([() => props.helpCfg, () => props.themeName], watchCfgHandlerDebounce, {
+    immediate: true,
+    deep: true,
+  });
+  watch(() => props.themeStyle, watchCfgHandler, { immediate: true, deep: true });
+
+  watch(
+    boxWidth,
+    (width) => {
+      if (document.body.clientWidth >= width) {
+        scale.value = 1;
+      } else {
+        scale.value = parseFloat((document.body.clientWidth / width).toFixed(4));
+      }
+    },
+    { immediate: true },
+  );
+
+  const dropMenuList = ref<any[]>([
     {
       event: 'changeBackground',
       text: '更换背景',
       icon: 'akar-icons:image',
       onClick() {
         getUploadBase64('upload-bg', (base64) => {
-          emits('update:mainB64', base64);
+          emit('update:mainB64', base64);
         });
       },
     },
@@ -155,7 +173,7 @@
         let fn = () => {
           getUploadBase64('upload-icon', async (base64) => {
             let iconList = await getHelpIconList(base64);
-            emits('update:iconB64List', iconList);
+            emit('update:iconB64List', iconList);
             $message.success('上传成功');
           });
         };
@@ -169,19 +187,15 @@
     },
   ]);
 
-  const isBindEvent = {};
+  watch(
+    () => props.themeName,
+    async (themeName: string) => {
+      emit('update:themeStyle', await getThemeConfig(themeName));
+    },
+    { immediate: true },
+  );
 
-  const wrapStyle = computed(() => {
-    let style: Recordable = {};
-    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&_v=${props.cacheVer}`;
-    let themeBg = themePath.replace('$s', 'bg');
-    let themeMain = themePath.replace('$s', 'main');
-    if (props.mainB64) {
-      themeMain = props.mainB64;
-    }
-    style.background = `url(${themeMain}) top left/100% auto no-repeat,url(${themeBg})`;
-    return style;
-  });
+  const isBindEvent = {};
 
   function getUploadBase64(inputId: string, callback: Fn) {
     let input = document.getElementById(inputId) as HTMLInputElement;
@@ -195,6 +209,7 @@
           Reader.readAsDataURL(file);
           Reader.onload = () => {
             callback(Reader.result);
+            // @ts-ignore
             input.value = null;
           };
         }
@@ -203,17 +218,19 @@
     input.click();
   }
 
-  const clickHead = () => {
-    showHeadModal.value = true;
-  };
-
   const clickBody = (
     cell: listItemType,
     cellIndex: number,
     group: helpListItemType,
     groupIndex: number,
   ) => {
-    emits('update:modelData', { show: true, cell, cellIndex, group, groupIndex });
+    let isShow = true;
+    if (props.modelData?.show) {
+      if (cell && cell === props.modelData?.cell) {
+        isShow = false;
+      }
+    }
+    emit('update:modelData', { show: isShow, cell, cellIndex, group, groupIndex });
   };
 
   const split = (item_list: ListType) => {
@@ -224,173 +241,74 @@
     return result;
   };
 
-  const scale = computed<Number>(() => {
-    if (document.body.clientWidth > 850) {
-      return 1;
-    } else {
-      return document.body.clientWidth / 850;
+  function onOpenSetting() {
+    emit('open-setting');
+    emit('update:modelData', { ...props.modelData, show: false });
+  }
+
+  function dataDef(...args: any[]) {
+    for (let item of args) {
+      if (!lodash.isUndefined(item)) {
+        return item;
+      }
     }
-  });
+  }
+
+  function genThemeConfig() {
+    let { helpCfg } = props;
+    if (!helpCfg) {
+      return { style: '', colCount: 3 };
+    }
+    let colCount = Math.min(5, Math.max(parseInt(helpCfg?.colCount) || 3, 2));
+    let colWidth = Math.min(500, Math.max(100, parseInt(helpCfg?.colWidth) || 265));
+    let width = Math.min(2500, Math.max(800, colCount * colWidth + 30));
+    let ret: string[] = [];
+    ret.push(`.${prefixCls} { width:${width}px; }`);
+    ret.push(`.${prefixCls} .help-table .td,.help-table .th{width:${100 / colCount}%}`);
+
+    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&themeName=${props.themeName}&_v=${props.cacheVer}`;
+    let themeBg = themePath.replace('$s', 'bg');
+    let themeMain = themePath.replace('$s', 'main');
+    if (props.mainB64) {
+      themeMain = props.mainB64;
+    }
+    let background = `background: url(${themeMain}) top left/100% auto no-repeat,url(${themeBg})`;
+    ret.push(`.${prefixCls} .container { width:${width}px; ${background}; }`);
+
+    let css = function (sel: string, css: string, key: string, def: any, fn?: Fn) {
+      let val = dataDef(props.themeStyle![key], def);
+      if (fn) {
+        val = fn(val);
+      }
+      ret.push(`.${prefixCls} ${sel}{${css}:${val}}`);
+    };
+    css('.help-title,.help-group', 'color', 'fontColor', '#ceb78b');
+    css('.help-title,.help-group', 'text-shadow', 'fontShadow', 'none');
+    css('.help-desc', 'color', 'descColor', '#eee');
+    css('.cont-box', 'background', 'contBgColor', 'rgba(43, 52, 61, 0.8)');
+    css('.cont-box', 'backdrop-filter', 'contBgBlur', 3, (n) =>
+      helpCfg?.bgBlur === false ? 'none' : `blur(${n}px)`,
+    );
+    css('.help-group', 'background', 'headerBgColor', 'rgba(34, 41, 51, .4)');
+    css('.help-table .tr:nth-child(odd)', 'background', 'rowBgColor1', 'rgba(34, 41, 51, .2)');
+    css('.help-table .tr:nth-child(even)', 'background', 'rowBgColor2', 'rgba(34, 41, 51, .4)');
+    return {
+      style: `${ret.join('\n')}`,
+      width,
+      colCount,
+    };
+  }
 </script>
 
-<style scoped>
-  .wrap {
-    box-shadow: 0 0 15px #888;
-    border-radius: 10px;
-    width: 830px;
-    padding: 20px 15px 10px 15px;
-    background-size: 100% auto;
-  }
+<style lang="less">
+  @import '../style/miao';
 
-  .change-background {
-    margin: 10px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .head-box {
-    border-radius: 15px;
-    padding: 10px 20px;
-    position: relative;
-    color: #fff;
-  }
-
-  .head-box:hover {
-    cursor: pointer;
-  }
-
-  .title {
-    font-size: 50px;
-    font-family: NZBZ, sans-serif;
-    text-shadow: 0 0 1px #000, 1px 1px 3px rgb(0 0 0 / 90%);
-  }
-
-  .label {
-    font-size: 16px;
-    text-shadow: 0 0 1px #000, 1px 1px 3px rgb(0 0 0 / 90%);
-    font-family: Number, '微软雅黑', sans-serif;
-  }
-
-  .cont-box {
-    border-radius: 15px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding: 5px 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 10px 0 rgb(0 0 0 / 15%);
-    position: relative;
-    background: rgba(43, 52, 61, 0.8);
-    font-family: Number, '微软雅黑', sans-serif;
-    color: white;
-  }
-
-  .help-group {
-    color: #ceb78b;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 8px 0 5px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .help-group:hover {
-    transform-origin: left;
-    color: #fafad2;
-  }
-
-  .help-table {
-    text-align: center;
-    border-collapse: collapse;
-    margin: 5px -10px -10px -15px;
-    border-radius: 0 0 10px 10px;
-    display: table;
-    overflow: hidden;
-    width: calc(100% + 30px);
-    color: #fff;
-  }
-
-  .help-table .tr {
-    display: table-row;
-  }
-
-  .help-table .td {
-    font-size: 14px;
-    display: table-cell;
-    box-shadow: 0 0 1px 0 #888 inset;
-    padding: 12px 0 12px 50px;
-    line-height: 24px;
-    position: relative;
-    width: 33.33%;
-    overflow: auto;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .help-table .tr:nth-child(odd) {
-    background: rgba(34, 41, 51, 0.6);
-  }
-
-  .help-table .tr:nth-child(even) {
-    background: rgba(34, 41, 51, 0.3);
-  }
-
-  .help-table .tr:last-child .td {
-    padding-bottom: 12px;
-  }
-
-  .help-icon {
-    width: 80px;
-    height: 80px;
-    display: block;
-    position: absolute;
-    border-radius: 5px;
-    transform: scale(0.425) translateX(-47px) translateY(-47px);
-    left: 6px;
-    top: 12px;
-  }
-
-  .help-title {
-    display: block;
-    color: #d3bc8e;
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-  .help-desc {
-    display: block;
-    font-size: 13px;
-    line-height: 18px;
-    color: #eee;
-  }
-
-  .copyright {
-    font-size: 16px;
-    font-family: 'Number', sans-serif;
-    text-align: center;
-    color: #fff;
-    position: relative;
-    padding-left: 10px;
-    text-shadow: 1px 1px 1px #000;
-    margin: 10px 0;
-  }
-
-  .version {
-    font-size: 13px;
-    color: #d3bc8e;
-    display: inline-block;
-    padding: 0 3px;
-  }
-
-  .active {
-    background-color: #3983a3;
-    transform: scale(1.02);
-  }
-
-  .inactive:hover {
-    background-color: #3983a3;
-    z-index: 100;
+  .@{prefix-cls} {
+    .setting-box {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      right: 20px;
+    }
   }
 </style>
