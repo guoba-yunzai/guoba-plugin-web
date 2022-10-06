@@ -41,7 +41,6 @@
       type="file"
       name="upload-bg"
       accept="image/bmp,image/jpeg,image/png"
-      @cancel="() => $message.warn('取消了选择')"
       @change="onUploadBgChange"
       style="display: none"
     />

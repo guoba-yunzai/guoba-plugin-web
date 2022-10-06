@@ -135,9 +135,9 @@ export function useThemeConfigSchemas(expand?: Partial<FormSchema>) {
     }),
     merge({
       field: 'rowBgColor2',
-      label: '奇数行底色',
+      label: '偶数行底色',
       component: 'GColorPicker',
-      bottomHelpMessage: '帮助奇数行底色',
+      bottomHelpMessage: '帮助偶数行底色',
     }),
   ] as FormSchema[];
 }
