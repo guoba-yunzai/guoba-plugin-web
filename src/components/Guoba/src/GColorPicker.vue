@@ -9,7 +9,7 @@
     <div class="vc-chrome-field custom">
       <VueColorEI label="b" :value="rgba.b" :min="0" :max="255" @change="onInput" />
     </div>
-    <div class="vc-chrome-field custom">
+    <div v-if="!disableAlpha" class="vc-chrome-field custom">
       <VueColorEI
         label="a"
         :value="rgba.a"
@@ -22,7 +22,7 @@
     <div class="vc-chrome-field">
       <Popover trigger="click" placement="bottom" :getPopupContainer="(n) => n.parentNode">
         <template #content>
-          <VueColorChrome :value="innerValue" @input="onValueChange" />
+          <VueColorChrome :value="innerValue" @input="onValueChange" :disableAlpha="disableAlpha" />
         </template>
         <div class="vc-color-view">
           <div :style="`height:100%;background:rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`" />
@@ -39,27 +39,50 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { debounce } from 'lodash-es';
 
+  type colorType = 'rgb' | 'rgba' | 'hex' | 'hex8';
+
   const props = defineProps({
     value: String,
   });
   const emit = defineEmits(['change']);
+  const regs = {
+    rgb: /rgb\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3})\)/,
+    rgba: /rgba\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3}), ?([10]?\.?\d+)\)/,
+    // 支持 3 或 6 位
+    hex: /#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})/,
+    // 只支持 8 位
+    hex8: /#([0-9a-fA-F]{8})/,
+  };
   const { prefixCls } = useDesign('g-color-picker');
-  const rgbaReg = /rgba\((\d{1,3}), ?(\d{1,3}), ?(\d{1,3}), ?([10]?\.?\d+)\)/;
   const defaultRgba = { r: 0, g: 0, b: 0, a: 1 };
-  const innerValue = reactive({ rgba: defaultRgba });
+  const innerValue = reactive({ rgba: defaultRgba, hex8: '#000000FF' });
+  const valueType = ref<colorType>('rgba');
+
   const rgba = computed(() => innerValue.rgba);
+  const disableAlpha = computed(() => ['rgb', 'hex'].includes(valueType.value));
 
   const emitChangeDebounce = debounce(emitChange, 100) as Function;
 
   watch(
     () => props.value,
     (val) => {
-      if (val && rgbaReg.test(val)) {
-        let matches: string[] = val.match(rgbaReg)!;
-        innerValue.rgba.r = parseInt(matches[1]);
-        innerValue.rgba.g = parseInt(matches[2]);
-        innerValue.rgba.b = parseInt(matches[3]);
-        innerValue.rgba.a = parseFloat(matches[4]);
+      if (val) {
+        if (regs.rgb.test(val)) {
+          valueType.value = 'rgb';
+          parseRgbColor(val);
+        } else if (regs.rgba.test(val)) {
+          valueType.value = 'rgba';
+          parseRgbColor(val, true);
+        } else if (regs.hex.test(val)) {
+          valueType.value = 'hex';
+          parseHexColor(val);
+        } else if (regs.hex8.test(val)) {
+          valueType.value = 'hex8';
+          parseHexColor(val, true);
+        } else {
+          innerValue.rgba = defaultRgba;
+          emitChange();
+        }
       } else {
         innerValue.rgba = defaultRgba;
         emitChange();
@@ -68,9 +91,57 @@
     { immediate: true },
   );
 
+  function parseRgbColor(value: string, alpha = false) {
+    let matches: string[];
+    if (alpha) {
+      matches = value.match(regs.rgba)!;
+    } else {
+      matches = value.match(regs.rgb)!;
+    }
+    innerValue.rgba.r = parseInt(matches[1]);
+    innerValue.rgba.g = parseInt(matches[2]);
+    innerValue.rgba.b = parseInt(matches[3]);
+    if (alpha) {
+      innerValue.rgba.a = parseFloat(matches[4]);
+    } else {
+      innerValue.rgba.a = 1;
+    }
+  }
+
+  function parseHexColor(value: string, alpha = false) {
+    let matches: string[], hex: string;
+    if (alpha) {
+      matches = value.match(regs.hex8)!;
+      hex = matches[1];
+      if (hex.length !== 8) {
+        innerValue.rgba = defaultRgba;
+        console.error('hex8 color must be 8 length');
+        return;
+      }
+    } else {
+      matches = value.match(regs.hex)!;
+      hex = matches[1];
+      if (hex.length === 3) {
+        hex = hex.replace(/(.)/g, '$1$1');
+      }
+    }
+    innerValue.rgba.r = parseInt(hex.slice(0, 2), 16);
+    innerValue.rgba.g = parseInt(hex.slice(2, 4), 16);
+    innerValue.rgba.b = parseInt(hex.slice(4, 6), 16);
+    if (alpha) {
+      innerValue.rgba.a = parseInt(hex.slice(6, 8), 16) / 255;
+    } else {
+      innerValue.rgba.a = 1;
+    }
+  }
+
   function onValueChange(color) {
-    innerValue.rgba = color.rgba;
-    emitChangeDebounce();
+    console.log('onValueChange:', color);
+    if (color.hex8 && color.rgba) {
+      innerValue.rgba = color.rgba;
+      innerValue.hex8 = color.hex8;
+      emitChangeDebounce();
+    }
   }
 
   function onInput(value, type) {
@@ -88,8 +159,19 @@
   }
 
   function emitChange() {
-    let { r, g, b, a } = innerValue.rgba;
-    emit('change', `rgba(${r}, ${g}, ${b}, ${a})`);
+    if (valueType.value === 'rgb') {
+      let { r, g, b } = innerValue.rgba;
+      emit('change', `rgb(${r}, ${g}, ${b})`);
+    } else if (valueType.value === 'hex') {
+      let hex8 = innerValue.hex8;
+      emit('change', hex8.slice(0, 7));
+    } else if (valueType.value === 'hex8') {
+      let hex8 = innerValue.hex8;
+      emit('change', hex8);
+    } else {
+      let { r, g, b, a } = innerValue.rgba;
+      emit('change', `rgba(${r}, ${g}, ${b}, ${a})`);
+    }
   }
 </script>
 

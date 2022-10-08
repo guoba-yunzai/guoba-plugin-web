@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="getProps">
+  <BasicModal v-bind="getProps" destroyOnClose>
     <a-spin wrapperClassName="p-2" :spinning="loading">
       <BasicForm @register="registerForm" />
     </a-spin>

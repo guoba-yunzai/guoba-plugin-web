@@ -90,7 +90,7 @@ export function useThemeConfigSchemas(expand?: Partial<FormSchema>) {
     merge({
       field: 'fontColor',
       label: '主文字颜色',
-      component: 'Input',
+      component: 'GColorPicker',
     }),
     merge({
       field: 'fontShadow',
@@ -101,7 +101,7 @@ export function useThemeConfigSchemas(expand?: Partial<FormSchema>) {
     merge({
       field: 'descColor',
       label: '描述文字颜色',
-      component: 'Input',
+      component: 'GColorPicker',
     }),
     merge({
       field: 'contBgColor',
