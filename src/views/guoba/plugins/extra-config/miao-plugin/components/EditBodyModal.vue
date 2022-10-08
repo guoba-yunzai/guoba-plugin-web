@@ -4,7 +4,7 @@
     :footer="null"
     :mask="false"
     :class="prefixCls"
-    wrapClassName="model-event-none"
+    :wrapClassName="wrapClassName"
   >
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move; margin: 0">
@@ -94,10 +94,11 @@
         </div>
 
         <div class="flex justify-between align-center">
-          <div class="flex justify-start">
+          <div class="flex justify-start move-buttons">
             <a-button
               class="ml-4"
-              :disabled="modelData.cellIndex === 0"
+              :class="['ml-4', { warn: modelData.cellIndex === 0 }]"
+              :disabled="moveBtnDisable(-1)"
               type="primary"
               shape="circle"
               size="medium"
@@ -108,7 +109,11 @@
 
             <a-button
               class="ml-4"
-              :disabled="modelData.cellIndex === helpList[modelData.groupIndex].list.length - 1"
+              :class="[
+                'ml-4',
+                { warn: modelData.cellIndex === helpList[modelData.groupIndex].list.length - 1 },
+              ]"
+              :disabled="moveBtnDisable(1)"
               type="primary"
               shape="circle"
               size="medium"
@@ -152,6 +157,7 @@
   import { helpListType, modelDataType } from '../types';
   import SelectIconModal from './SelectIconModal.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const props = defineProps({
     panelCls: String,
@@ -159,8 +165,13 @@
     modelData: Object as PropType<modelDataType>,
     iconB64List: Array as PropType<string[]>,
   });
+  const emit = defineEmits(['update:modelData']);
   const { prefixCls } = useDesign('miao-plugin-edit-modal');
+  const { createConfirm } = useMessage();
 
+  // 是否穿透弹窗点击
+  const eventNone = ref<boolean>(true);
+  const wrapClassName = computed(() => (eventNone.value ? 'model-event-none' : ''));
   const showIconModal = ref<boolean>(false);
   let showIconModalAfter = false;
 
@@ -200,6 +211,16 @@
   };
 
   const moveCell = (offset) => {
+    if (offset === -1 && props.modelData!.cellIndex === 0) {
+      moveCellToGroup(offset);
+      return;
+    } else if (
+      offset === 1 &&
+      props.modelData!.cellIndex === props.helpList![props.modelData!.groupIndex!].list.length - 1
+    ) {
+      moveCellToGroup(offset);
+      return;
+    }
     let temp,
       array = props.helpList![props.modelData!.groupIndex!].list,
       index = props.modelData!.cellIndex!;
@@ -208,6 +229,54 @@
     array[index + offset] = temp;
     props.modelData!.cellIndex! += offset;
   };
+
+  function moveCellToGroup(offset) {
+    let tip = offset === -1 ? '上' : '下';
+    eventNone.value = false;
+    createConfirm({
+      title: '跨分组移动',
+      iconType: 'warning',
+      content: `确定要将该项目移动到${tip}一个分组吗？`,
+      onOk: () => {
+        let { modelData, helpList } = props;
+        let { cell, groupIndex, cellIndex } = modelData!;
+        let oldGroup = helpList![groupIndex!];
+        let newGroup = helpList![groupIndex! + offset];
+        let newCellIndex;
+        if (offset === -1) {
+          newGroup.list.push(cell!);
+          oldGroup.list.splice(cellIndex!, 1);
+          newCellIndex = newGroup.list.length - 1;
+        } else {
+          newGroup.list.unshift(cell!);
+          oldGroup.list.splice(cellIndex!, 1);
+          newCellIndex = 0;
+        }
+        emit(
+          'update:modelData',
+          Object.assign(modelData, {
+            cellIndex: newCellIndex,
+            group: newGroup,
+            groupIndex: groupIndex! + offset,
+          }),
+        );
+      },
+      afterClose: () => (eventNone.value = true),
+    });
+  }
+
+  function moveBtnDisable(offset) {
+    let { modelData, helpList } = props;
+    if (offset === -1) {
+      return modelData!.groupIndex === 0 && modelData!.cellIndex === 0;
+    } else if (offset === 1) {
+      return (
+        modelData!.groupIndex === helpList!.length - 1 &&
+        modelData!.cellIndex === helpList![modelData!.groupIndex].list.length - 1
+      );
+    }
+    return false;
+  }
 
   const deleteGroup = () => {
     props.helpList!.splice(props.modelData!.groupIndex!, 1);
@@ -294,6 +363,9 @@
 
   function onGlobalClick(event: PointerEvent) {
     if (props.modelData?.show) {
+      if (!eventNone.value) {
+        return;
+      }
       if (showIconModalAfter) {
         return;
       }
@@ -315,7 +387,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
   .tip {
     font-size: 12px;
     color: #888;
@@ -354,5 +426,15 @@
     margin: 0 6px 0 2px;
     position: relative;
     top: -0.5px;
+  }
+
+  .move-buttons {
+    ::v-deep(.ant-btn) {
+      &.warn:not(.is-disabled) {
+        color: #fff;
+        background: #dc9d29;
+        border-color: #dc9d29;
+      }
+    }
   }
 </style>
