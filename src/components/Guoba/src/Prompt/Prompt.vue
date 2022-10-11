@@ -1,22 +1,26 @@
 <template>
-  <Modal v-bind="getProps">
-    <Spin :spinning="loading">
-      <div style="padding: 20px">
-        <div v-html="options.content" style="margin-bottom: 8px"></div>
-        <BasicForm @register="registerForm">
-          <template #customInput="{ model, field }">
-            <Input
-              ref="inputRef"
-              v-model:value="model[field]"
-              :placeholder="placeholder"
-              @pressEnter="onSubmit"
-              @input="onChange"
-            />
-          </template>
-        </BasicForm>
-      </div>
-    </Spin>
-  </Modal>
+  <ConfigProvider :locale="getAntdLocale">
+    <AppProvider>
+      <Modal v-bind="getProps">
+        <Spin :spinning="loading">
+          <div style="padding: 20px">
+            <div v-html="options.content" style="margin-bottom: 8px"></div>
+            <BasicForm @register="registerForm">
+              <template #customInput="{ model, field }">
+                <Input
+                  ref="inputRef"
+                  v-model:value="model[field]"
+                  :placeholder="placeholder"
+                  @pressEnter="onSubmit"
+                  @input="onChange"
+                />
+              </template>
+            </BasicForm>
+          </div>
+        </Spin>
+      </Modal>
+    </AppProvider>
+  </ConfigProvider>
 </template>
 
 <script lang="ts">
@@ -25,6 +29,9 @@
   import { ref, defineComponent, computed, unref, onMounted, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { Modal, Spin, Input } from 'ant-design-vue';
+  import { useLocale } from '/@/locales/useLocale';
+  import { ConfigProvider } from 'ant-design-vue';
+  import { AppProvider } from '/@/components/Application';
 
   export default defineComponent({
     name: 'Prompt',
@@ -33,9 +40,12 @@
       Spin,
       Input,
       BasicForm,
+      AppProvider,
+      ConfigProvider,
     },
     emits: ['register'],
     setup(props, { emit }) {
+      const { getAntdLocale } = useLocale();
       const inputRef = ref();
       const visible = ref(false);
       // 当前是否正在加载中
@@ -46,14 +56,17 @@
       const [registerForm, { clearValidate, setFieldsValue, validate, updateSchema }] = useForm({
         compact: true,
         wrapperCol: { span: 24 },
-        schemas: [
-          {
-            label: '',
-            field: 'input',
-            component: 'Input',
-            slot: 'customInput',
-          },
-        ],
+        schemas: computed(() => {
+          return [
+            {
+              label: '',
+              field: 'input',
+              component: 'Input',
+              slot: 'customInput',
+              bottomHelpMessage: options.value.bottomHelpMessage,
+            },
+          ];
+        }),
         showActionButtonGroup: false,
       });
 
@@ -157,6 +170,7 @@
         onSubmit,
 
         registerForm,
+        getAntdLocale,
       };
     },
   });
@@ -167,6 +181,7 @@
       &-close-x {
         width: 56px;
       }
+
       form .ant-col {
         flex: 1;
       }

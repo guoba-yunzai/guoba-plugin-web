@@ -1,8 +1,10 @@
 import type { App } from 'vue';
 import type { componentMapType } from '/@/components/Form/src/componentMap';
 import GAvatar from './src/GAvatar.vue';
+import { registerPrompt } from './src/Prompt';
 
 export function registerGuoba(app: App) {
+  registerPrompt(app);
   app.component(GAvatar.name, GAvatar);
 }
 

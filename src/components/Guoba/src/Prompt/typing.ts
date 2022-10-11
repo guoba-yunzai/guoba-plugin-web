@@ -12,4 +12,6 @@ export interface PromptProps extends ModalOptionsPartial {
   placeholder?: string;
   // 输入框默认值
   defaultValue?: string;
+  // 底部提示文本
+  bottomHelpMessage?: string;
 }

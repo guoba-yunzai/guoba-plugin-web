@@ -1,7 +1,10 @@
+import type { App } from 'vue';
 import type { PromptProps } from '../typing';
 import { render, createVNode, nextTick } from 'vue';
 import { error } from '/@/utils/log';
 import Prompt from '../Prompt.vue';
+
+let _app: Nullable<App> = null;
 
 export function usePrompt() {
   function createPrompt(options: PromptProps) {
@@ -20,6 +23,7 @@ export function usePrompt() {
         document.body.removeChild(box);
       },
     });
+    vm.appContext = _app!._context;
     // 挂载到 body
     render(vm, box);
     document.body.appendChild(box);
@@ -53,4 +57,8 @@ export function usePrompt() {
   return {
     createPrompt,
   };
+}
+
+export function setApp(app: App) {
+  _app = app;
 }
