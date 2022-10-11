@@ -11,7 +11,7 @@
               <a-popconfirm
                 title="确定要还原吗？"
                 placement="left"
-                @confirm="() => onRollback(item.id)"
+                @confirm="() => onRollback(item)"
               >
                 <a-button type="primary" shape="circle" preIcon="ant-design:undo" />
               </a-popconfirm>
@@ -23,6 +23,7 @@
             <a-list-item-meta :description="item.time">
               <template #title>
                 <span>{{ item.remark }}</span>
+                <span v-if="item.version !== 2" class="remark-old">OLD</span>
               </template>
             </a-list-item-meta>
           </a-list-item>
@@ -47,7 +48,7 @@
     remark: string;
     // 备份时间
     time: string;
-    isInit: boolean;
+    version: number;
   };
 
   export default defineComponent({
@@ -58,7 +59,9 @@
     emits: ['register', 'reload'],
     setup(props, { emit }) {
       const attrs = useAttrs();
-      const { createMessage: $message } = useMessage();
+      // @ts-ignore
+      // noinspection JSUnusedLocalSymbols
+      const { createMessage: $message, createConfirm } = useMessage();
       const { createPrompt } = usePrompt();
       // 当前是否正在加载中
       const loading = ref(false);
@@ -108,7 +111,8 @@
         createPrompt({
           title: '新增备份',
           required: true,
-          placeholder: '请输入备注',
+          placeholder: '请输入备份名称',
+          bottomHelpMessage: '注：新版备份只会备份配置和图标，背景图片请使用“皮肤”功能。',
           async onOk(value) {
             await addBackup(value);
             await loadData();
@@ -116,22 +120,40 @@
         });
       }
 
-      async function onRollback(id) {
+      async function onRollback(item: BackupItem) {
+        let reload = false;
+        if (item.version !== 2) {
+          reload = await confirmConvert();
+          if (!reload) {
+            return;
+          }
+        }
         try {
           setLoading(true);
-          await restoreBackup(id);
+          await restoreBackup(item.id);
+          if (reload) {
+            await loadData();
+          }
           emit('reload');
         } finally {
           setLoading(false);
         }
       }
 
+      function confirmConvert() {
+        return new Promise<boolean>((resolve) => {
+          createConfirm({
+            iconType: 'warning',
+            title: '备份版本过低',
+            content: '当前备份为旧版备份，是否要转换为新版备份？',
+            onOk: () => resolve(true),
+            onCancel: () => resolve(false),
+          });
+        });
+      }
+
       async function onDelete(item: BackupItem) {
         try {
-          if (item.isInit) {
-            $message.warn('初始备份不可删除');
-            return;
-          }
           setLoading(true);
           await deleteBackup(item.id);
           await loadData();
@@ -158,4 +180,13 @@
   });
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+  .remark-old {
+    color: #999;
+    position: relative;
+    top: -1px;
+    margin-right: 1px;
+    transform: scale(0.65);
+    display: inline-block;
+  }
+</style>

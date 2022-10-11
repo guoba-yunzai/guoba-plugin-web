@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import type { FormActionType } from '/@/components/Form';
   import type { ThemeConfigType } from '../types';
-  import { watch } from 'vue';
+  import { watch, onMounted, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { settingSchemas } from '../miao.data';
@@ -47,9 +47,14 @@
     themeStyle: Object as PropType<ThemeConfigType>,
     debugThemeName: String,
   });
-  const emit = defineEmits(['register', 'update:model', 'update:themeStyle', 'update:debugThemeName']);
+  const emit = defineEmits([
+    'register',
+    'update:model',
+    'update:themeStyle',
+    'update:debugThemeName',
+  ]);
 
-  const [registerDrawer, { closeDrawer }] = useDrawerInner();
+  const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner();
   const [registerFormOrigin, { getFieldsValue, setFieldsValue, updateSchema }] = useForm({
     schemas: settingSchemas,
     labelWidth: 120,
@@ -60,6 +65,12 @@
     baseColProps: { span: 24 },
   });
   const drawerWidth = window.innerWidth >= 600 ? '600px' : '100%';
+
+  onMounted(() => {
+    // TODO-guoba 临时解决皮肤不打开此抽屉不切换的问题
+    setDrawerProps({ visible: true });
+    nextTick(() => closeDrawer());
+  });
 
   async function registerForm(formAction: FormActionType, formModel) {
     registerFormOrigin(formAction);
