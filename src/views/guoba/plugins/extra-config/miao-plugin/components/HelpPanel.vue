@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { defineEmits, ref, watch } from 'vue';
+  import { ref, watch } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
   import {
     helpCfgType,

@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, defineEmits, ref } from 'vue';
+  import { computed, ref } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
   import { Modal } from 'ant-design-vue';
   import {
