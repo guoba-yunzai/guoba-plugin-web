@@ -27,11 +27,19 @@
   import type { PromptProps } from './typing';
   import type { ModalProps } from '/@/components/Modal';
   import { ref, defineComponent, computed, unref, onMounted, nextTick } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form';
+  import { useForm } from '/@/components/Form';
   import { Modal, Spin, Input } from 'ant-design-vue';
   import { useLocale } from '/@/locales/useLocale';
   import { ConfigProvider } from 'ant-design-vue';
   import { AppProvider } from '/@/components/Application';
+  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+
+  export const BasicForm = createAsyncComponent(
+    () => import('/@/components/Form/src/BasicForm.vue'),
+    {
+      loading: true,
+    },
+  );
 
   export default defineComponent({
     name: 'Prompt',
