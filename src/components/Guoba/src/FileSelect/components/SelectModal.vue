@@ -7,7 +7,11 @@
     @cancel="onCancel"
   >
     <a-spin :spinning="loading">
-      <DirectoryTree :treeData="treeData" :loadData="onLoadData" @select="onSelect" />
+      <DirectoryTree :treeData="treeData" :loadData="onLoadData" @select="onSelect">
+        <template #title="{ title, key }">
+          <span v-html="title"></span>
+        </template>
+      </DirectoryTree>
     </a-spin>
     <template #footer>
       <a-row type="flex" justify="space-between">
@@ -28,14 +32,17 @@
   import { Tree } from 'ant-design-vue';
   import { defHttp } from '/@/utils/http/axios';
   import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { usePrompt } from '/@/components/Guoba';
 
   enum Api {
-    rootFileUrl = '/sys/fs/tree/root',
-    fileTreeUrl = '/sys/fs/tree/children',
+    createDir = '/sys/fs/create-dir',
+    treeRoot = '/sys/fs/tree/root',
+    treeChildren = '/sys/fs/tree/children',
   }
 
   const DirectoryTree = Tree.DirectoryTree;
   const emit = defineEmits(['select', 'register']);
+  const { createPrompt } = usePrompt();
 
   const loading = ref(true);
   const treeData = ref<any[]>([]);
@@ -65,7 +72,7 @@
   async function loadRoot() {
     try {
       loading.value = true;
-      treeData.value = await defHttp.get({ url: Api.rootFileUrl });
+      treeData.value = await defHttp.get({ url: Api.treeRoot });
     } finally {
       loading.value = false;
     }
@@ -85,18 +92,26 @@
 
   function onCreate() {
     if (currentNode.value) {
-      loading.value = true;
-      try {
-        loadChildren(currentNode.value.dataRef.path, currentNode.value);
-      } finally {
-        loading.value = false;
-      }
+      let path = currentNode.value.dataRef.path;
+      createPrompt({
+        title: '请输入新目录名称',
+        required: true,
+        async onOk(value) {
+          loading.value = true;
+          try {
+            await defHttp.put({ url: Api.createDir, params: { path, name: value } });
+            await loadChildren(path, currentNode.value);
+          } finally {
+            loading.value = false;
+          }
+        },
+      });
     }
   }
 
   async function loadChildren(path, node) {
     let params = { path };
-    node.dataRef.children = await defHttp.get({ url: Api.fileTreeUrl, params });
+    node.dataRef.children = await defHttp.get({ url: Api.treeChildren, params });
     treeData.value = [...treeData.value];
   }
 </script>
