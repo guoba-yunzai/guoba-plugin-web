@@ -26,6 +26,7 @@
 <script lang="ts">
   import type { PromptProps } from './typing';
   import type { ModalProps } from '/@/components/Modal';
+  import type { FormActionType } from '/@/components/Form';
   import { ref, defineComponent, computed, unref, onMounted, nextTick } from 'vue';
   import { useForm } from '/@/components/Form';
   import { Modal, Spin, Input } from 'ant-design-vue';
@@ -61,7 +62,7 @@
       const options = ref<PromptProps>({});
       const placeholder = computed(() => options.value.placeholder ?? '请输入内容');
       // 注册表单
-      const [registerForm, { clearValidate, setFieldsValue, validate, updateSchema }] = useForm({
+      const [registerFormOrigin, formActions] = useForm({
         compact: true,
         wrapperCol: { span: 24 },
         schemas: computed(() => {
@@ -77,6 +78,15 @@
         }),
         showActionButtonGroup: false,
       });
+      const { clearValidate, setFieldsValue, validate, updateSchema } = formActions;
+
+      let waitFormResolve: any = null;
+      let waitForm = new Promise((resolve) => (waitFormResolve = resolve));
+
+      const registerForm = (formActions: FormActionType) => {
+        registerFormOrigin(formActions);
+        waitFormResolve && waitFormResolve();
+      };
 
       // 弹窗最终props
       const getProps = computed(() => {
@@ -119,6 +129,7 @@
 
         options.value = opt;
         visible.value = true;
+        await waitForm;
         await nextTick();
         await updateSchema({
           field: 'input',
