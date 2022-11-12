@@ -1,16 +1,15 @@
 <template>
-  <a-input class="file-select-input" :value="value" readonly placeholder="请选择…">
+  <a-input class="file-select-input" :value="value" readonly :placeholder="title">
     <template #addonAfter>
       <span @click="onOpen" style="cursor: pointer">选择</span>
     </template>
   </a-input>
-  <SelectModal @register="registerModal" @select="onSelect" />
+  <PathSelectModal @register="registerModal" @select="onSelect" />
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
   import { useModal } from '/@/components/Modal';
-  import SelectModal from './components/SelectModal.vue';
+  import PathSelectModal from './components/PathSelectModal.vue';
 
   const props = defineProps({
     value: String,
