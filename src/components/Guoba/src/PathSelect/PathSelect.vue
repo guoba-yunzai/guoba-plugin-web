@@ -1,5 +1,10 @@
 <template>
-  <a-input class="file-select-input" :value="value" readonly :placeholder="title">
+  <a-input
+    class="file-select-input"
+    :value="value"
+    :placeholder="title"
+    @update:value="updateValue"
+  >
     <template #addonAfter>
       <span @click="onOpen" style="cursor: pointer">选择</span>
     </template>
@@ -21,6 +26,7 @@
       type: Boolean,
       default: true,
     },
+    beforeSelect: Function,
   });
   const emit = defineEmits(['update:value']);
 
@@ -31,7 +37,14 @@
   }
 
   function onSelect(path) {
-    emit('update:value', path);
+    if (typeof props.beforeSelect == 'function') {
+      path = props.beforeSelect(path);
+    }
+    updateValue(path);
+  }
+
+  function updateValue(value) {
+    emit('update:value', value);
   }
 </script>
 

@@ -60,12 +60,6 @@
           bottomHelpMessage: '迁移添加的词条、表情',
         },
         {
-          field: 'globalData',
-          label: '全局表情&语音',
-          component: 'Switch',
-          bottomHelpMessage: '迁移全局表情和语音',
-        },
-        {
           field: 'cfg_basic',
           label: '基础配置',
           component: 'Switch',

@@ -11,7 +11,11 @@
         <div v-if="models.installMode === 'new'" key="trans-git">
           <ModeBox v-model:active="models.gitAddress" :modeList="modeList.git" />
           <div class="lite-form">
-            <PathSelect v-model:value="models.installPath" title="选择安装目录" />
+            <PathSelect
+              v-model:value="models.installPath"
+              title="选择安装目录"
+              :beforeSelect="pathBeforeSelect"
+            />
           </div>
         </div>
         <div v-else-if="models.installMode === 'exist'" key="trans-input" class="lite-form">
@@ -54,13 +58,7 @@
 
   watch(
     () => models.value.installPath,
-    (val) => {
-      if (val && !/Yunzai-Bot[\\/]?$/i.test(val)) {
-        let s = /\\/.test(val) ? '\\' : '/';
-        s = val.endsWith(s) ? '' : s;
-        models.value.installPath = val + s + 'Yunzai-Bot';
-      }
-    },
+    (val) => {},
     { immediate: true },
   );
 
@@ -92,6 +90,15 @@
       },
     ],
   });
+
+  function pathBeforeSelect(path) {
+    if (path && !/Yunzai-Bot[\\/]?$/i.test(path)) {
+      let s = /\\/.test(path) ? '\\' : '/';
+      s = path.endsWith(s) ? '' : s;
+      return path + s + 'Yunzai-Bot';
+    }
+    return path;
+  }
 </script>
 
 <style scoped></style>
