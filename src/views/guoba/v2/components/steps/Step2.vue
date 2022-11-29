@@ -109,12 +109,13 @@
         await nextTick();
         if (logRef.value?.resizableTextArea?.textArea) {
           let textArea = logRef.value.resizableTextArea.textArea as HTMLTextAreaElement;
-          let { scrollTop, clientHeight, scrollHeight } = textArea;
-          let realTop = scrollTop + clientHeight;
-          if (isFirst || (scrollHeight > clientHeight && realTop >= scrollHeight - 50)) {
-            isFirst = false;
-            textArea.scrollTop = scrollHeight;
-          }
+          // let { scrollTop, clientHeight, scrollHeight } = textArea;
+          // let realTop = scrollTop + clientHeight;
+          // if (isFirst || (scrollHeight > clientHeight && realTop >= scrollHeight - 50)) {
+          //   isFirst = false;
+          //   textArea.scrollTop = scrollHeight;
+          // }
+          textArea.scrollTop = textArea.scrollHeight;
         }
       },
       { immediate: true, deep: true },
