@@ -37,6 +37,21 @@
       },
       schemas: [
         {
+          field: 'moduleTool',
+          label: '安装依赖',
+          component: 'Select',
+          componentProps: {
+            options: [
+              { label: '不安装', value: 'none' },
+              { label: 'pnpm (推荐)', value: 'pnpm' },
+              { label: 'npm', value: 'npm' },
+              { label: 'cnpm', value: 'cnpm' },
+              { label: 'yarn', value: 'yarn' },
+            ],
+          },
+          bottomHelpMessage: '选择安装依赖的方式及工具',
+        },
+        {
           field: 'rubbishClean',
           label: '过滤垃圾文件',
           component: 'Switch',
@@ -52,8 +67,8 @@
           field: 'redisClean',
           label: 'Redis清理',
           component: 'Switch',
-          helpMessage: '如果你扔想保留V2的数据，则不要清理。',
-          bottomHelpMessage: '仅清理V2版本遗留的用户UID绑定关系（谨慎）',
+          helpMessage: '如果你扔想保留V2的Redis数据，则不要清理。',
+          bottomHelpMessage: '仅清理V2版本遗留的redis缓存（谨慎）',
         },
         {
           field: 'transferJs',

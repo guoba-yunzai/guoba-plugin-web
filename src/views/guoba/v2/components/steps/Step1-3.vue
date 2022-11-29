@@ -36,12 +36,6 @@
           bottomHelpMessage: '迁移公共Cookie（不验证有效性）',
         },
         {
-          field: 'uidBind',
-          label: 'UID绑定关系',
-          component: 'Switch',
-          bottomHelpMessage: '迁移用户QQ号和游戏UID的绑定关系（需操作redis）',
-        },
-        {
           field: 'userGacha',
           label: '用户抽卡记录',
           component: 'Switch',
@@ -58,6 +52,12 @@
           label: '添加的表情',
           component: 'Switch',
           bottomHelpMessage: '迁移添加的词条、表情',
+        },
+        {
+          field: 'groupBind',
+          label: '群聊绑定',
+          component: 'Switch',
+          bottomHelpMessage: '迁移用户QQ号和群号的绑定关系（需操作redis）',
         },
         {
           field: 'cfg_basic',

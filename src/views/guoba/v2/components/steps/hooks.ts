@@ -86,8 +86,6 @@ interface StepStore {
     // git地址
     gitAddress: 'github' | 'gitee';
 
-    // 迁移绑定关系
-    uidBind: boolean;
     // 迁移用户cookie
     userCookie: boolean;
     // 迁移公共cookie
@@ -96,10 +94,10 @@ interface StepStore {
     userGacha: boolean;
     // 用户札记数据
     userNote: boolean;
+    // 迁移group_id绑定关系
+    groupBind: boolean;
     // 添加的表情、词条
     groupFace: boolean;
-    // 迁移全局表情&语音
-    globalData: boolean;
 
     // 基础配置，包括：主人QQ号、自动同意加好友、自动退小群、Cookie文档地址、使用用户Cookie、pushTask推送任务、黑名单QQ号
     cfg_basic: boolean;
@@ -115,6 +113,8 @@ interface StepStore {
     // 成就插件：用户数据
     ach_userData: boolean;
 
+    // 安装依赖的方式（none=不安装）
+    moduleTool: 'none' | 'pnpm' | 'npm' | 'cnpm' | 'yarn';
     // 清理redis
     redisClean: boolean;
     // 清理垃圾文件
@@ -150,10 +150,9 @@ export const useStepStore = defineStore({
       installMode: 'new',
       installPath: '',
       gitAddress: 'gitee',
-      uidBind: true,
       userCookie: true,
+      groupBind: true,
       userGacha: true,
-      globalData: true,
       miao_userData: true,
       ach_userData: true,
       cfg_basic: true,
@@ -165,6 +164,7 @@ export const useStepStore = defineStore({
       userNote: true,
       redisClean: false,
       rubbishClean: true,
+      moduleTool: 'pnpm',
       transferJs: false,
       jsPluginInfo: { passed: null, noPass: null },
     },
