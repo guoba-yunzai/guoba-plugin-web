@@ -17,7 +17,7 @@
         type="success"
         show-icon
       />
-      <Alert v-else message="在迁移成功之前，请勿重启或关闭云崽" type="warning" show-icon />
+      <Alert v-else message="在迁移结束之前，请勿重启或关闭云崽" type="warning" show-icon />
       <br />
       迁移日志：
       <a-textarea ref="logRef" :value="logs" :auto-size="{ minRows: 10, maxRows: 10 }" />

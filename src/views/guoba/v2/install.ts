@@ -7,15 +7,15 @@ const passName = ['MasterLogin', 'Login', 'V2Update'];
 
 export function registerV2(_: App) {
   if (!isV2) return;
-  router.isReady().then(() => {
-    router.beforeEach((to, _from, next) => {
-      if (!passName.includes(to.name as string)) {
-        next({ name: 'V2Update' });
-      } else {
-        next();
-      }
-    });
+  // router.isReady().then(() => {
+  router.beforeEach((to, _from, next) => {
+    if (!passName.includes(to.name as string)) {
+      next({ name: 'V2Update' });
+    } else {
+      next();
+    }
   });
+  // });
 }
 
 export function useV2Route() {

@@ -121,6 +121,8 @@ interface StepStore {
     rubbishClean: boolean;
     // 迁移JS插件
     transferJs: boolean;
+    // 强制迁移JS插件，即使不兼容
+    transferJsForce: boolean;
     // JS插件迁移详情
     jsPluginInfo: {
       // 可以迁移的
@@ -166,6 +168,7 @@ export const useStepStore = defineStore({
       rubbishClean: true,
       moduleTool: 'pnpm',
       transferJs: false,
+      transferJsForce: false,
       jsPluginInfo: { passed: null, noPass: null },
     },
     status: {

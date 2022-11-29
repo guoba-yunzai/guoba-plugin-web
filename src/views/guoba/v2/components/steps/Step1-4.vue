@@ -78,7 +78,7 @@
         },
         {
           field: 'transferJsInfo',
-          label: 'JS插件迁移详情',
+          label: '迁移详情',
           component: 'Input',
           render: () => {
             const jsPluginInfo = models.value.jsPluginInfo;
@@ -99,6 +99,14 @@
             return h('div', {}, [text, HActions]);
           },
           bottomHelpMessage: '',
+          ifShow: ({ model }) =>
+            models.value.jsPluginInfo.passed != null && model.transferJs === true,
+        },
+        {
+          field: 'transferJsForce',
+          label: '强制迁移',
+          component: 'Switch',
+          bottomHelpMessage: '强制迁移JS插件，即使存在不兼容的写法',
           ifShow: ({ model }) =>
             models.value.jsPluginInfo.passed != null && model.transferJs === true,
         },
