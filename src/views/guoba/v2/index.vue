@@ -76,7 +76,7 @@
       .basic-form {
         margin: 8px auto 0;
         width: 380px;
-        max-height: 420px;
+        max-height: 480px;
         overflow: auto;
       }
 

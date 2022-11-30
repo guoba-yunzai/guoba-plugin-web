@@ -52,29 +52,17 @@
           bottomHelpMessage: '选择安装依赖的方式及工具',
         },
         {
-          field: 'rubbishClean',
-          label: '过滤垃圾文件',
-          component: 'Switch',
-          helpMessage: [
-            '垃圾文件指的是：',
-            '1. 生成图片导致的html文件缓存。',
-            '（即以html为后缀的文件）',
-            '仅清理这一项，其他文件不清理。',
-          ],
-          bottomHelpMessage: '是否过滤“data”文件夹中的垃圾文件',
-        },
-        {
-          field: 'redisClean',
-          label: 'Redis清理',
-          component: 'Switch',
-          helpMessage: '如果你扔想保留V2的Redis数据，则不要清理。',
-          bottomHelpMessage: '仅清理V2版本遗留的redis缓存（谨慎）',
-        },
-        {
-          field: 'transferJs',
-          label: '迁移JS插件',
-          component: 'Switch',
-          bottomHelpMessage: '仅处理"lib/example"下的JS插件',
+          field: 'transferJsMode',
+          label: '单文件JS插件',
+          component: 'Select',
+          componentProps: {
+            options: [
+              { label: '不迁移', value: 'none' },
+              { label: '仅迁移兼容的', value: 'passed' },
+              { label: '迁移所有插件', value: 'force' },
+            ],
+          },
+          bottomHelpMessage: '选择迁移“单文件JS插件”的方式',
         },
         {
           field: 'transferJsInfo',
@@ -100,15 +88,26 @@
           },
           bottomHelpMessage: '',
           ifShow: ({ model }) =>
-            models.value.jsPluginInfo.passed != null && model.transferJs === true,
+            models.value.jsPluginInfo.passed != null && model.transferJsMode === 'passed',
         },
         {
-          field: 'transferJsForce',
-          label: '强制迁移',
+          field: 'rubbishClean',
+          label: '过滤垃圾文件',
           component: 'Switch',
-          bottomHelpMessage: '强制迁移JS插件，即使存在不兼容的写法',
-          ifShow: ({ model }) =>
-            models.value.jsPluginInfo.passed != null && model.transferJs === true,
+          helpMessage: [
+            '垃圾文件指的是：',
+            '1. 生成图片导致的html文件缓存。',
+            '（即以html为后缀的文件）',
+            '仅清理这一项，其他文件不清理。',
+          ],
+          bottomHelpMessage: '是否过滤“data”文件夹中的垃圾文件',
+        },
+        {
+          field: 'redisClean',
+          label: 'Redis清理',
+          component: 'Switch',
+          helpMessage: '如果你扔想保留V2的Redis数据，则不要清理。',
+          bottomHelpMessage: '仅清理V2版本遗留的redis缓存（谨慎）',
         },
       ],
     },
@@ -116,12 +115,13 @@
   );
 
   watch(
-    () => models.value.transferJs,
+    () => models.value.transferJsMode,
     (val) => {
-      if (val && models.value.jsPluginInfo.passed == null) {
+      if (val === 'passed' && models.value.jsPluginInfo.passed == null) {
         onRecheck();
       }
     },
+    { immediate: true },
   );
   const { createSuccessModal, createWarningModal } = useMessage();
 
@@ -141,6 +141,7 @@
     if (noPass!.length > 0) {
       createWarningModal({
         title: '不兼容的插件',
+        width: 600,
         content: h('span', [
           ...noPass!.map((i) => {
             return h('span', [
@@ -166,6 +167,7 @@
     if (passed!.length > 0) {
       createSuccessModal({
         title: '可迁移的插件',
+        width: 600,
         content: h('span', [
           '注意事项：',
           h('br'),
