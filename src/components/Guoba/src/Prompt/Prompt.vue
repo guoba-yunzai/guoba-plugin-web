@@ -28,7 +28,7 @@
   import type { ModalProps } from '/@/components/Modal';
   import type { FormActionType } from '/@/components/Form';
   import { ref, defineComponent, computed, unref, onMounted, nextTick } from 'vue';
-  import { useForm } from '/@/components/Form';
+  import { useForm } from '/@/components/Form/src/hooks/useForm';
   import { Modal, Spin, Input } from 'ant-design-vue';
   import { useLocale } from '/@/locales/useLocale';
   import { ConfigProvider } from 'ant-design-vue';
