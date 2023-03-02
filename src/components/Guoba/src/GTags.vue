@@ -35,10 +35,15 @@
     inheritAttrs: false,
     props: {
       value: propTypes.array.def(() => []),
+      // 允许新增
       allowAdd: propTypes.bool.def(false),
+      // 允许删除
       allowDel: propTypes.bool.def(false),
+      // 是否是弹出输入框
       showPrompt: propTypes.bool.def(false),
+      // 弹出配置
       promptProps: propTypes.object.def(() => ({})),
+      // 值格式化方法
       valueFormatter: propTypes.oneOfType([propTypes.func, propTypes.string]),
     },
     emits: ['change'],
