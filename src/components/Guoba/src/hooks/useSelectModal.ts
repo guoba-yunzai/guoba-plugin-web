@@ -103,6 +103,7 @@ export function useSelectModal(getList, props) {
   async function getDataSource(params, flag) {
     let { records } = await getList(params);
     dataSource.value = records;
+    console.log('useSelectModel', props);
     if (flag) {
       let options = <any[]>[];
       records.forEach((item) => {
