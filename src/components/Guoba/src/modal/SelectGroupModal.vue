@@ -54,6 +54,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { selectModalProps, useSelectModal } from '../hooks/useSelectModal';
   import { defHttp } from '/@/utils/http/axios';
+  import { useUserStore } from '/@/store/modules/user';
 
   function getGroupList(params) {
     return defHttp.get({ url: '/oicq/group/list', params });
@@ -74,6 +75,7 @@
     setup(props, { emit }) {
       const attrs = useAttrs();
       const tableRef = ref();
+      const userStore = useUserStore();
       //表格配置
       const config = {
         canResize: false,
@@ -81,7 +83,6 @@
         size: 'small',
       };
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
-      console.log('selectGroupModel', getBindValue);
       const [
         {
           rowSelection,
@@ -155,10 +156,13 @@
           align: 'left',
           customRender({ text, record }) {
             if (record.remark !== text) {
+              const isOwner = record.owner_id === userStore.getUserInfo.userId;
+              const isAdmin = record.admin_flag;
+              const adminText = isOwner ? '（群主）' : isAdmin ? '（管理员）' : '';
               return (
                 <span>
-                  <span>{record.remark}</span>
-                  <span style="color:#999;font-size:8px;">（{text}）</span>
+                  <span>{text}</span>
+                  <span style="color:#999;font-size:8px;">{adminText}</span>
                 </span>
               );
             }
@@ -166,11 +170,19 @@
           },
         },
         {
-          title: '群成员',
+          title: '活跃人数',
           dataIndex: 'active_member_count',
-          width: 100,
-          customRender({ record }) {
-            return `${record.active_member_count || 0}(${record.member_count})`;
+          width: 80,
+          customRender({ text }) {
+            return (text ?? 0) + '人';
+          },
+        },
+        {
+          title: '总人数',
+          dataIndex: 'member_count',
+          width: 80,
+          customRender({ text }) {
+            return (text ?? 0) + '人';
           },
         },
       ];
