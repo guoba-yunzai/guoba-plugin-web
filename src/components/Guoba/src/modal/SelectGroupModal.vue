@@ -1,0 +1,220 @@
+<template>
+  <FormItemRest>
+    <BasicModal
+      width="800px"
+      :title="modalTitle"
+      @ok="handleOk"
+      @register="register"
+      @visible-change="visibleChange"
+      v-bind="$attrs"
+    >
+      <a-row>
+        <a-col :span="showSelected ? 18 : 24">
+          <BasicTable
+            ref="tableRef"
+            :columns="columns"
+            :scroll="tableScroll"
+            v-bind="getBindValue"
+            :useSearchForm="true"
+            :formConfig="formConfig"
+            :api="getGroupList"
+            :searchInfo="searchInfo"
+            :rowSelection="rowSelection"
+            :indexColumnProps="indexColumnProps"
+          >
+            <!--            <template #tableTitle></template>-->
+          </BasicTable>
+        </a-col>
+        <a-col v-if="showSelected" :span="6">
+          <BasicTable
+            v-bind="selectedTable"
+            :dataSource="selectRows"
+            :useSearchForm="true"
+            :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
+          >
+            <!--操作栏-->
+            <template #action="{ record }">
+              <a @click="handleDeleteSelected(record)">
+                <Icon icon="ant-design:delete-outlined" />
+              </a>
+            </template>
+          </BasicTable>
+        </a-col>
+      </a-row>
+    </BasicModal>
+  </FormItemRest>
+</template>
+<script lang="tsx">
+  import type { BasicColumn, FormProps } from '/@/components/Table';
+  import { BasicTable } from '/@/components/Table';
+  import { defineComponent, ref, unref } from 'vue';
+  import { FormItemRest } from 'ant-design-vue/es/form';
+  import { useAttrs } from '/@/hooks/core/useAttrs';
+  import { propTypes } from '/@/utils/propTypes';
+  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { selectModalProps, useSelectModal } from '../hooks/useSelectModal';
+  import { defHttp } from '/@/utils/http/axios';
+
+  function getGroupList(params) {
+    return defHttp.get({ url: '/oicq/group/list', params });
+  }
+
+  export default defineComponent({
+    name: 'SelectGroupModal',
+    components: {
+      BasicModal,
+      BasicTable,
+      FormItemRest,
+    },
+    props: {
+      ...selectModalProps,
+      modalTitle: propTypes.string.def('选择群'),
+    },
+    emits: ['register', 'getSelectResult'],
+    setup(props, { emit }) {
+      const attrs = useAttrs();
+      const tableRef = ref();
+      //表格配置
+      const config = {
+        canResize: false,
+        bordered: true,
+        size: 'small',
+      };
+      const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
+      console.log('selectGroupModel', getBindValue);
+      const [
+        {
+          rowSelection,
+          visibleChange,
+          selectValues,
+          indexColumnProps,
+          getSelectResult,
+          handleDeleteSelected,
+          selectRows,
+        },
+      ] = useSelectModal(getGroupList, getBindValue);
+      const tableScroll = ref<Recordable>({ x: false });
+      //注册弹框
+      const [register, { closeModal }] = useModalInner(() => {
+        if (window.innerWidth < 900) {
+          tableScroll.value = { x: 900 };
+        } else {
+          tableScroll.value = { x: false };
+        }
+        setTimeout(() => {
+          if (tableRef.value) {
+            tableRef.value.setSelectedRowKeys(selectValues['value'] || []);
+          }
+        }, 800);
+      });
+      const searchInfo = ref(props.params);
+      //查询form
+      const formConfig: FormProps = {
+        // labelWidth: 200,
+        baseColProps: { xs: 24, sm: 8, md: 6, lg: 8, xl: 8, xxl: 8 },
+        actionColOptions: {
+          xs: 24,
+          sm: 8,
+          md: 8,
+          lg: 8,
+          xl: 8,
+          xxl: 8,
+          style: { paddingLeft: '8px', textAlign: 'left' },
+        },
+        labelCol: { xs: 24, sm: 6 },
+        wrapperCol: { xs: 24, sm: 18 },
+        schemas: [
+          {
+            label: '群号',
+            field: 'query_group_id',
+            component: 'Input',
+            componentProps: { placeholder: '请输入群号' },
+          },
+          {
+            label: '群名称',
+            field: 'query_name',
+            component: 'Input',
+            componentProps: { placeholder: '请输入群名称' },
+          },
+        ],
+        autoSubmitOnEnter: true,
+      };
+      //定义表格列
+      const columns: BasicColumn[] = [
+        {
+          title: '头像',
+          dataIndex: 'group_id',
+          width: 60,
+          customRender: ({ text }) => <g-avatar id={text} type="group" qs={100} />,
+        },
+        { title: '群号', dataIndex: 'group_id', width: 120 },
+        {
+          title: '群名',
+          dataIndex: 'group_name',
+          ellipsis: true,
+          align: 'left',
+          customRender({ text, record }) {
+            if (record.remark !== text) {
+              return (
+                <span>
+                  <span>{record.remark}</span>
+                  <span style="color:#999;font-size:8px;">（{text}）</span>
+                </span>
+              );
+            }
+            return text;
+          },
+        },
+        {
+          title: '群成员',
+          dataIndex: 'active_member_count',
+          width: 100,
+          customRender({ record }) {
+            return `${record.active_member_count || 0}(${record.member_count})`;
+          },
+        },
+      ];
+      //已选择的table信息
+      const selectedTable = {
+        rowKey: 'group_id',
+        size: 'small',
+        bordered: true,
+        scroll: { y: 390 },
+        canResize: false,
+        pagination: false,
+        showIndexColumn: false,
+        columns: [columns[0], { ...columns[1], show: false }, columns[2]],
+      };
+
+      /**
+       * 确定选择
+       */
+      function handleOk() {
+        getSelectResult((options, values) => {
+          //回传选项和已选择的值
+          emit('getSelectResult', options, values);
+          //关闭弹窗
+          closeModal();
+        });
+      }
+
+      return {
+        handleOk,
+        searchInfo,
+        register,
+        indexColumnProps,
+        visibleChange,
+        getBindValue,
+        getGroupList,
+        formConfig,
+        columns,
+        rowSelection,
+        selectRows,
+        selectedTable,
+        handleDeleteSelected,
+        tableScroll,
+        tableRef,
+      };
+    },
+  });
+</script>

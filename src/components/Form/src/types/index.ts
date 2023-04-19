@@ -85,6 +85,7 @@ export type ComponentType =
   | 'EasyCron'
   | 'GTags'
   | 'GSelectFriend'
+  | 'GSelectGroup'
   | 'Input'
   | 'InputGroup'
   | 'InputPassword'
