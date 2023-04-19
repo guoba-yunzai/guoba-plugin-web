@@ -68,16 +68,18 @@
       }
 
       async function getWeather() {
-        try {
-          let { ok, result, message } = await helperApi.getCityWeather();
-          if (ok) {
-            weather.value = result.weather;
-          } else {
-            weather.value = message;
-          }
-        } catch (e: any) {
-          weather.value = e.message || e;
-        }
+        // 临时砍掉查天气功能
+        weather.value = '欢迎使用锅巴插件~';
+        // try {
+        //   let { ok, result, message } = await helperApi.getCityWeather();
+        //   if (ok) {
+        //     weather.value = result.weather;
+        //   } else {
+        //     weather.value = message;
+        //   }
+        // } catch (e: any) {
+        //   weather.value = e.message || e;
+        // }
       }
 
       loadData();
