@@ -1,12 +1,14 @@
 import type { App } from 'vue';
 import type { componentMapType } from '/@/components/Form/src/componentMap';
 import GAvatar from './src/GAvatar.vue';
+import GSpan from './src/GSpan.vue';
 import { registerPrompt } from './src/Prompt';
 import { registerV2 } from '/@/views/guoba/v2/install';
 
 export function registerGuoba(app: App) {
   registerV2(app);
   registerPrompt(app);
+  app.component('GSpan', GSpan);
   app.component(GAvatar.name, GAvatar);
 }
 
