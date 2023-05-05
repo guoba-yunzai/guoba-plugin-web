@@ -1,11 +1,13 @@
 <template>
-  <BasicForm @register="registerForm" />
+  <a-spin :spinning="loading">
+    <BasicForm @register="registerForm" />
+  </a-spin>
 </template>
 
 <script lang="ts">
   import type { PropType } from 'vue';
   import type { Plugin } from '/#/guoba';
-  import { computed, defineComponent } from 'vue';
+  import { ref, computed, defineComponent } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -20,6 +22,8 @@
       },
     },
     setup(props) {
+      const loading = ref(false);
+
       const { createMessage: $message, createErrorModal } = useMessage();
 
       const [registerForm, { setFieldsValue, validate }] = useForm({
@@ -34,8 +38,13 @@
 
       // 获取插件配置数据
       async function getPluginConfigData() {
-        let result = await defHttp.get({ url: url.value }, { errorMessageMode: 'modal' });
-        setFieldsValue(result);
+        try {
+          loading.value = true;
+          let result = await defHttp.get({ url: url.value }, { errorMessageMode: 'modal' });
+          await setFieldsValue(result);
+        } finally {
+          loading.value = false;
+        }
       }
 
       async function savePluginConfigData() {
@@ -58,6 +67,7 @@
           registerForm(...args);
           getPluginConfigData();
         },
+        loading,
         savePluginConfigData,
       };
     },
