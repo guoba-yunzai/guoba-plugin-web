@@ -81,6 +81,7 @@ export interface ColEx {
 }
 
 export type ComponentType =
+  | 'GSubForm'
   | 'GColorPicker'
   | 'EasyCron'
   | 'GTags'

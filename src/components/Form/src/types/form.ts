@@ -208,6 +208,9 @@ export interface FormSchema {
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
 }
+
+export type FormSchemas = FormSchema[];
+
 export interface HelpComponentProps {
   maxWidth: string;
   // Whether to display the serial number

@@ -107,6 +107,22 @@ notification.config({
   duration: 3,
 });
 
+interface MOE extends Omit<ModalOptionsEx, 'iconType'> {
+  iconType?: ModalOptionsEx['iconType'];
+}
+
+// 提示框，无需传入iconType，默认为warning
+function createConfirmSync(options: MOE) {
+  return new Promise((resolve) => {
+    createConfirm({
+      iconType: 'warning',
+      ...options,
+      onOk: () => resolve(true),
+      onCancel: () => resolve(false),
+    });
+  });
+}
+
 /**
  * @description: message
  */
@@ -115,6 +131,7 @@ export function useMessage() {
     createMessage: Message,
     notification: notification as NotifyApi,
     createConfirm: createConfirm,
+    createConfirmSync,
     createSuccessModal,
     createErrorModal,
     createInfoModal,
