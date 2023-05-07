@@ -45,6 +45,7 @@
     return {
       title: `填写列表`,
       width: 800,
+      minHeight: 400,
       onOk: onOk,
     };
   });
@@ -74,6 +75,7 @@
   }
 
   function onOpenSingleForm(models: Recordable, payload?) {
+    payload = !payload ? { isUpdate: false } : payload;
     formModal.openModal(true, { models, payload });
   }
 
@@ -83,6 +85,7 @@
     } else {
       modelList.value.push(values);
     }
+    emit('ok', modelList.value);
   }
 </script>
 
