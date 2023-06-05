@@ -29,6 +29,9 @@
             <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x">
               {{ t('sys.login.signInDesc') }}
             </div>
+            <div v-if="ICPNo" class="mt-5 font-normal text-white dark:text-gray-500 -enter-x icp-no">
+              {{ ICPNo }}
+            </div>
           </div>
         </div>
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
@@ -78,6 +81,7 @@
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
   const title = computed(() => globSetting?.title ?? '');
+  const ICPNo = computed(() => globSetting?.ICPNo ?? '');
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login';
@@ -218,5 +222,11 @@
       font-size: 12px;
       color: @text-color-secondary;
     }
+
+    .icp-no {
+      position: fixed;
+      bottom: 10px;
+    }
+
   }
 </style>

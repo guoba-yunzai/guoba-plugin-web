@@ -1,19 +1,25 @@
 <template>
   <Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
     <div :class="`${prefixCls}__links`">
-<!--      <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>-->
+      <!-- <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>-->
       <a href="https://oicqjs.github.io/oicq/" target="_blank">OICQ文档</a>
 
-      <GithubFilled @click="openWindow('https://gitee.com/guoba-yunzai')" :class="`${prefixCls}__github`" />
+      <GithubFilled
+        :class="`${prefixCls}__github`"
+        @click="openWindow('https://github.com/guoba-yunzai')"
+      />
 
       <a href="https://github.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a>
-<!--      <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>-->
+      <!-- <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>-->
     </div>
     <div :class="`${prefixCls}__links`">
-      <span>Copyright &copy;2022</span> 
+      <span>Copyright &copy;2022</span>
       <a href="https://github.com/zolay-poi" target="_blank"> Zolay-poi </a>
       <span> & </span>
       <a href="https://github.com/vbenjs/vue-vben-admin" target="_blank"> Vben Admin </a>
+    </div>
+    <div v-if="ICPNo" :class="`${prefixCls}__links`">
+      <span>{{ ICPNo }}</span>
     </div>
   </Footer>
 </template>
@@ -32,12 +38,14 @@
   import { useRouter } from 'vue-router';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useLayoutHeight } from '../content/useContentViewHeight';
+  import { useGlobSetting } from '/@/hooks/setting';
 
   export default defineComponent({
     name: 'LayoutFooter',
     components: { Footer: Layout.Footer, GithubFilled },
     setup() {
       const { t } = useI18n();
+      const globSetting = useGlobSetting();
       const { getShowFooter } = useRootSetting();
       const { currentRoute } = useRouter();
       const { prefixCls } = useDesign('layout-footer');
@@ -54,11 +62,13 @@
         }
         return unref(getShowFooter) && !unref(currentRoute).meta?.hiddenFooter;
       });
+      const ICPNo = computed(() => globSetting?.ICPNo ?? '');
 
       return {
         getShowLayoutFooter,
         prefixCls,
         t,
+        ICPNo,
         DOC_URL,
         GITHUB_URL,
         SITE_URL,

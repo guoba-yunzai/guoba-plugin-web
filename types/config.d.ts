@@ -147,6 +147,8 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
+  // 域名ICP备案号
+  ICPNo?: string;
 }
 export interface GlobEnvConfig {
   // Site title

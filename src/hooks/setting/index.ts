@@ -19,12 +19,17 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
   }
 
   // Take global configuration
-  const glob: Readonly<GlobConfig> = {
+  const glob: GlobConfig = {
     title: VITE_GLOB_APP_TITLE,
     apiUrl: VITE_GLOB_API_URL,
     shortName: VITE_GLOB_APP_SHORT_NAME,
     urlPrefix: VITE_GLOB_API_URL_PREFIX,
     uploadUrl: VITE_GLOB_UPLOAD_URL,
   };
+
+  if (window['__GUOBA_CONF__']) {
+    glob.ICPNo = window['__GUOBA_CONF__']['ICP_NO'] as string;
+  }
+
   return glob as Readonly<GlobConfig>;
 };
