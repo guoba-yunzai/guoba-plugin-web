@@ -19,7 +19,7 @@
       <a href="https://github.com/vbenjs/vue-vben-admin" target="_blank"> Vben Admin </a>
     </div>
     <div v-if="ICPNo" :class="`${prefixCls}__links`">
-      <span>{{ ICPNo }}</span>
+      <a href="https://beian.miit.gov.cn/" target="_blank">{{ ICPNo }}</a>
     </div>
   </Footer>
 </template>

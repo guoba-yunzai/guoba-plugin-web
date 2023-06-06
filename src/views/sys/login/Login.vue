@@ -30,7 +30,9 @@
               {{ t('sys.login.signInDesc') }}
             </div>
             <div v-if="ICPNo" class="mt-5 font-normal text-white dark:text-gray-500 -enter-x icp-no">
-              {{ ICPNo }}
+              <a href="https://beian.miit.gov.cn/" target="_blank" class="text-white">
+                {{ ICPNo }}
+              </a>
             </div>
           </div>
         </div>
