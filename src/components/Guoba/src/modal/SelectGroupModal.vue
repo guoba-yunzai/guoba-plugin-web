@@ -21,6 +21,7 @@
             :searchInfo="searchInfo"
             :rowSelection="rowSelection"
             :indexColumnProps="indexColumnProps"
+            :pagination="paginationProp"
           >
             <!--            <template #tableTitle></template>-->
           </BasicTable>
@@ -55,6 +56,7 @@
   import { selectModalProps, useSelectModal } from '../hooks/useSelectModal';
   import { defHttp } from '/@/utils/http/axios';
   import { useUserStore } from '/@/store/modules/user';
+  import { waitRef } from '/@/utils';
 
   function getGroupList(params) {
     return defHttp.get({ url: '/oicq/group/list', params });
@@ -92,21 +94,19 @@
           getSelectResult,
           handleDeleteSelected,
           selectRows,
+          checkedKeys,
         },
       ] = useSelectModal(getGroupList, getBindValue);
       const tableScroll = ref<Recordable>({ x: false });
       //注册弹框
-      const [register, { closeModal }] = useModalInner(() => {
+      const [register, { closeModal }] = useModalInner(async () => {
         if (window.innerWidth < 900) {
           tableScroll.value = { x: 900 };
         } else {
           tableScroll.value = { x: false };
         }
-        setTimeout(() => {
-          if (tableRef.value) {
-            tableRef.value.setSelectedRowKeys(selectValues['value'] || []);
-          }
-        }, 800);
+        await waitRef(tableRef);
+        tableRef.value.setSelectedRowKeys(selectValues['value'] || []);
       });
       const searchInfo = ref(props.params);
       //查询form
@@ -203,6 +203,12 @@
        */
       function handleOk() {
         getSelectResult((options, values) => {
+          console.group('group getSelectResult');
+          console.log('options', options);
+          console.log('values', values);
+          console.log('selectRows', selectRows.value);
+          console.log('checkedKeys', checkedKeys.value);
+          console.groupEnd();
           //回传选项和已选择的值
           emit('getSelectResult', options, values);
           //关闭弹窗
@@ -210,7 +216,12 @@
         });
       }
 
+      const paginationProp = ref({
+        pageSizeOptions: ['3', '10', '20', '50', '100', '200'],
+      });
+
       return {
+        paginationProp,
         handleOk,
         searchInfo,
         register,

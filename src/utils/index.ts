@@ -1,5 +1,5 @@
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router';
-import type { App, Plugin } from 'vue';
+import type { Ref, App, Plugin } from 'vue';
 
 import { unref } from 'vue';
 import { isObject } from '/@/utils/is';
@@ -90,3 +90,20 @@ export const withInstall = <T>(component: T, alias?: string) => {
   };
   return component as T & Plugin;
 };
+
+/**
+ * 等待 ref 对象的值不为空时返回，可用于判断组件是否加载完成
+ * @param ref
+ * @param delay 延迟时间
+ */
+export function waitRef<T>(ref: Ref<T>, delay = 100): Promise<T> {
+  return new Promise((resolve) => {
+    (function next() {
+      if (ref.value) {
+        resolve(ref.value);
+      } else {
+        setTimeout(next, delay);
+      }
+    })();
+  });
+}
