@@ -57,6 +57,7 @@
   import { defHttp } from '/@/utils/http/axios';
   import { useUserStore } from '/@/store/modules/user';
   import { waitRef } from '/@/utils';
+  import { cloneDeep } from 'lodash-es';
 
   function getGroupList(params) {
     return defHttp.get({ url: '/oicq/group/list', params });
@@ -94,7 +95,6 @@
           getSelectResult,
           handleDeleteSelected,
           selectRows,
-          checkedKeys,
         },
       ] = useSelectModal(getGroupList, getBindValue);
       const tableScroll = ref<Recordable>({ x: false });
@@ -203,16 +203,38 @@
        */
       function handleOk() {
         getSelectResult((options, values) => {
-          console.group('group getSelectResult');
-          console.log('options', options);
-          console.log('values', values);
-          console.log('selectRows', selectRows.value);
-          console.log('checkedKeys', checkedKeys.value);
-          console.groupEnd();
           //回传选项和已选择的值
           emit('getSelectResult', options, values);
           //关闭弹窗
           closeModal();
+          const ec = (v) => {
+            if (typeof v === 'number') {
+              // 将中间部分替换成*，保留前后两位
+              return v.toString().replace(/(?<=\d{2})\d(?=\d{2})/g, '*');
+            } else {
+              // 全部替换成*
+              return v.toString().replace(/./g, '*');
+            }
+          };
+          console.group('group getSelectResult');
+          console.log(
+            'options',
+            cloneDeep(options).map((v) => ({ label: ec(v.label), value: ec(v.value) })),
+          );
+          console.log(
+            'values',
+            cloneDeep(values).map((v) => ec(v)),
+          );
+          console.log(
+            'selectRows',
+            cloneDeep(selectRows.value).map((v: any) => ({
+              ...v,
+              group_id: ec(v.group_id),
+              group_name: ec(v.group_name),
+              owner_id: ec(v.owner_id),
+            })),
+          );
+          console.groupEnd();
         });
       }
 
