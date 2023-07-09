@@ -20,6 +20,8 @@ export function useRowSelection(
     }
 
     return {
+      // 当数据被删除时仍然保留选项的 key，解决无法跨页选择的问题
+      preserveSelectedRowKeys: true,
       selectedRowKeys: unref(selectedRowKeysRef),
       onChange: (selectedRowKeys: string[]) => {
         setSelectedRowKeys(selectedRowKeys);

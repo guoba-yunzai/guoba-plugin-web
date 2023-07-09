@@ -21,7 +21,6 @@
             :searchInfo="searchInfo"
             :rowSelection="rowSelection"
             :indexColumnProps="indexColumnProps"
-            :pagination="paginationProp"
           >
             <!--            <template #tableTitle></template>-->
           </BasicTable>
@@ -216,34 +215,10 @@
               return v.toString().replace(/./g, '*');
             }
           };
-          console.group('group getSelectResult');
-          console.log(
-            'options',
-            cloneDeep(options).map((v) => ({ label: ec(v.label), value: ec(v.value) })),
-          );
-          console.log(
-            'values',
-            cloneDeep(values).map((v) => ec(v)),
-          );
-          console.log(
-            'selectRows',
-            cloneDeep(selectRows.value).map((v: any) => ({
-              ...v,
-              group_id: ec(v.group_id),
-              group_name: ec(v.group_name),
-              owner_id: ec(v.owner_id),
-            })),
-          );
-          console.groupEnd();
         });
       }
 
-      const paginationProp = ref({
-        pageSizeOptions: ['3', '10', '20', '50', '100', '200'],
-      });
-
       return {
-        paginationProp,
         handleOk,
         searchInfo,
         register,
