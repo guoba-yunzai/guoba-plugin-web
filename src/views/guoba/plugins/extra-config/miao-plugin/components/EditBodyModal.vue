@@ -137,7 +137,7 @@
     v-if="modelData.cell"
     v-model:visible="showIconModal"
     v-model:cell="modelData.cell"
-    v-model:iconB64List="iconB64List"
+    :iconB64List="iconB64List"
     :afterClose="iconModalAfter"
   />
 </template>
@@ -254,7 +254,7 @@
         }
         emit(
           'update:modelData',
-          Object.assign(modelData, {
+          Object.assign({}, modelData, {
             cellIndex: newCellIndex,
             group: newGroup,
             groupIndex: groupIndex! + offset,

@@ -1,12 +1,13 @@
 <template>
   <Modal
-    v-model:visible="visible"
+    :visible="visible"
     @cancel="closeModal"
     width="420px"
     :closable="false"
     :footer="null"
     :maskStyle="{ background: 'rgba(0, 0, 0, 0.1)' }"
     v-bind="$attrs"
+    @update:visible="emit('update:visible', $event)"
   >
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move">
@@ -42,7 +43,7 @@
     </div>
   </Modal>
 
-  <IconUploader :uploader="uploader" v-model:iconB64List="iconB64List" />
+  <IconUploader :uploader="uploader" :iconB64List="iconB64List" />
 </template>
 
 <script lang="ts" setup>

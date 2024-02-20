@@ -75,10 +75,10 @@
   async function registerForm(formAction: FormActionType, formModel) {
     registerFormOrigin(formAction);
     await updateThemeSchema();
-    await setFieldsValue(props.model);
     watch(
       () => props.model,
-      () => setFieldsValue(props.model),
+      () => setFieldsValue(props.model ?? {}),
+      { deep: true, immediate: true },
     );
     watch(formModel, onModelUpdate, { immediate: true });
   }

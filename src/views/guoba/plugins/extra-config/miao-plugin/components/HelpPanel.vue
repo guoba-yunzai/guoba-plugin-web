@@ -62,9 +62,10 @@
 
     <EditBodyModal
       :panelCls="prefixCls"
-      v-model:helpList="helpList"
-      v-model:modelData="modelData"
-      v-model:iconB64List="iconB64List"
+      :helpList="helpList"
+      :modelData="modelData"
+      :iconB64List="iconB64List"
+      @update:modelData="emit('update:modelData', $event)"
     />
     <UploadIconHelpModal @register="registerUihModal" />
   </div>

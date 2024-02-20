@@ -125,8 +125,8 @@
   <SelectIconModal
     v-if="modelData.cell"
     v-model:visible="showIconModal"
-    v-model:cell="modelData.cell"
-    v-model:iconB64List="iconB64List"
+    :cell="modelData.cell"
+    :iconB64List="iconB64List"
   />
 </template>
 
