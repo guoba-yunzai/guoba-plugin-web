@@ -1,7 +1,7 @@
 <script lang="tsx">
   import type { PropType } from 'vue';
-  import { Result, Button } from 'ant-design-vue';
-  import { defineComponent, ref, computed, unref } from 'vue';
+  import { computed, defineComponent, ref, unref } from 'vue';
+  import { Button, Result } from 'ant-design-vue';
   import { ExceptionEnum } from '/@/enums/exceptionEnum';
   import notDataSvg from '/@/assets/svg/no-data.svg';
   import netWorkSvg from '/@/assets/svg/net-error.svg';
@@ -39,6 +39,16 @@
         default: '',
       },
 
+      btnText: {
+        type: String as PropType<string>,
+        default: '',
+      },
+
+      goPath: {
+        type: String as PropType<string>,
+        default: '',
+      },
+
       full: {
         type: Boolean as PropType<boolean>,
         default: false,
@@ -66,20 +76,28 @@
       const backLoginI18n = t('sys.exception.backLogin');
       const backHomeI18n = t('sys.exception.backHome');
 
+      const getBtnText = (def: string) => (props.btnText ? props.btnText : def);
+      const handleGoTo = (fn) => {
+        if (props.goPath) {
+          return go(props.goPath);
+        }
+        return fn();
+      };
+
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_ACCESS, {
         title: '403',
         status: `${ExceptionEnum.PAGE_NOT_ACCESS}`,
         subTitle: t('sys.exception.subTitle403'),
-        btnText: props.full ? backLoginI18n : backHomeI18n,
-        handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
+        btnText: getBtnText(props.full ? backLoginI18n : backHomeI18n),
+        handler: () => handleGoTo(() => (props.full ? go(PageEnum.BASE_LOGIN) : go())),
       });
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_FOUND, {
         title: '404',
         status: `${ExceptionEnum.PAGE_NOT_FOUND}`,
         subTitle: t('sys.exception.subTitle404'),
-        btnText: props.full ? backLoginI18n : backHomeI18n,
-        handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
+        btnText: getBtnText(props.full ? backLoginI18n : backHomeI18n),
+        handler: () => handleGoTo(() => (props.full ? go(PageEnum.BASE_LOGIN) : go())),
       });
 
       unref(statusMapRef).set(ExceptionEnum.ERROR, {
