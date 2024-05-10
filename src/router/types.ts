@@ -11,6 +11,7 @@ export type Component<T = any> =
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   name: string;
   meta: RouteMeta;
+  guobaMeta?: Recordable;
   component?: Component | string;
   components?: Component;
   children?: AppRouteRecordRaw[];
@@ -43,6 +44,8 @@ export interface Menu {
   roles?: RoleEnum[];
 
   meta?: Partial<RouteMeta>;
+
+  guobaMeta?: Partial<Recordable>;
 
   tag?: MenuTag;
 

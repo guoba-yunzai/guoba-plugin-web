@@ -5,7 +5,8 @@
     v-bind="$props"
     :class="getLevelClass"
   >
-    <Icon v-if="getIcon" :icon="getIcon" :size="16" />
+    <PluginIcon v-if="item.guobaMeta?.plugin" :plugin="item.guobaMeta?.plugin" :size="16" />
+    <Icon v-else-if="getIcon" :icon="getIcon" :size="16" />
     <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-1 collapse-title">
       {{ getI18nName }}
     </div>
@@ -23,7 +24,8 @@
     :collapsedShowTitle="collapsedShowTitle"
   >
     <template #title>
-      <Icon v-if="getIcon" :icon="getIcon" :size="16" />
+      <PluginIcon v-if="item.guobaMeta?.plugin" :plugin="item.guobaMeta?.plugin" :size="16" />
+      <Icon v-else-if="getIcon" :icon="getIcon" :size="16" />
 
       <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-2 collapse-title">
         {{ getI18nName }}
@@ -55,10 +57,12 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import PluginIcon from '/@/components/Guoba/src/components/PluginIcon.vue';
 
   export default defineComponent({
     name: 'SimpleSubMenu',
     components: {
+      PluginIcon,
       SubMenu,
       MenuItem,
       SimpleMenuTag: createAsyncComponent(() => import('./SimpleMenuTag.vue')),

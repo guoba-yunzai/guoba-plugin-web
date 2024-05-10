@@ -16,12 +16,16 @@ export function parseAuthorLink(record: Recordable) {
     let tags: VNode[] = [];
     for (let i = 0; i < author.length; i++) {
       tags.push(
-        <a href={authorLink[i]} target="_blank">
+        <a href={authorLink[i]} target="_blank" style={'text-wrap: nowrap;'}>
           {author[i]}
         </a>,
       );
     }
-    return <a-space>{tags}</a-space>;
+    return (
+      <a-space wrap style={'justify-content: center;'}>
+        {tags}
+      </a-space>
+    );
   }
   return author.join(' ');
 }

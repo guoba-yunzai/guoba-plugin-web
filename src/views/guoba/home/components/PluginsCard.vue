@@ -8,9 +8,7 @@
     <template v-for="(item, idx) of plugins" :key="item.name">
       <CardGrid v-if="idx < 12" class="!md:w-1/3 !w-full plugin-item" @click="() => onClick(item)">
         <span class="flex">
-          <img v-if="item.iconPath" class="icon-image" :src="item.iconPath" alt="" />
-          <Icon v-else-if="item.icon" :icon="item.icon" :color="item.iconColor" size="30" />
-          <Icon v-else icon="clarity:plugin-line" size="30" />
+          <PluginIcon :plugin="item" :size="30" />
           <span class="text-lg ml-4 ellipsis" :title="item.title">
             <span v-if="item.isDeleted" style="text-decoration: line-through">{{
               item.title
@@ -41,11 +39,13 @@
 <script lang="ts">
   import type { PropType } from 'vue';
   import { defineComponent } from 'vue';
-  import type { Plugins } from '/#/guoba';
+  import type { Plugin, Plugins } from '/#/guoba';
   import { Card, Tag } from 'ant-design-vue';
   import { Icon } from '/@/components/Icon';
   import { useModal } from '/@/components/Modal';
   import GPluginModal from '/@/components/Guoba/src/GPluginModal.vue';
+  import PluginIcon from '/@/components/Guoba/src/components/PluginIcon.vue';
+  import { useGo } from '/@/hooks/web/usePage';
 
   export default defineComponent({
     components: {
@@ -54,6 +54,7 @@
       Icon,
       Tag,
       GPluginModal,
+      PluginIcon,
     },
     props: {
       plugins: {
@@ -63,9 +64,15 @@
     },
     setup() {
       const [registerModal, { openModal }] = useModal();
+      const go = useGo();
 
-      function onClick(plugin) {
-        openModal(true, { plugin });
+      function onClick(plugin: Plugin) {
+        if (plugin.showInMenu) {
+          // 跳转到插件详情页
+          go(`/plugin/@/${plugin.name}`);
+        } else {
+          openModal(true, { plugin });
+        }
       }
 
       /**
@@ -96,10 +103,5 @@
 
   .plugin-item {
     cursor: pointer;
-  }
-
-  .icon-image {
-    width: 30px;
-    height: 30px;
   }
 </style>

@@ -12,6 +12,7 @@
     <PageWrapper v-else :loading="loading" sticky stickyTop="-50px">
       <template #title>
         <div class="plugin-title">
+          <PluginIcon :plugin="plugin!" :size="24" />
           <a class="title-name" @click="onOpenPluginModal">{{ plugin!.title }}</a>
           <a :href="plugin!.link" target="_blank" style="margin-left: 4px">
             <Icon icon="bx:link" style="font-size: 20px" />
@@ -79,6 +80,7 @@
   import PluginConfigForm from '/@/components/Guoba/src/components/PluginConfigForm.vue';
   import GPluginModal from '/@/components/Guoba/src/GPluginModal.vue';
   import { useModal } from '/@/components/Modal';
+  import PluginIcon from '/@/components/Guoba/src/components/PluginIcon.vue';
 
   const { prefixCls } = useDesign('plugin-detail');
   const guobaStore = useGuobaStore();
@@ -144,6 +146,14 @@
   @prefix-cls: ~'@{namespace}-plugin-detail';
   .@{prefix-cls} {
     .plugin-title {
+      * {
+        vertical-align: middle;
+      }
+
+      .title-name {
+        margin-left: 8px;
+      }
+
       a:not(:hover) {
         color: @text-color-base;
       }
