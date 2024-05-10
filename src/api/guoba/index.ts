@@ -4,6 +4,8 @@ import { defHttp } from '/@/utils/http/axios';
 
 const enum SystemApi {
   login = '/login',
+  loginCodeRequest = '/login/code/request',
+  loginCodeCheck = '/login/code/check',
   logout = '/logout',
   homeData = '/home/data',
 }
@@ -18,6 +20,20 @@ export const sysApi = {
   },
   async getHomeData() {
     return await defHttp.get({ url: SystemApi.homeData });
+  },
+
+  // 请求登录验证码
+  doLoginCodeRequest() {
+    return defHttp.post(
+      { url: SystemApi.loginCodeRequest, params: {} },
+      { errorMessageMode: 'none' },
+    );
+  },
+  doLoginCodeCheck(code: string) {
+    return defHttp.post(
+      { url: SystemApi.loginCodeCheck, params: { code } },
+      { errorMessageMode: 'modal' },
+    );
   },
 };
 

@@ -100,6 +100,22 @@ export const useUserStore = defineStore({
         return Promise.reject(error);
       }
     },
+
+    async loginCodeRequest() {
+      try {
+        await sysApi.doLoginCodeRequest();
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    async loginCodeCheck(code: string) {
+      try {
+        return await sysApi.doLoginCodeCheck(code);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
       if (!this.getToken) return null;
       // get user info
