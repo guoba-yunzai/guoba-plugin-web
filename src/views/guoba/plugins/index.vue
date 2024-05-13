@@ -22,8 +22,21 @@
       </template>
     </BasicTable>
     <GPluginModal @register="registerModal" @success="handleSuccess" />
+
+    <a-button type="primary" shape="circle" icon="+" class="float-button" @click="install"></a-button>
   </PageWrapper>
 </template>
+
+<style scoped>
+.float-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  z-index: 1000;
+}
+</style>
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
 
@@ -36,6 +49,10 @@
   import { useGuobaStore } from '/@/store/guoba';
 
   import GPluginModal from '/@/components/Guoba/src/GPluginModal.vue';
+
+  import { pluginApi } from '/@/api/guoba';
+  import { usePrompt } from '/@/components/Guoba';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     name: 'Plugins',
@@ -84,6 +101,32 @@
         openModal(true, { plugin: record });
       }
 
+      async function install() {
+        const { createPrompt } = usePrompt();
+        const { createMessage: $message } = useMessage();
+        createPrompt({
+          title: '安装自定义插件',
+          required: true,
+          placeholder: '请输入插件 Git 地址',
+          bottomHelpMessage: '仅支持安装 Plugin 插件，请自行验证插件是否安全',
+          rules: [
+            { required: true, message: '请输入插件 Git 地址' },
+            { type: 'url', message: '请输入正确的 Git 地址' },
+          ],
+          okText: '安装',
+          async onOk(value) {
+            let data = await pluginApi.installPlugin(value)
+            if (data.status === 'success') {
+              $message.success(data.message);
+              setTimeout(() => {}, 3000);
+              window.location.reload();
+            } else {
+              $message.error(data.message);
+            }
+          },
+        });
+      }
+
       return {
         registerTable,
         registerModal,
@@ -92,6 +135,7 @@
         handleSuccess,
         handleView,
         searchInfo,
+        install,
       };
     },
   });

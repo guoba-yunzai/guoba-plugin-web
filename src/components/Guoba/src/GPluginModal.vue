@@ -23,7 +23,7 @@
             <a-button v-if="!plugin?.installed" type="primary" @click="installNow">
               立即安装
             </a-button>
-            <a-button v-else type="primary" danger @click="installNow">卸载</a-button>
+            <a-button v-else type="primary" danger @click="uninstall">卸载</a-button>
           </template>
         </a-col>
         <a-col>
@@ -209,8 +209,30 @@
         initOk.value = true;
       }
 
-      function installNow() {
-        $message.warn('该功能暂未开放，敬请期待');
+      async function installNow() {
+        setLoading(true);
+        let data = await pluginApi.installPlugin(plugin.value!.link)
+        setLoading(false);
+        if (data.status === 'success') {
+          $message.success(data.message);
+          await sleep(3000);
+          window.location.reload();
+        } else {
+          $message.error(data.message);
+        }
+      }
+
+      async function uninstall() {
+        setLoading(true);
+        let data = await pluginApi.uninstallPlugin(plugin.value!.name)
+        setLoading(false);
+        if (data.status === 'success') {
+          $message.success(data.message);
+          await sleep(3000);
+          window.location.reload();
+        } else {
+          $message.error(data.message);
+        }
       }
 
       return {
@@ -228,6 +250,7 @@
         close,
         saveConfig,
         installNow,
+        uninstall,
         onInitOk,
       };
     },
