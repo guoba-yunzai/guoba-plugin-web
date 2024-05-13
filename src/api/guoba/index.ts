@@ -74,3 +74,14 @@ export const pluginApi = {
     return await defHttp.put({ url: PluginApi.uninstallPlugin, params: { name }, timeout: 5 * 60 * 1000 });
   },
 };
+
+const enum BotApi {
+  restart = '/bot/restart',
+}
+
+// Bot相关接口
+export const botApi = {
+  async doRestart() {
+    return await defHttp.post({ url: BotApi.restart });
+  },
+};

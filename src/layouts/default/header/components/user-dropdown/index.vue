@@ -21,6 +21,8 @@
         <MenuDivider v-if="getShowDoc" />
         <MenuItem v-if="getUseLockPage" key="lock" :text="t('layout.header.tooltipLock')" icon="ion:lock-closed-outline" />
         <MenuItem key="logout" :text="t('layout.header.dropdownItemLoginOut')" icon="ion:power-outline" />
+        <MenuDivider />
+        <MenuItem key="restart-bot" text="重启Bot" icon="solar:restart-bold" />
       </Menu>
     </template>
   </Dropdown>
@@ -31,7 +33,7 @@
   import { Dropdown, Menu } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
 
-  import { defineComponent, computed } from 'vue';
+  import { computed, defineComponent } from 'vue';
 
   import { DOC_URL } from '/@/settings/siteSetting';
 
@@ -46,8 +48,11 @@
   import { openWindow } from '/@/utils';
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { botApi } from '/@/api/guoba';
+  import { sleep } from '/@/utils/common';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'restart-bot';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -88,6 +93,21 @@
         openWindow(DOC_URL);
       }
 
+      const { createConfirm } = useMessage();
+
+      function handleRestartBot() {
+        createConfirm({
+          title: '重启',
+          iconType: 'warning',
+          content: `确定要立即重启Bot吗？`,
+          async onOk() {
+            await botApi.doRestart();
+            await sleep(5000);
+            window.location.reload();
+          },
+        });
+      }
+
       function handleMenuClick(e: MenuInfo) {
         switch (e.key as MenuEvent) {
           case 'logout':
@@ -98,6 +118,9 @@
             break;
           case 'lock':
             handleLock();
+            break;
+          case 'restart-bot':
+            handleRestartBot();
             break;
         }
       }
@@ -134,6 +157,7 @@
 
     &__header {
       border-radius: 50%;
+
       &.ant-avatar {
         margin-right: 8px;
       }
