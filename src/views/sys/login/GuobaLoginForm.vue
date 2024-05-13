@@ -3,6 +3,8 @@
     <template #description>请以主人的身份，向你的机器人发送“#锅巴登录”指令进行登录。</template>
   </a-empty>
 
+  <a-divider>或使用验证码登录</a-divider>
+
   <div style="margin-bottom: 16px; display: flex; align-items: center">
     <a-input style="flex-grow: 1; margin-right: 8px" placeholder="请输入验证码" v-model:value="code" :disabled="loading" />
     <a-button :disabled="isCodeButtonDisabled" @click="handleCodeLogin">

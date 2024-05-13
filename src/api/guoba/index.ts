@@ -67,10 +67,10 @@ export const pluginApi = {
   async getReadme(link: string, force = false) {
     return await defHttp.get({ url: PluginApi.getReadme, params: { link, force } });
   },
-  async installPlugin(link: string) {
-    return await defHttp.get({ url: PluginApi.installPlugin, params: { link }, timeout: 5 * 60 * 1000 });
+  async installPlugin(link: string, params?: Recordable) {
+    return await defHttp.put({ url: PluginApi.installPlugin, params: { link, ...params }, timeout: 5 * 60 * 1000 });
   },
   async uninstallPlugin(name: string) {
-    return await defHttp.get({ url: PluginApi.uninstallPlugin, params: { name }, timeout: 5 * 60 * 1000 });
+    return await defHttp.put({ url: PluginApi.uninstallPlugin, params: { name }, timeout: 5 * 60 * 1000 });
   },
 };

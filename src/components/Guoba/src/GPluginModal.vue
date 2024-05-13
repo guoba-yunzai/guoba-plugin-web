@@ -20,8 +20,8 @@
       <a-row type="flex" justify="space-between">
         <a-col>
           <template v-if="['desc'].includes(activeKey)">
-            <a-button v-if="!plugin?.installed" type="primary" @click="installNow"> 立即安装 </a-button>
-            <a-button v-else type="primary" danger @click="uninstall">卸载</a-button>
+            <a-button v-if="!plugin?.installed" type="primary" @click="installNow"> 立即安装</a-button>
+            <a-button v-else type="primary" danger :disabled="['miao-plugin'].includes(plugin.name)" @click="uninstall"> 卸载 </a-button>
           </template>
         </a-col>
         <a-col>
@@ -42,6 +42,7 @@
   import type { ModalProps } from '/@/components/Modal';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { computed, defineComponent, ref, unref, watch } from 'vue';
+  import { Checkbox } from 'ant-design-vue';
   import { Description, useDescription } from '/@/components/Description';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -68,7 +69,8 @@
       const configFormRef = ref();
       const attrs = useAttrs();
       const { prefixCls } = useDesign('g-plugin-modal');
-      const { createMessage: $message } = useMessage();
+      const { createMessage: $message, createConfirm } = useMessage();
+
       // 当前是否正在加载中
       const loading = ref(false);
       const loadingTip = ref('');
@@ -207,30 +209,93 @@
         initOk.value = true;
       }
 
+      const autoRestart = ref(true);
+      const autoNpmInstall = ref(true);
+
       async function installNow() {
-        setLoading(true);
-        let data = await pluginApi.installPlugin(plugin.value!.link);
-        setLoading(false);
-        if (data.status === 'success') {
-          $message.success(data.message);
-          await sleep(3000);
-          window.location.reload();
-        } else {
-          $message.error(data.message);
-        }
+        createConfirm({
+          title: '安装插件',
+          iconType: 'warning',
+          content: () => (
+            <div>
+              <p>确定要安装该插件吗？</p>
+              <Checkbox
+                checked={autoRestart.value}
+                onChange={(e) => {
+                  autoRestart.value = e.target.checked;
+                  // 自动重启必须自动安装依赖
+                  if (autoRestart.value && !autoNpmInstall.value) {
+                    autoNpmInstall.value = true;
+                  }
+                }}
+              >
+                自动重启
+              </Checkbox>
+              <Checkbox
+                checked={autoNpmInstall.value}
+                onChange={(e) => {
+                  if (!e.target.checked && autoRestart.value) {
+                    $message.warn('请先去掉自动重启（自动重启必须自动安装依赖）');
+                  } else {
+                    autoNpmInstall.value = e.target.checked;
+                  }
+                }}
+              >
+                自动安装依赖
+              </Checkbox>
+            </div>
+          ),
+          async onOk() {
+            try {
+              setLoading(true);
+              let data = await pluginApi.installPlugin(plugin.value!.link, {
+                autoRestart: autoRestart.value,
+                autoNpmInstall: autoNpmInstall.value,
+              });
+              if (data.status === 'success') {
+                $message.success(data.message);
+                await sleep(3000);
+                window.location.reload();
+              } else {
+                $message.error(data.message);
+              }
+            } finally {
+              setLoading(false);
+            }
+          },
+        });
       }
 
       async function uninstall() {
-        setLoading(true);
-        let data = await pluginApi.uninstallPlugin(plugin.value!.name);
-        setLoading(false);
-        if (data.status === 'success') {
-          $message.success(data.message);
-          await sleep(3000);
-          window.location.reload();
-        } else {
-          $message.error(data.message);
-        }
+        createConfirm({
+          title: '卸载插件',
+          iconType: 'warning',
+          content: (
+            <div>
+              <p>
+                确定要卸载该插件吗？
+                <br />
+                将会删除插件目录包括可能产生的数据以及配置，且无法恢复！
+              </p>
+              <p>请谨慎操作，卸载后会立即重启！</p>
+            </div>
+          ),
+          async onOk() {
+            try {
+              setLoading(true);
+              let data = await pluginApi.uninstallPlugin(plugin.value!.name);
+              if (data.status === 'success') {
+                $message.success(data.message);
+                await sleep(3000);
+                window.location.reload();
+              } else {
+                $message.error(data.message);
+              }
+            } finally {
+              setLoading(false);
+            }
+          },
+        });
       }
 
       return {
