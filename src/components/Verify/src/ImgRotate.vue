@@ -64,9 +64,7 @@
         state.draged = true;
         const { imgWidth, height, maxDegree } = props;
         const { moveX } = data;
-        const currentRotate = Math.ceil(
-          (moveX / (imgWidth! - parseInt(height as string))) * maxDegree! * unref(getFactorRef),
-        );
+        const currentRotate = Math.ceil((moveX / (imgWidth! - parseInt(height as string))) * maxDegree! * unref(getFactorRef));
         state.currentRotate = currentRotate;
         state.imgStyle = hackCss('transform', `rotateZ(${state.randomRotate - currentRotate}deg)`);
       }
@@ -139,15 +137,9 @@
                 alt="verify"
               />
               {state.showTip && (
-                <span class={[`ir-dv-img__tip`, state.isPassing ? 'success' : 'error']}>
-                  {state.isPassing
-                    ? t('component.verify.time', { time: time.toFixed(1) })
-                    : t('component.verify.error')}
-                </span>
+                <span class={[`ir-dv-img__tip`, state.isPassing ? 'success' : 'error']}>{state.isPassing ? t('component.verify.time', { time: time.toFixed(1) }) : t('component.verify.error')}</span>
               )}
-              {!state.showTip && !state.draged && (
-                <span class={[`ir-dv-img__tip`, 'normal']}>{t('component.verify.redoTip')}</span>
-              )}
+              {!state.showTip && !state.draged && <span class={[`ir-dv-img__tip`, 'normal']}>{t('component.verify.redoTip')}</span>}
             </div>
             <BasicDragVerify
               class={`ir-dv-drag__bar`}

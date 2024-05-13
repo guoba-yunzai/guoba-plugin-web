@@ -1,18 +1,7 @@
 <template>
-  <BasicModal
-    @register="registerModal"
-    :title="title"
-    :width="500"
-    @ok="onSubmit"
-    @cancel="onCancel"
-  >
+  <BasicModal @register="registerModal" :title="title" :width="500" @ok="onSubmit" @cancel="onCancel">
     <a-spin :spinning="loading">
-      <DirectoryTree
-        :treeData="treeData"
-        :loadData="onLoadData"
-        expandAction="dblclick"
-        @select="onSelect"
-      >
+      <DirectoryTree :treeData="treeData" :loadData="onLoadData" expandAction="dblclick" @select="onSelect">
         <template #title="{ title, key }">
           <span v-html="title"></span>
         </template>

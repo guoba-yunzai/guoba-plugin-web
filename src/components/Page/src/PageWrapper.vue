@@ -1,13 +1,6 @@
 <template>
   <div :class="getClass" ref="wrapperRef">
-    <PageHeader
-      :ghost="ghost"
-      :title="title"
-      v-bind="omit($attrs, 'class')"
-      ref="headerRef"
-      v-if="getShowHeader"
-      :style="getHeaderStyle"
-    >
+    <PageHeader :ghost="ghost" :title="title" v-bind="omit($attrs, 'class')" ref="headerRef" v-if="getShowHeader" :style="getHeaderStyle">
       <template #default>
         <template v-if="content">
           {{ content }}
@@ -88,13 +81,7 @@
       });
 
       const getUpwardSpace = computed(() => props.upwardSpace);
-      const { redoHeight, setCompensation, contentHeight } = useContentHeight(
-        getIsContentFullHeight,
-        wrapperRef,
-        [headerRef, footerRef],
-        [contentRef],
-        getUpwardSpace,
-      );
+      const { redoHeight, setCompensation, contentHeight } = useContentHeight(getIsContentFullHeight, wrapperRef, [headerRef, footerRef], [contentRef], getUpwardSpace);
       setCompensation({ useLayoutFooter: true, elements: [footerRef] });
 
       const getClass = computed(() => {
@@ -107,9 +94,7 @@
         ];
       });
 
-      const getShowHeader = computed(
-        () => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length,
-      );
+      const getShowHeader = computed(() => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length);
 
       const getHeaderStyle = computed(() => {
         let style: Recordable = {};
@@ -119,7 +104,7 @@
           style.top = props.stickyTop ?? '-60px';
           style.boxShadow = '0 0 5px -2px';
         }
-        return style
+        return style;
       });
 
       const getShowFooter = computed(() => slots?.leftFooter || slots?.rightFooter);

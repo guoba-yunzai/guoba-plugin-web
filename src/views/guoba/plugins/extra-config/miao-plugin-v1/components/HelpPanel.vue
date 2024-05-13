@@ -2,21 +2,10 @@
   <div :style="`transform: scale(${scale});transform-origin: center top;`">
     <div class="wrap" :style="wrapStyle">
       <div class="change-background">
-        <input
-          type="file"
-          id="upload-bg"
-          style="display: none"
-          name="icon"
-          accept="image/bmp,image/jpeg,image/png"
-        />
+        <input type="file" id="upload-bg" style="display: none" name="icon" accept="image/bmp,image/jpeg,image/png" />
         <input type="file" id="upload-icon" style="display: none" name="icon" accept="image/png" />
         <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">
-          <a-button
-            :style="`transform: scale(${1 / scale});transform-origin: right top;`"
-            type="primary"
-            shape="circle"
-            size="large"
-          >
+          <a-button :style="`transform: scale(${1 / scale});transform-origin: right top;`" type="primary" shape="circle" size="large">
             <Icon icon="akar-icons:image" />
           </a-button>
         </Dropdown>
@@ -38,19 +27,10 @@
 
         <div v-if="group.list && group.list.length > 0" class="help-table">
           <div v-for="(result, row) in split(group.list)" class="tr" :key="row">
-            <div
-              class="td"
-              v-for="(cell, col) in result"
-              :key="col"
-              :class="cell === modelData.cell ? 'active' : 'inactive'"
-              @click="clickBody(cell, 3 * row + col, group, groupIndex)"
-            >
+            <div class="td" v-for="(cell, col) in result" :key="col" :class="cell === modelData.cell ? 'active' : 'inactive'" @click="clickBody(cell, 3 * row + col, group, groupIndex)">
               <transition name="fade-transition">
                 <div>
-                  <div
-                    class="help-icon"
-                    :style="`background: url(${iconB64List[cell.icon]}) 0 0 no-repeat`"
-                  />
+                  <div class="help-icon" :style="`background: url(${iconB64List[cell.icon]}) 0 0 no-repeat`" />
                   <div class="help-title"> {{ cell.title }}</div>
                   <div class="help-desc"> {{ cell.desc }}</div>
                 </div>
@@ -86,11 +66,7 @@
       </div>
     </modal>
 
-    <EditBodyModal
-      :helpList="helpList"
-      :modelData="modelData"
-      :iconB64List="iconB64List"
-    />
+    <EditBodyModal :helpList="helpList" :modelData="modelData" :iconB64List="iconB64List" />
     <UploadIconHelpModal @register="registerUihModal" />
   </div>
 </template>
@@ -99,14 +75,7 @@
   import { computed, ref } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
   import { Modal } from 'ant-design-vue';
-  import {
-    helpCfgType,
-    helpListItemType,
-    helpListType,
-    listItemType,
-    ListType,
-    modelDataType,
-  } from '../types';
+  import { helpCfgType, helpListItemType, helpListType, listItemType, ListType, modelDataType } from '../types';
   import { Dropdown, DropMenu } from '/@/components/Dropdown';
   import { getHelpIconList } from '/@/views/guoba/plugins/extra-config/miao-plugin/miao.api';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -207,12 +176,7 @@
     showHeadModal.value = true;
   };
 
-  const clickBody = (
-    cell: listItemType,
-    cellIndex: number,
-    group: helpListItemType,
-    groupIndex: number,
-  ) => {
+  const clickBody = (cell: listItemType, cellIndex: number, group: helpListItemType, groupIndex: number) => {
     emits('update:modelData', { show: true, cell, cellIndex, group, groupIndex });
   };
 

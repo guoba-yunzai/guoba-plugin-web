@@ -4,10 +4,7 @@
       <!-- <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>-->
       <a href="https://oicqjs.github.io/oicq/" target="_blank">OICQ文档</a>
 
-      <GithubFilled
-        :class="`${prefixCls}__github`"
-        @click="openWindow('https://github.com/guoba-yunzai')"
-      />
+      <GithubFilled :class="`${prefixCls}__github`" @click="openWindow('https://github.com/guoba-yunzai')" />
 
       <a href="https://github.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a>
       <!-- <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>-->

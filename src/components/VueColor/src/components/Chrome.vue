@@ -1,20 +1,12 @@
 <template>
-  <div
-    role="application"
-    aria-label="Chrome color picker"
-    :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']"
-  >
+  <div role="application" aria-label="Chrome color picker" :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']">
     <div class="vc-chrome-saturation-wrap">
       <saturation v-model:value="colors" @change="childChange"></saturation>
     </div>
     <div class="vc-chrome-body">
       <div class="vc-chrome-controls">
         <div class="vc-chrome-color-wrap">
-          <div
-            :aria-label="`current color is ${colors.hex}`"
-            class="vc-chrome-active-color"
-            :style="{ background: activeColor }"
-          ></div>
+          <div :aria-label="`current color is ${colors.hex}`" class="vc-chrome-active-color" :style="{ background: activeColor }"></div>
           <CheckBoard v-if="!disableAlpha"></CheckBoard>
         </div>
 
@@ -48,13 +40,7 @@
             <ed-in label="b" :value="colors.rgba.b" @change="inputChange"></ed-in>
           </div>
           <div class="vc-chrome-field" v-if="!disableAlpha">
-            <ed-in
-              label="a"
-              :value="colors.a"
-              :arrow-offset="0.01"
-              :max="1"
-              @change="inputChange"
-            ></ed-in>
+            <ed-in label="a" :value="colors.a" :arrow-offset="0.01" :max="1" @change="inputChange"></ed-in>
           </div>
         </div>
         <!--        <div class="vc-chrome-fields" v-show="fieldsIndex === 2">-->

@@ -7,13 +7,7 @@
             <div v-html="options.content" style="margin-bottom: 8px"></div>
             <BasicForm @register="registerForm">
               <template #customInput="{ model, field }">
-                <Input
-                  ref="inputRef"
-                  v-model:value="model[field]"
-                  :placeholder="placeholder"
-                  @pressEnter="onSubmit"
-                  @input="onChange"
-                />
+                <Input ref="inputRef" v-model:value="model[field]" :placeholder="placeholder" @pressEnter="onSubmit" @input="onChange" />
               </template>
             </BasicForm>
           </div>
@@ -35,12 +29,9 @@
   import { AppProvider } from '/@/components/Application';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
-  export const BasicForm = createAsyncComponent(
-    () => import('/@/components/Form/src/BasicForm.vue'),
-    {
-      loading: true,
-    },
-  );
+  export const BasicForm = createAsyncComponent(() => import('/@/components/Form/src/BasicForm.vue'), {
+    loading: true,
+  });
 
   export default defineComponent({
     name: 'Prompt',

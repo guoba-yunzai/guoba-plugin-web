@@ -120,14 +120,8 @@
 
   watchEffect(() => {
     if (startedDrag.value) {
-      transformX.value =
-        preTransformX.value +
-        Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
-        startX.value;
-      transformY.value =
-        preTransformY.value +
-        Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
-        startY.value;
+      transformX.value = preTransformX.value + Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) - startX.value;
+      transformY.value = preTransformY.value + Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) - startY.value;
     }
   });
 

@@ -1,13 +1,5 @@
 <template>
-  <Modal
-    :visible="visible"
-    @cancel="closeModal"
-    width="420px"
-    :closable="false"
-    :footer="null"
-    :mask="false"
-    @update:visible="emits('update:visible', $event)"
-  >
+  <Modal :visible="visible" @cancel="closeModal" width="420px" :closable="false" :footer="null" :mask="false" @update:visible="emits('update:visible', $event)">
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move">
         选择图标
@@ -33,9 +25,7 @@
         />
 
         <a-space class="add-icon" style="padding: 10px; width: 100%">
-          <a-button :type="edit ? 'danger' : 'success'" @click="switchEdit">{{
-            edit ? '完成' : '替换图标'
-          }}</a-button>
+          <a-button :type="edit ? 'danger' : 'success'" @click="switchEdit">{{ edit ? '完成' : '替换图标' }}</a-button>
           <a-button type="primary" @click="addLine">添加10个空图标</a-button>
         </a-space>
       </div>
@@ -123,14 +113,8 @@
 
   watchEffect(() => {
     if (startedDrag.value) {
-      transformX.value =
-        preTransformX.value +
-        Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
-        startX.value;
-      transformY.value =
-        preTransformY.value +
-        Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
-        startY.value;
+      transformX.value = preTransformX.value + Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) - startX.value;
+      transformY.value = preTransformY.value + Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) - startY.value;
     }
   });
 

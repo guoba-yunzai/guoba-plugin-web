@@ -24,10 +24,7 @@
   async function loadImage() {
     try {
       loading.value = true;
-      let res = await defHttp.get(
-        { url: '/home/random-image', responseType: 'blob' },
-        { isTransformResponse: false, isReturnNativeResponse: true },
-      );
+      let res = await defHttp.get({ url: '/home/random-image', responseType: 'blob' }, { isTransformResponse: false, isReturnNativeResponse: true });
       let img = new Image();
       imgSrc.value = URL.createObjectURL(res.data);
       img.src = imgSrc.value;

@@ -37,10 +37,7 @@ export async function saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64) {
 }
 
 async function getImageBase64(url) {
-  let res = await defHttp.get(
-    { url, responseType: 'blob', timeout: -1 },
-    { isTransformResponse: false, isReturnNativeResponse: true, errorMessageMode: 'modal' },
-  );
+  let res = await defHttp.get({ url, responseType: 'blob', timeout: -1 }, { isTransformResponse: false, isReturnNativeResponse: true, errorMessageMode: 'modal' });
   let blob = res.data as Blob;
   return await blobToDataUrl(blob);
 }
@@ -125,10 +122,7 @@ export function getBackupList() {
 
 // 新增备份
 export function addBackup(remark) {
-  return defHttp.post(
-    { url: MiaoApi.helpBackup, params: { remark } },
-    { errorMessageMode: 'modal' },
-  );
+  return defHttp.post({ url: MiaoApi.helpBackup, params: { remark } }, { errorMessageMode: 'modal' });
 }
 
 // 还原备份
@@ -213,8 +207,5 @@ export async function putThemeItem(themeName: string, mainPic) {
  * @param themeName
  */
 export async function deleteThemeItem(themeName: string) {
-  return defHttp.delete(
-    { url: MiaoApi.themeAction, params: { themeName }, timeout: -1 },
-    { errorMessageMode: 'modal' },
-  );
+  return defHttp.delete({ url: MiaoApi.themeAction, params: { themeName }, timeout: -1 }, { errorMessageMode: 'modal' });
 }

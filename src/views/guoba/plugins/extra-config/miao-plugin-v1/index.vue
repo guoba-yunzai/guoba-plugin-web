@@ -1,12 +1,5 @@
 <template>
-  <PageWrapper
-    :class="[prefixCls]"
-    title="编辑喵喵帮助"
-    dense
-    sticky
-    stickyTop="-14px"
-    :loading="loading"
-  >
+  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px" :loading="loading">
     <template #headerContent>
       <EditMiaoHeader @save="saveData" @rollback="onRollback" @backup="onBackup" />
     </template>

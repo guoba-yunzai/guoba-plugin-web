@@ -121,12 +121,7 @@ export const useMultipleTabStore = defineStore({
     async addTab(route: RouteLocationNormalized) {
       const { path, name, fullPath, params, query, meta } = getRawRoute(route);
       // 404  The page does not need to add a tab
-      if (
-        path === PageEnum.ERROR_PAGE ||
-        path === PageEnum.BASE_LOGIN ||
-        !name ||
-        [REDIRECT_ROUTE.name, PAGE_NOT_FOUND_ROUTE.name].includes(name as string)
-      ) {
+      if (path === PageEnum.ERROR_PAGE || path === PageEnum.BASE_LOGIN || !name || [REDIRECT_ROUTE.name, PAGE_NOT_FOUND_ROUTE.name].includes(name as string)) {
         return;
       }
 
@@ -157,9 +152,7 @@ export const useMultipleTabStore = defineStore({
           // const realName: string = path.match(/(\S*)\//)![1];
           const realPath = meta?.realPath ?? '';
           // 获取到已经打开的动态路由数, 判断是否大于某一个值
-          if (
-            this.tabList.filter((e) => e.meta?.realPath ?? '' === realPath).length >= dynamicLevel
-          ) {
+          if (this.tabList.filter((e) => e.meta?.realPath ?? '' === realPath).length >= dynamicLevel) {
             // 关闭第一个
             const index = this.tabList.findIndex((item) => item.meta.realPath === realPath);
             index !== -1 && this.tabList.splice(index, 1);

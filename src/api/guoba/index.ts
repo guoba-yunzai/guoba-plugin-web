@@ -24,16 +24,10 @@ export const sysApi = {
 
   // 请求登录验证码
   doLoginCodeRequest() {
-    return defHttp.post(
-      { url: SystemApi.loginCodeRequest, params: {} },
-      { errorMessageMode: 'none' },
-    );
+    return defHttp.post({ url: SystemApi.loginCodeRequest, params: {} }, { errorMessageMode: 'none' });
   },
   doLoginCodeCheck(code: string) {
-    return defHttp.post(
-      { url: SystemApi.loginCodeCheck, params: { code } },
-      { errorMessageMode: 'modal' },
-    );
+    return defHttp.post({ url: SystemApi.loginCodeCheck, params: { code } }, { errorMessageMode: 'modal' });
   },
 };
 
@@ -42,8 +36,7 @@ const enum HelperApi {
 }
 
 export const helperApi = {
-  getCityWeather: () =>
-    defHttp.get({ url: HelperApi.getCityWeather }, { isTransformResponse: false }),
+  getCityWeather: () => defHttp.get({ url: HelperApi.getCityWeather }, { isTransformResponse: false }),
 };
 
 const enum UserApi {

@@ -1,12 +1,5 @@
 <template>
-  <a-cascader
-    v-model:value="state"
-    :options="options"
-    :load-data="loadData"
-    change-on-select
-    @change="handleChange"
-    :displayRender="handleRenderDisplay"
-  >
+  <a-cascader v-model:value="state" :options="options" :load-data="loadData" change-on-select @change="handleChange" :displayRender="handleRenderDisplay">
     <template #suffixIcon v-if="loading">
       <LoadingOutlined spin />
     </template>

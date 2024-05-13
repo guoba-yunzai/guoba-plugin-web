@@ -6,8 +6,7 @@
           <a :href="GITHUB_URL" target="_blank">Guoba-Plugin</a>
           是一个
           <a href="https://github.com/Le-niao/Yunzai-Bot" target="_blank">Yunzai-Bot</a>
-          的插件，主要用于提供后台管理界面。
-          基于Vue-VBen-Admin、Vue3.0、Vite、Ant-Design-Vue、TypeScript开发。
+          的插件，主要用于提供后台管理界面。 基于Vue-VBen-Admin、Vue3.0、Vite、Ant-Design-Vue、TypeScript开发。
         </span>
       </div>
     </template>

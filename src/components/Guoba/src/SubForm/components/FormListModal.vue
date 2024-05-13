@@ -4,12 +4,7 @@
       <a-empty v-if="modelList.length === 0" description="暂无数据，请点击下方的“新增”按钮添加" />
 
       <template v-for="(models, idx) of modelList">
-        <SettingCard
-          :models="models"
-          allowRemove
-          @click="onEdit(models, idx)"
-          @remove="onRemove(models, idx)"
-        />
+        <SettingCard :models="models" allowRemove @click="onEdit(models, idx)" @remove="onRemove(models, idx)" />
       </template>
     </div>
     <template #footer>

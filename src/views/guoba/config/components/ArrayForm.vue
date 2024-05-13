@@ -14,22 +14,10 @@
         <div class="array-item" v-for="(val, idx) of innerValue">
           <a-input v-model:value="innerValue[idx]" style="max-width: 880px" />
           <a-popconfirm v-if="card.allowDel" title="确定要删除吗？" @confirm="() => onRemove(idx)">
-            <a-button
-              type="primary"
-              pre-icon="ant-design:minus"
-              size="small"
-              shape="circle"
-              danger
-            />
+            <a-button type="primary" pre-icon="ant-design:minus" size="small" shape="circle" danger />
           </a-popconfirm>
         </div>
-        <a-button
-          v-if="card.allowAdd"
-          type="link"
-          pre-icon="ant-design:plus"
-          size="small"
-          @click="onAdd"
-        >
+        <a-button v-if="card.allowAdd" type="link" pre-icon="ant-design:plus" size="small" @click="onAdd">
           <span>{{ addBtnText }}</span>
         </a-button>
       </div>

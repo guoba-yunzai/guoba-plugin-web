@@ -87,19 +87,13 @@
             return h('div', {}, [text, HActions]);
           },
           bottomHelpMessage: '',
-          ifShow: ({ model }) =>
-            models.value.jsPluginInfo.passed != null && model.transferJsMode === 'passed',
+          ifShow: ({ model }) => models.value.jsPluginInfo.passed != null && model.transferJsMode === 'passed',
         },
         {
           field: 'rubbishClean',
           label: '过滤垃圾文件',
           component: 'Switch',
-          helpMessage: [
-            '垃圾文件指的是：',
-            '1. 生成图片导致的html文件缓存。',
-            '（即以html为后缀的文件）',
-            '仅清理这一项，其他文件不清理。',
-          ],
+          helpMessage: ['垃圾文件指的是：', '1. 生成图片导致的html文件缓存。', '（即以html为后缀的文件）', '仅清理这一项，其他文件不清理。'],
           bottomHelpMessage: '是否过滤“data”文件夹中的垃圾文件',
         },
         {
@@ -144,15 +138,7 @@
         width: 600,
         content: h('span', [
           ...noPass!.map((i) => {
-            return h('span', [
-              renderLine('插件名称', i.file),
-              h('br'),
-              renderLine('原因', i.reason, '#ff7e7e'),
-              h('br'),
-              renderLine('第' + i.lineNum + '行', i.line),
-              h('br'),
-              h('br'),
-            ]);
+            return h('span', [renderLine('插件名称', i.file), h('br'), renderLine('原因', i.reason, '#ff7e7e'), h('br'), renderLine('第' + i.lineNum + '行', i.line), h('br'), h('br')]);
           }),
         ]),
         onOk: showPassedModal,

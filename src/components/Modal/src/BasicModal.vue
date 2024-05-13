@@ -1,20 +1,11 @@
 <template>
   <Modal v-bind="getBindValue" @cancel="handleCancel">
     <template #closeIcon v-if="!$slots.closeIcon">
-      <ModalClose
-        :canFullscreen="getProps.canFullscreen"
-        :fullScreen="fullScreenRef"
-        @cancel="handleCancel"
-        @fullscreen="handleFullScreen"
-      />
+      <ModalClose :canFullscreen="getProps.canFullscreen" :fullScreen="fullScreenRef" @cancel="handleCancel" @fullscreen="handleFullScreen" />
     </template>
 
     <template #title v-if="!$slots.title">
-      <ModalHeader
-        :helpMessage="getProps.helpMessage"
-        :title="getMergeProps.title"
-        @dblclick="handleTitleDbClick"
-      />
+      <ModalHeader :helpMessage="getProps.helpMessage" :title="getMergeProps.title" @dblclick="handleTitleDbClick" />
     </template>
 
     <template #footer v-if="!$slots.footer">
@@ -51,17 +42,7 @@
 <script lang="ts">
   import type { ModalProps, ModalMethods } from './typing';
 
-  import {
-    defineComponent,
-    computed,
-    ref,
-    watch,
-    unref,
-    watchEffect,
-    toRef,
-    getCurrentInstance,
-    nextTick,
-  } from 'vue';
+  import { defineComponent, computed, ref, watch, unref, watchEffect, toRef, getCurrentInstance, nextTick } from 'vue';
   import Modal from './components/Modal';
   import ModalWrapper from './components/ModalWrapper.vue';
   import ModalClose from './components/ModalClose.vue';

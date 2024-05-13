@@ -37,11 +37,7 @@ function handleChildren(children: BasicColumn[] | undefined, ellipsis: boolean) 
   });
 }
 
-function handleIndexColumn(
-  propsRef: ComputedRef<BasicTableProps>,
-  getPaginationRef: ComputedRef<boolean | PaginationProps>,
-  columns: BasicColumn[],
-) {
+function handleIndexColumn(propsRef: ComputedRef<BasicTableProps>, getPaginationRef: ComputedRef<boolean | PaginationProps>, columns: BasicColumn[]) {
   const { t } = useI18n();
 
   const { showIndexColumn, indexColumnProps, isTreeTable } = unref(propsRef);
@@ -100,10 +96,7 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
   }
 }
 
-export function useColumns(
-  propsRef: ComputedRef<BasicTableProps>,
-  getPaginationRef: ComputedRef<boolean | PaginationProps>,
-) {
+export function useColumns(propsRef: ComputedRef<BasicTableProps>, getPaginationRef: ComputedRef<boolean | PaginationProps>) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;
   let cacheColumns = unref(propsRef).columns;
 
@@ -120,10 +113,7 @@ export function useColumns(
     columns.forEach((item) => {
       const { customRender, slots } = item;
 
-      handleItem(
-        item,
-        Reflect.has(item, 'ellipsis') ? !!item.ellipsis : !!ellipsis && !customRender && !slots,
-      );
+      handleItem(item, Reflect.has(item, 'ellipsis') ? !!item.ellipsis : !!ellipsis && !customRender && !slots);
     });
     return columns;
   });
@@ -224,10 +214,7 @@ export function useColumns(
       // Sort according to another array
       if (!isEqual(cacheKeys, columns)) {
         newColumns.sort((prev, next) => {
-          return (
-            columnKeys.indexOf(prev.dataIndex?.toString() as string) -
-            columnKeys.indexOf(next.dataIndex?.toString() as string)
-          );
+          return columnKeys.indexOf(prev.dataIndex?.toString() as string) - columnKeys.indexOf(next.dataIndex?.toString() as string);
         });
       }
       columnsRef.value = newColumns;
@@ -279,9 +266,7 @@ function sortFixedColumn(columns: BasicColumn[]) {
     }
     defColumns.push(column);
   }
-  return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter(
-    (item) => !item.defaultHidden,
-  );
+  return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter((item) => !item.defaultHidden);
 }
 
 // format cell

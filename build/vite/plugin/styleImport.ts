@@ -68,11 +68,7 @@ export function configStyleImportPlugin(_isBuild: boolean) {
             'image-preview-group': 'image',
           };
 
-          return ignoreList.includes(name)
-            ? ''
-            : replaceList.hasOwnProperty(name)
-            ? `ant-design-vue/es/${replaceList[name]}/style/index`
-            : `ant-design-vue/es/${name}/style/index`;
+          return ignoreList.includes(name) ? '' : replaceList.hasOwnProperty(name) ? `ant-design-vue/es/${replaceList[name]}/style/index` : `ant-design-vue/es/${name}/style/index`;
         },
       },
     ],

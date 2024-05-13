@@ -8,11 +8,7 @@
         <template #renderItem="{ item }">
           <a-list-item>
             <template #actions>
-              <a-popconfirm
-                title="确定要还原吗？"
-                placement="left"
-                @confirm="() => onRollback(item.id)"
-              >
+              <a-popconfirm title="确定要还原吗？" placement="left" @confirm="() => onRollback(item.id)">
                 <a-button type="primary" shape="circle" preIcon="ant-design:undo" />
               </a-popconfirm>
               <a-popconfirm title="确定要删除吗？" placement="left" @confirm="() => onDelete(item)">

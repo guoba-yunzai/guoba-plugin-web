@@ -1,11 +1,5 @@
 <template>
-  <Form
-    v-bind="getBindValue"
-    :class="getFormClass"
-    ref="formElRef"
-    :model="formModel"
-    @keypress.enter="handleEnterPress"
-  >
+  <Form v-bind="getBindValue" :class="getFormClass" ref="formElRef" :model="formModel" @keypress.enter="handleEnterPress">
     <Row v-bind="getRow">
       <slot name="formHeader"></slot>
       <template v-for="schema in getSchema" :key="schema.field">
@@ -25,10 +19,7 @@
       </template>
 
       <FormAction v-bind="getFormActionBindProps" @toggle-advanced="handleToggleAdvanced">
-        <template
-          #[item]="data"
-          v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']"
-        >
+        <template #[item]="data" v-for="item in ['resetBefore', 'submitBefore', 'advanceBefore', 'advanceAfter']">
           <slot :name="item" v-bind="data || {}"></slot>
         </template>
       </FormAction>
@@ -110,9 +101,7 @@
         };
       });
 
-      const getBindValue = computed(
-        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
-      );
+      const getBindValue = computed(() => ({ ...attrs, ...props, ...unref(getProps) } as Recordable));
 
       const getSchema = computed((): FormSchema[] => {
         const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
@@ -132,9 +121,7 @@
           }
         }
         if (unref(getProps).showAdvancedButton) {
-          return cloneDeep(
-            schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[],
-          );
+          return cloneDeep(schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[]);
         } else {
           return cloneDeep(schemas as FormSchema[]);
         }
@@ -163,29 +150,17 @@
         formElRef: formElRef as Ref<FormActionType>,
       });
 
-      const {
-        handleSubmit,
-        setFieldsValue,
-        clearValidate,
-        validate,
-        validateFields,
-        getFieldsValue,
-        updateSchema,
-        resetSchema,
-        appendSchemaByField,
-        removeSchemaByFiled,
-        resetFields,
-        scrollToField,
-      } = useFormEvents({
-        emit,
-        getProps,
-        formModel,
-        getSchema,
-        defaultValueRef,
-        formElRef: formElRef as Ref<FormActionType>,
-        schemaRef: schemaRef as Ref<FormSchema[]>,
-        handleFormValues,
-      });
+      const { handleSubmit, setFieldsValue, clearValidate, validate, validateFields, getFieldsValue, updateSchema, resetSchema, appendSchemaByField, removeSchemaByFiled, resetFields, scrollToField } =
+        useFormEvents({
+          emit,
+          getProps,
+          formModel,
+          getSchema,
+          defaultValueRef,
+          formElRef: formElRef as Ref<FormActionType>,
+          schemaRef: schemaRef as Ref<FormSchema[]>,
+          handleFormValues,
+        });
 
       createFormContext({
         resetAction: resetFields,
@@ -295,9 +270,7 @@
         formActionType: formActionType as any,
         setFormModel,
         getFormClass,
-        getFormActionBindProps: computed(
-          (): Recordable => ({ ...getProps.value, ...advanceState }),
-        ),
+        getFormActionBindProps: computed((): Recordable => ({ ...getProps.value, ...advanceState })),
         ...formActionType,
       };
     },
@@ -337,7 +310,7 @@
           align-items: center;
         }
       }
-      
+
       .bottom-message {
         color: #bfbfbf;
       }
@@ -358,7 +331,7 @@
     .@{prefix-cls} {
       .ant-form-item {
         .bottom-message {
-          color: #5C5C5C;
+          color: #5c5c5c;
         }
       }
     }

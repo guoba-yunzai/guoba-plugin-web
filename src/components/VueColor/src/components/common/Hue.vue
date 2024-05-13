@@ -11,11 +11,7 @@
       @touchmove="handleChange"
       @touchstart="handleChange"
     >
-      <div
-        class="vc-hue-pointer"
-        :style="{ top: pointerTop, left: pointerLeft }"
-        role="presentation"
-      >
+      <div class="vc-hue-pointer" :style="{ top: pointerTop, left: pointerLeft }" role="presentation">
         <div class="vc-hue-picker"></div>
       </div>
     </div>
@@ -159,28 +155,10 @@
     border-radius: 2px;
   }
   .vc-hue--horizontal {
-    background: linear-gradient(
-      to right,
-      #f00 0%,
-      #ff0 17%,
-      #0f0 33%,
-      #0ff 50%,
-      #00f 67%,
-      #f0f 83%,
-      #f00 100%
-    );
+    background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
   }
   .vc-hue--vertical {
-    background: linear-gradient(
-      to top,
-      #f00 0%,
-      #ff0 17%,
-      #0f0 33%,
-      #0ff 50%,
-      #00f 67%,
-      #f0f 83%,
-      #f00 100%
-    );
+    background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
   }
   .vc-hue-container {
     cursor: pointer;

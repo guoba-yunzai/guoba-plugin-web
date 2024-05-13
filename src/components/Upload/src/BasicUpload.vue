@@ -19,20 +19,9 @@
         </a-button>
       </Tooltip>
     </Space>
-    <UploadModal
-      v-bind="bindValue"
-      :previewFileList="fileList"
-      @register="registerUploadModal"
-      @change="handleChange"
-      @delete="handleDelete"
-    />
+    <UploadModal v-bind="bindValue" :previewFileList="fileList" @register="registerUploadModal" @change="handleChange" @delete="handleDelete" />
 
-    <UploadPreviewModal
-      :value="fileList"
-      @register="registerPreviewModal"
-      @list-change="handlePreviewChange"
-      @delete="handlePreviewDelete"
-    />
+    <UploadPreviewModal :value="fileList" @register="registerPreviewModal" @list-change="handlePreviewChange" @delete="handlePreviewDelete" />
   </div>
 </template>
 <script lang="ts">

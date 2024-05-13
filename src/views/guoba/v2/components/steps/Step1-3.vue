@@ -63,8 +63,7 @@
           field: 'cfg_basic',
           label: '基础配置',
           component: 'Switch',
-          bottomHelpMessage:
-            '基础配置，包括：主人QQ号、自动同意加好友、自动退小群、Cookie文档地址、使用用户Cookie、pushTask推送任务、黑名单QQ号',
+          bottomHelpMessage: '基础配置，包括：主人QQ号、自动同意加好友、自动退小群、Cookie文档地址、使用用户Cookie、pushTask推送任务、黑名单QQ号',
         },
         {
           field: 'cfg_pushNews',

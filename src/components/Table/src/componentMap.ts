@@ -1,14 +1,5 @@
 import type { Component } from 'vue';
-import {
-  Input,
-  Select,
-  Checkbox,
-  InputNumber,
-  Switch,
-  DatePicker,
-  TimePicker,
-  AutoComplete,
-} from 'ant-design-vue';
+import { Input, Select, Checkbox, InputNumber, Switch, DatePicker, TimePicker, AutoComplete } from 'ant-design-vue';
 import type { ComponentType } from './types/componentType';
 import { ApiSelect, ApiTreeSelect } from '/@/components/Form';
 

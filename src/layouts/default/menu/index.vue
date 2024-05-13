@@ -40,17 +40,7 @@
     setup(props) {
       const go = useGo();
 
-      const {
-        getMenuMode,
-        getMenuType,
-        getMenuTheme,
-        getCollapsed,
-        getCollapsedShowTitle,
-        getAccordion,
-        getIsHorizontal,
-        getIsSidebarType,
-        getSplit,
-      } = useMenuSetting();
+      const { getMenuMode, getMenuType, getMenuTheme, getCollapsed, getCollapsedShowTitle, getAccordion, getIsHorizontal, getIsSidebarType, getSplit } = useMenuSetting();
       const { getShowLogo } = useRootSetting();
 
       const { prefixCls } = useDesign('layout-menu');
@@ -59,21 +49,14 @@
 
       const { getIsMobile } = useAppInject();
 
-      const getComputedMenuMode = computed(() =>
-        unref(getIsMobile) ? MenuModeEnum.INLINE : props.menuMode || unref(getMenuMode),
-      );
+      const getComputedMenuMode = computed(() => (unref(getIsMobile) ? MenuModeEnum.INLINE : props.menuMode || unref(getMenuMode)));
 
       const getComputedMenuTheme = computed(() => props.theme || unref(getMenuTheme));
 
       const getIsShowLogo = computed(() => unref(getShowLogo) && unref(getIsSidebarType));
 
       const getUseScroll = computed(() => {
-        return (
-          !unref(getIsHorizontal) &&
-          (unref(getIsSidebarType) ||
-            props.splitType === MenuSplitTyeEnum.LEFT ||
-            props.splitType === MenuSplitTyeEnum.NONE)
-        );
+        return !unref(getIsHorizontal) && (unref(getIsSidebarType) || props.splitType === MenuSplitTyeEnum.LEFT || props.splitType === MenuSplitTyeEnum.NONE);
       });
 
       const getWrapperStyle = computed((): CSSProperties => {
@@ -129,13 +112,7 @@
       function renderHeader() {
         if (!unref(getIsShowLogo) && !unref(getIsMobile)) return null;
 
-        return (
-          <AppLogo
-            showTitle={!unref(getCollapsed)}
-            class={unref(getLogoClass)}
-            theme={unref(getComputedMenuTheme)}
-          />
-        );
+        return <AppLogo showTitle={!unref(getCollapsed)} class={unref(getLogoClass)} theme={unref(getComputedMenuTheme)} />;
       }
 
       function renderMenu() {
@@ -145,14 +122,7 @@
         return !props.isHorizontal ? (
           <SimpleMenu {...menuProps} isSplitMenu={unref(getSplit)} items={menus} />
         ) : (
-          <BasicMenu
-            {...(menuProps as any)}
-            isHorizontal={props.isHorizontal}
-            type={unref(getMenuType)}
-            showLogo={unref(getIsShowLogo)}
-            mode={unref(getComputedMenuMode as any)}
-            items={menus}
-          />
+          <BasicMenu {...(menuProps as any)} isHorizontal={props.isHorizontal} type={unref(getMenuType)} showLogo={unref(getIsShowLogo)} mode={unref(getComputedMenuMode as any)} items={menus} />
         );
       }
 
@@ -160,11 +130,7 @@
         return (
           <>
             {renderHeader()}
-            {unref(getUseScroll) ? (
-              <ScrollContainer style={unref(getWrapperStyle)}>{() => renderMenu()}</ScrollContainer>
-            ) : (
-              renderMenu()
-            )}
+            {unref(getUseScroll) ? <ScrollContainer style={unref(getWrapperStyle)}>{() => renderMenu()}</ScrollContainer> : renderMenu()}
           </>
         );
       };

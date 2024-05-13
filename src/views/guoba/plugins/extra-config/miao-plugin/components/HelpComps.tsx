@@ -71,17 +71,7 @@ export const HelpTable = defineComponent({
     const trNodes = computed(() => {
       const nodes: VNode[] = [];
       for (let i = 0; i < Math.ceil(props.list.length / props.colCount); i++) {
-        nodes.push(
-          <HelpRow
-            key={`help-row-${i}`}
-            list={props.list}
-            rowIndex={i}
-            colCount={props.colCount}
-            iconB64List={props.iconB64List}
-            modelData={props.modelData}
-            onOpen={onOpen}
-          />,
-        );
+        nodes.push(<HelpRow key={`help-row-${i}`} list={props.list} rowIndex={i} colCount={props.colCount} iconB64List={props.iconB64List} modelData={props.modelData} onOpen={onOpen} />);
       }
       return nodes;
     });

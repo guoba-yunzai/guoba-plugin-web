@@ -22,11 +22,7 @@
               </template>
             </a-list-item-meta>
             <template #actions>
-              <Dropdown
-                v-if="item.name !== 'default'"
-                :trigger="['click']"
-                :dropMenuList="getDropMenuList(item)"
-              >
+              <Dropdown v-if="item.name !== 'default'" :trigger="['click']" :dropMenuList="getDropMenuList(item)">
                 <a-button type="primary" shape="circle" preIcon="ant-design:setting" />
               </Dropdown>
             </template>
@@ -36,14 +32,7 @@
     </a-spin>
     <ThemeConfigModal @register="registerConfigModal" @success="loadData" />
 
-    <input
-      ref="uploadBgRef"
-      type="file"
-      name="upload-bg"
-      accept="image/bmp,image/jpeg,image/png"
-      @change="onUploadBgChange"
-      style="display: none"
-    />
+    <input ref="uploadBgRef" type="file" name="upload-bg" accept="image/bmp,image/jpeg,image/png" @change="onUploadBgChange" style="display: none" />
   </BasicDrawer>
 </template>
 

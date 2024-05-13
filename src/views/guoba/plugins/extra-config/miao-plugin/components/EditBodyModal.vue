@@ -1,11 +1,5 @@
 <template>
-  <Modal
-    v-model:visible="modelData.show"
-    :footer="null"
-    :mask="false"
-    :class="prefixCls"
-    :wrapClassName="wrapClassName"
-  >
+  <Modal v-model:visible="modelData.show" :footer="null" :mask="false" :class="prefixCls" :wrapClassName="wrapClassName">
     <template #title>
       <div ref="modalTitleRef" style="width: 100%; cursor: move; margin: 0">
         编辑内容
@@ -29,35 +23,16 @@
 
       <div class="row">
         <div>仅主人</div>
-        <Switch
-          v-model:checked="modelData.group.auth"
-          checkedValue="master"
-          checked-children="是"
-          un-checked-children="否"
-        />
+        <Switch v-model:checked="modelData.group.auth" checkedValue="master" checked-children="是" un-checked-children="否" />
       </div>
 
       <div class="flex justify-between align-center flex-wrap">
         <div class="flex justify-start">
-          <a-button
-            class="ml-4"
-            :disabled="modelData.groupIndex === 0"
-            type="primary"
-            shape="circle"
-            size="medium"
-            @click="moveGroup(-1)"
-          >
+          <a-button class="ml-4" :disabled="modelData.groupIndex === 0" type="primary" shape="circle" size="medium" @click="moveGroup(-1)">
             <Icon icon="akar-icons:arrow-up" />
           </a-button>
 
-          <a-button
-            class="ml-4"
-            :disabled="modelData.groupIndex === helpList.length - 1"
-            type="primary"
-            shape="circle"
-            size="medium"
-            @click="moveGroup(1)"
-          >
+          <a-button class="ml-4" :disabled="modelData.groupIndex === helpList.length - 1" type="primary" shape="circle" size="medium" @click="moveGroup(1)">
             <Icon icon="akar-icons:arrow-down" />
           </a-button>
         </div>
@@ -73,11 +48,7 @@
       <div v-if="modelData.cell">
         <a-divider style="margin: 16px 0" />
 
-        <div
-          class="icon"
-          @click="changeIcon"
-          :style="`background: url(${iconB64List[modelData.cell.icon]}) 0 0 no-repeat`"
-        />
+        <div class="icon" @click="changeIcon" :style="`background: url(${iconB64List[modelData.cell.icon]}) 0 0 no-repeat`" />
 
         <div class="row">
           <div>标题</div>
@@ -95,24 +66,13 @@
 
         <div class="flex justify-between align-center">
           <div class="flex justify-start move-buttons">
-            <a-button
-              class="ml-4"
-              :class="['ml-4', { warn: modelData.cellIndex === 0 }]"
-              :disabled="moveBtnDisable(-1)"
-              type="primary"
-              shape="circle"
-              size="medium"
-              @click="moveCell(-1)"
-            >
+            <a-button class="ml-4" :class="['ml-4', { warn: modelData.cellIndex === 0 }]" :disabled="moveBtnDisable(-1)" type="primary" shape="circle" size="medium" @click="moveCell(-1)">
               <Icon icon="akar-icons:arrow-left" />
             </a-button>
 
             <a-button
               class="ml-4"
-              :class="[
-                'ml-4',
-                { warn: modelData.cellIndex === helpList[modelData.groupIndex].list.length - 1 },
-              ]"
+              :class="['ml-4', { warn: modelData.cellIndex === helpList[modelData.groupIndex].list.length - 1 }]"
               :disabled="moveBtnDisable(1)"
               type="primary"
               shape="circle"
@@ -133,25 +93,11 @@
     </div>
   </Modal>
 
-  <SelectIconModal
-    v-if="modelData.cell"
-    v-model:visible="showIconModal"
-    v-model:cell="modelData.cell"
-    :iconB64List="iconB64List"
-    :afterClose="iconModalAfter"
-  />
+  <SelectIconModal v-if="modelData.cell" v-model:visible="showIconModal" v-model:cell="modelData.cell" :iconB64List="iconB64List" :afterClose="iconModalAfter" />
 </template>
 
 <script lang="ts" setup>
-  import {
-    ref,
-    watch,
-    watchEffect,
-    computed,
-    CSSProperties,
-    onDeactivated,
-    onUnmounted,
-  } from 'vue';
+  import { ref, watch, watchEffect, computed, CSSProperties, onDeactivated, onUnmounted } from 'vue';
   import { useDraggable } from '@vueuse/core';
   import { Modal, Switch } from 'ant-design-vue';
   import { helpListType, modelDataType } from '../types';
@@ -214,10 +160,7 @@
     if (offset === -1 && props.modelData!.cellIndex === 0) {
       moveCellToGroup(offset);
       return;
-    } else if (
-      offset === 1 &&
-      props.modelData!.cellIndex === props.helpList![props.modelData!.groupIndex!].list.length - 1
-    ) {
+    } else if (offset === 1 && props.modelData!.cellIndex === props.helpList![props.modelData!.groupIndex!].list.length - 1) {
       moveCellToGroup(offset);
       return;
     }
@@ -270,10 +213,7 @@
     if (offset === -1) {
       return modelData!.groupIndex === 0 && modelData!.cellIndex === 0;
     } else if (offset === 1) {
-      return (
-        modelData!.groupIndex === helpList!.length - 1 &&
-        modelData!.cellIndex === helpList![modelData!.groupIndex].list.length - 1
-      );
+      return modelData!.groupIndex === helpList!.length - 1 && modelData!.cellIndex === helpList![modelData!.groupIndex].list.length - 1;
     }
     return false;
   }
@@ -339,14 +279,8 @@
 
   watchEffect(() => {
     if (startedDrag.value) {
-      transformX.value =
-        preTransformX.value +
-        Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) -
-        startX.value;
-      transformY.value =
-        preTransformY.value +
-        Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) -
-        startY.value;
+      transformX.value = preTransformX.value + Math.min(Math.max(dragRect.value.left, x.value), dragRect.value.right) - startX.value;
+      transformY.value = preTransformY.value + Math.min(Math.max(dragRect.value.top, y.value), dragRect.value.bottom) - startY.value;
     }
   });
 
@@ -371,10 +305,7 @@
       }
       let path = event.composedPath() as HTMLElement[];
       for (let element of path) {
-        if (
-          element.classList?.contains(prefixCls) ||
-          element.classList?.contains(props.panelCls!)
-        ) {
+        if (element.classList?.contains(prefixCls) || element.classList?.contains(props.panelCls!)) {
           return;
         }
       }

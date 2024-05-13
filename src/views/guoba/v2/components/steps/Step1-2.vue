@@ -9,10 +9,7 @@
         </div>
         <div v-else-if="models.mode === 'choose'" class="s-tip">
           <span style="color: red">[不推荐] </span>
-          <span>
-            选择迁移可选择迁移哪些项目。由于plugin可能会将数据存放到data文件夹，
-            如果使用选择迁移，锅巴无法考虑到所有插件，极有可能导致数据丢失！
-          </span>
+          <span> 选择迁移可选择迁移哪些项目。由于plugin可能会将数据存放到data文件夹， 如果使用选择迁移，锅巴无法考虑到所有插件，极有可能导致数据丢失！ </span>
         </div>
         <span v-else></span>
       </transition>

@@ -2,20 +2,12 @@
   <div class="step-box">
     <div class="step-tip">请选择安装V3云崽的方式</div>
     <transition-group name="fade-slide" mode="out-in" appear>
-      <ModeBox
-        v-model:active="models.installMode"
-        :modeList="modeList.install"
-        key="trans-install"
-      />
+      <ModeBox v-model:active="models.installMode" :modeList="modeList.install" key="trans-install" />
       <transition name="fade-slide" mode="out-in" appear key="trans-1">
         <div v-if="models.installMode === 'new'" key="trans-git">
           <ModeBox v-model:active="models.gitAddress" :modeList="modeList.git" />
           <div class="lite-form">
-            <PathSelect
-              v-model:value="models.installPath"
-              title="选择安装目录"
-              :beforeSelect="pathBeforeSelect"
-            />
+            <PathSelect v-model:value="models.installPath" title="选择安装目录" :beforeSelect="pathBeforeSelect" />
           </div>
         </div>
         <div v-else-if="models.installMode === 'exist'" key="trans-input" class="lite-form">

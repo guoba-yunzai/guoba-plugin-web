@@ -1,10 +1,5 @@
 <template>
-  <a-input
-    class="file-select-input"
-    :value="value"
-    :placeholder="title"
-    @update:value="updateValue"
-  >
+  <a-input class="file-select-input" :value="value" :placeholder="title" @update:value="updateValue">
     <template #addonAfter>
       <span @click="onOpen" style="cursor: pointer">选择</span>
     </template>

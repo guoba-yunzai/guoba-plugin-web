@@ -3,20 +3,10 @@
     <template #title>
       <span>{{ t('component.table.settingColumn') }}</span>
     </template>
-    <Popover
-      placement="bottomLeft"
-      trigger="click"
-      @visible-change="handleVisibleChange"
-      :overlayClassName="`${prefixCls}__cloumn-list`"
-      :getPopupContainer="getPopupContainer"
-    >
+    <Popover placement="bottomLeft" trigger="click" @visible-change="handleVisibleChange" :overlayClassName="`${prefixCls}__cloumn-list`" :getPopupContainer="getPopupContainer">
       <template #title>
         <div :class="`${prefixCls}__popover-title`">
-          <Checkbox
-            :indeterminate="indeterminate"
-            v-model:checked="checkAll"
-            @change="onCheckAllChange"
-          >
+          <Checkbox :indeterminate="indeterminate" v-model:checked="checkAll" @change="onCheckAllChange">
             {{ t('component.table.settingColumnShow') }}
           </Checkbox>
 
@@ -24,11 +14,7 @@
             {{ t('component.table.settingIndexColumnShow') }}
           </Checkbox>
 
-          <Checkbox
-            v-model:checked="checkSelect"
-            @change="handleSelectCheckChange"
-            :disabled="!defaultRowSelection"
-          >
+          <Checkbox v-model:checked="checkSelect" @change="handleSelectCheckChange" :disabled="!defaultRowSelection">
             {{ t('component.table.settingSelectColumnShow') }}
           </Checkbox>
 
@@ -48,11 +34,7 @@
                   {{ item.label }}
                 </Checkbox>
 
-                <Tooltip
-                  placement="bottomLeft"
-                  :mouseLeaveDelay="0.4"
-                  :getPopupContainer="getPopupContainer"
-                >
+                <Tooltip placement="bottomLeft" :mouseLeaveDelay="0.4" :getPopupContainer="getPopupContainer">
                   <template #title>
                     {{ t('component.table.settingFixedLeft') }}
                   </template>
@@ -69,11 +51,7 @@
                   />
                 </Tooltip>
                 <Divider type="vertical" />
-                <Tooltip
-                  placement="bottomLeft"
-                  :mouseLeaveDelay="0.4"
-                  :getPopupContainer="getPopupContainer"
-                >
+                <Tooltip placement="bottomLeft" :mouseLeaveDelay="0.4" :getPopupContainer="getPopupContainer">
                   <template #title>
                     {{ t('component.table.settingFixedRight') }}
                   </template>
@@ -100,16 +78,7 @@
 </template>
 <script lang="ts">
   import type { BasicColumn, ColumnChangeParam } from '../../types/table';
-  import {
-    defineComponent,
-    ref,
-    reactive,
-    toRefs,
-    watchEffect,
-    nextTick,
-    unref,
-    computed,
-  } from 'vue';
+  import { defineComponent, ref, reactive, toRefs, watchEffect, nextTick, unref, computed } from 'vue';
   import { Tooltip, Popover, Checkbox, Divider } from 'ant-design-vue';
   import type { CheckboxChangeEvent } from 'ant-design-vue/lib/checkbox/interface';
   import { SettingOutlined, DragOutlined } from '@ant-design/icons-vue';
@@ -317,11 +286,7 @@
 
               plainSortOptions.value = columns;
 
-              setColumns(
-                columns
-                  .map((col: Options) => col.value)
-                  .filter((value: string) => state.checkedList.includes(value)),
-              );
+              setColumns(columns.map((col: Options) => col.value).filter((value: string) => state.checkedList.includes(value)));
             },
           });
           // 记录原始order 序列
@@ -365,11 +330,7 @@
       function setColumns(columns: BasicColumn[] | string[]) {
         table.setColumns(columns);
         const data: ColumnChangeParam[] = unref(plainSortOptions).map((col) => {
-          const visible =
-            columns.findIndex(
-              (c: BasicColumn | string) =>
-                c === col.value || (typeof c !== 'string' && c.dataIndex === col.value),
-            ) !== -1;
+          const visible = columns.findIndex((c: BasicColumn | string) => c === col.value || (typeof c !== 'string' && c.dataIndex === col.value)) !== -1;
           return { dataIndex: col.value, fixed: col.fixed, visible };
         });
 
@@ -377,9 +338,7 @@
       }
 
       function getPopupContainer() {
-        return isFunction(attrs.getPopupContainer)
-          ? attrs.getPopupContainer()
-          : getParentContainer();
+        return isFunction(attrs.getPopupContainer) ? attrs.getPopupContainer() : getParentContainer();
       }
 
       return {

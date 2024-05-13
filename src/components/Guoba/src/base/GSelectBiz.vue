@@ -71,10 +71,7 @@
       //接收下拉框选项
       const options = inject('selectOptions', ref<DefaultOptionType[]>([]));
       //接收选择的值
-      const selectValues = inject(
-        'selectValues',
-        reactive<GSelectBizValues>({ value: [], change: false }),
-      );
+      const selectValues = inject('selectValues', reactive<GSelectBizValues>({ value: [], change: false }));
 
       /**
        * 打开弹出框

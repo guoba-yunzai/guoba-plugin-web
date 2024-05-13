@@ -4,13 +4,7 @@
       <checkboard></checkboard>
     </div>
     <div class="vc-alpha-gradient" :style="{ background: gradientColor }"></div>
-    <div
-      class="vc-alpha-container"
-      ref="container"
-      @mousedown="handleMouseDown"
-      @touchmove="handleChange"
-      @touchstart="handleChange"
-    >
+    <div class="vc-alpha-container" ref="container" @mousedown="handleMouseDown" @touchmove="handleChange" @touchstart="handleChange">
       <div class="vc-alpha-pointer" :style="{ left: colors.a * 100 + '%' }">
         <div class="vc-alpha-picker"></div>
       </div>
@@ -37,9 +31,7 @@
       gradientColor() {
         var rgba = this.colors.rgba;
         var rgbStr = [rgba.r, rgba.g, rgba.b].join(',');
-        return (
-          'linear-gradient(to right, rgba(' + rgbStr + ', 0) 0%, rgba(' + rgbStr + ', 1) 100%)'
-        );
+        return 'linear-gradient(to right, rgba(' + rgbStr + ', 0) 0%, rgba(' + rgbStr + ', 1) 100%)';
       },
     },
     methods: {

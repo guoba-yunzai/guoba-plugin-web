@@ -2,13 +2,7 @@
   <div :class="[prefixCls]" :style="`transform: scale(${scale});transform-origin: center top;`">
     <div class="container">
       <div class="setting-box">
-        <input
-          type="file"
-          id="upload-bg"
-          style="display: none"
-          name="icon"
-          accept="image/bmp,image/jpeg,image/png"
-        />
+        <input type="file" id="upload-bg" style="display: none" name="icon" accept="image/bmp,image/jpeg,image/png" />
         <input type="file" id="upload-icon" style="display: none" name="icon" accept="image/png" />
         <!--        <Dropdown :trigger="['click']" :dropMenuList="dropMenuList">-->
         <!--          <a-button-->
@@ -20,13 +14,7 @@
         <!--            <Icon icon="akar-icons:image" />-->
         <!--          </a-button>-->
         <!--        </Dropdown>-->
-        <a-button
-          :style="`transform: scale(${1 / scale});transform-origin: right top;`"
-          type="primary"
-          shape="circle"
-          size="large"
-          @click="onOpenSetting"
-        >
+        <a-button :style="`transform: scale(${1 / scale});transform-origin: right top;`" type="primary" shape="circle" size="large" @click="onOpenSetting">
           <Icon icon="ion:settings-outline" />
         </a-button>
       </div>
@@ -60,13 +48,7 @@
       </div>
     </div>
 
-    <EditBodyModal
-      :panelCls="prefixCls"
-      :helpList="helpList"
-      :modelData="modelData"
-      :iconB64List="iconB64List"
-      @update:modelData="emit('update:modelData', $event)"
-    />
+    <EditBodyModal :panelCls="prefixCls" :helpList="helpList" :modelData="modelData" :iconB64List="iconB64List" @update:modelData="emit('update:modelData', $event)" />
     <UploadIconHelpModal @register="registerUihModal" />
   </div>
 </template>
@@ -74,15 +56,7 @@
 <script lang="ts" setup>
   import { ref, watch } from 'vue';
   import EditBodyModal from './EditBodyModal.vue';
-  import {
-    helpCfgType,
-    helpListItemType,
-    helpListType,
-    listItemType,
-    ListType,
-    modelDataType,
-    ThemeConfigType,
-  } from '../types';
+  import { helpCfgType, helpListItemType, helpListType, listItemType, ListType, modelDataType, ThemeConfigType } from '../types';
   import lodash from 'lodash-es';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { createLocalStorage } from '/@/utils/cache';
@@ -109,13 +83,7 @@
     versions: Object as PropType<{ yunzai: string; miao: string }>,
   });
 
-  const emit = defineEmits([
-    'update:themeStyle',
-    'update:modelData',
-    'update:mainB64',
-    'update:iconB64List',
-    'open-setting',
-  ]);
+  const emit = defineEmits(['update:themeStyle', 'update:modelData', 'update:mainB64', 'update:iconB64List', 'open-setting']);
 
   const ls = createLocalStorage();
   const permStore = usePermissionStore();
@@ -219,12 +187,7 @@
     input.click();
   }
 
-  const clickBody = (
-    cell: listItemType,
-    cellIndex: number,
-    group: helpListItemType,
-    groupIndex: number,
-  ) => {
+  const clickBody = (cell: listItemType, cellIndex: number, group: helpListItemType, groupIndex: number) => {
     let isShow = true;
     if (props.modelData?.show) {
       if (cell && cell === props.modelData?.cell) {
@@ -287,9 +250,7 @@
     css('.help-title,.help-group', 'text-shadow', 'fontShadow', 'none');
     css('.help-desc', 'color', 'descColor', '#eee');
     css('.cont-box', 'background', 'contBgColor', 'rgba(43, 52, 61, 0.8)');
-    css('.cont-box', 'backdrop-filter', 'contBgBlur', 3, (n) =>
-      helpCfg?.bgBlur === false ? 'none' : `blur(${n}px)`,
-    );
+    css('.cont-box', 'backdrop-filter', 'contBgBlur', 3, (n) => (helpCfg?.bgBlur === false ? 'none' : `blur(${n}px)`));
     css('.help-group', 'background', 'headerBgColor', 'rgba(34, 41, 51, .4)');
     css('.help-table .tr:nth-child(odd)', 'background', 'rowBgColor1', 'rgba(34, 41, 51, .2)');
     css('.help-table .tr:nth-child(even)', 'background', 'rowBgColor2', 'rgba(34, 41, 51, .4)');

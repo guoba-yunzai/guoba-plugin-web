@@ -2,12 +2,7 @@
   <div :class="[prefixCls]">
     <Skeleton v-if="pageLoading" active />
     <div v-else-if="isError">
-      <Exception
-        :status="ExceptionEnum.PAGE_NOT_FOUND"
-        subTitle="未找到该插件"
-        btnText="返回插件列表"
-        goPath="/plugins/index"
-      />
+      <Exception :status="ExceptionEnum.PAGE_NOT_FOUND" subTitle="未找到该插件" btnText="返回插件列表" goPath="/plugins/index" />
     </div>
     <PageWrapper v-else :loading="loading" sticky stickyTop="-50px">
       <template #title>

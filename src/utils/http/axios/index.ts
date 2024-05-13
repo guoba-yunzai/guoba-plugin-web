@@ -90,8 +90,8 @@ const transform: AxiosTransform = {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix, joinVersion = false } = options;
 
     if (joinVersion) {
-      let { API_PREFIX } = window['__YUNZAI_BOT_CONF__']
-      config.url = `${API_PREFIX}${config.url}`
+      let { API_PREFIX } = window['__YUNZAI_BOT_CONF__'];
+      config.url = `${API_PREFIX}${config.url}`;
     }
 
     if (joinPrefix) {
@@ -125,10 +125,7 @@ const transform: AxiosTransform = {
           config.params = undefined;
         }
         if (joinParamsToUrl) {
-          config.url = setObjToUrlParams(
-            config.url as string,
-            Object.assign({}, config.params, config.data),
-          );
+          config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data));
         }
       } else {
         // 兼容restful风格
@@ -148,9 +145,7 @@ const transform: AxiosTransform = {
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       let { TOKEN_KEY } = window['__YUNZAI_BOT_CONF__'];
-      (config as Recordable).headers[TOKEN_KEY] = options.authenticationScheme
-        ? `${options.authenticationScheme} ${token}`
-        : token;
+      (config as Recordable).headers[TOKEN_KEY] = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
     }
     return config;
   },

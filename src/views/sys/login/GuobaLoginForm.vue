@@ -3,23 +3,18 @@
     <template #description>请以主人的身份，向你的机器人发送“#锅巴登录”指令进行登录。</template>
   </a-empty>
 
-  <div style="margin-bottom: 16px; display: flex; align-items: center;">
-    <a-input
-      style="flex-grow: 1; margin-right: 8px;"
-      placeholder="请输入验证码"
-      v-model:value="code"
-      :disabled="loading"
-    />
+  <div style="margin-bottom: 16px; display: flex; align-items: center">
+    <a-input style="flex-grow: 1; margin-right: 8px" placeholder="请输入验证码" v-model:value="code" :disabled="loading" />
     <a-button :disabled="isCodeButtonDisabled" @click="handleCodeLogin">
       {{ isCodeButtonDisabled ? `${countdown}秒` : '获取验证码' }}
     </a-button>
   </div>
-  
-  <a-button block type="primary" @click="handleLogin" :loading="loading"> 登录 </a-button>
+
+  <a-button block type="primary" @click="handleLogin" :loading="loading"> 登录</a-button>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, onUnmounted } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
   import { sleep } from '/@/utils/common';
   import { useUserStore } from '/@/store/modules/user';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -32,7 +27,7 @@
   const code = ref('');
   const countdown = ref(0);
   const isCodeButtonDisabled = ref(false);
-  
+
   function initCountdown() {
     const savedTimestamp = localStorage.getItem('codeTimestamp');
     if (savedTimestamp) {

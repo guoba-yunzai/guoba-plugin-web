@@ -8,26 +8,14 @@
       <div class="item">
         <a-radio :value="TypeEnum.range" v-bind="beforeRadioAttrs">区间</a-radio>
         <span> 从 </span>
-        <a-select
-          v-model:value="valueRange.start"
-          :options="weekOptions"
-          v-bind="typeRangeSelectAttrs"
-        />
+        <a-select v-model:value="valueRange.start" :options="weekOptions" v-bind="typeRangeSelectAttrs" />
         <span> 至 </span>
-        <a-select
-          v-model:value="valueRange.end"
-          :options="weekOptions"
-          v-bind="typeRangeSelectAttrs"
-        />
+        <a-select v-model:value="valueRange.end" :options="weekOptions" v-bind="typeRangeSelectAttrs" />
       </div>
       <div class="item">
         <a-radio :value="TypeEnum.loop" v-bind="beforeRadioAttrs">循环</a-radio>
         <span> 从 </span>
-        <a-select
-          v-model:value="valueLoop.start"
-          :options="weekOptions"
-          v-bind="typeLoopSelectAttrs"
-        />
+        <a-select v-model:value="valueLoop.start" :options="weekOptions" v-bind="typeLoopSelectAttrs" />
         <span> 开始，间隔 </span>
         <InputNumber v-model:value="valueLoop.interval" v-bind="typeLoopAttrs" />
         <span> 天 </span>

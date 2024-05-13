@@ -1,19 +1,7 @@
 <template>
-  <PageWrapper
-    :class="[prefixCls]"
-    title="编辑喵喵帮助"
-    dense
-    sticky
-    stickyTop="-14px"
-    :loading="loading"
-  >
+  <PageWrapper :class="[prefixCls]" title="编辑喵喵帮助" dense sticky stickyTop="-14px" :loading="loading">
     <template #headerContent>
-      <EditMiaoHeader
-        @save="saveData"
-        @rollback="onRollback"
-        @backup="onBackup"
-        @theme="onOpenTheme"
-      />
+      <EditMiaoHeader @save="saveData" @rollback="onRollback" @backup="onBackup" @theme="onOpenTheme" />
     </template>
     <div class="flex justify-center md:pt-4 my-4">
       <Transition name="scroll-y-reverse-transition">

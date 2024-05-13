@@ -19,16 +19,7 @@ interface UseFormActionContext {
   schemaRef: Ref<FormSchema[]>;
   handleFormValues: Fn;
 }
-export function useFormEvents({
-  emit,
-  getProps,
-  formModel,
-  getSchema,
-  defaultValueRef,
-  formElRef,
-  schemaRef,
-  handleFormValues,
-}: UseFormActionContext) {
+export function useFormEvents({ emit, getProps, formModel, getSchema, defaultValueRef, formElRef, schemaRef, handleFormValues }: UseFormActionContext) {
   async function resetFields(): Promise<void> {
     const { resetFunc, submitOnReset } = unref(getProps);
     resetFunc && isFunction(resetFunc) && (await resetFunc());
@@ -172,14 +163,10 @@ export function useFormEvents({
       updateData = [...data];
     }
 
-    const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
-    );
+    const hasField = updateData.every((item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field));
 
     if (!hasField) {
-      error(
-        'All children of the form Schema array that need to be updated must contain the `field` field',
-      );
+      error('All children of the form Schema array that need to be updated must contain the `field` field');
       return;
     }
     schemaRef.value = updateData as FormSchema[];
@@ -194,14 +181,10 @@ export function useFormEvents({
       updateData = [...data];
     }
 
-    const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
-    );
+    const hasField = updateData.every((item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field));
 
     if (!hasField) {
-      error(
-        'All children of the form Schema array that need to be updated must contain the `field` field',
-      );
+      error('All children of the form Schema array that need to be updated must contain the `field` field');
       return;
     }
     const schema: FormSchema[] = [];
@@ -232,13 +215,7 @@ export function useFormEvents({
     const obj: Recordable = {};
     const currentFieldsValue = getFieldsValue();
     schemas.forEach((item) => {
-      if (
-        item.component != 'Divider' &&
-        Reflect.has(item, 'field') &&
-        item.field &&
-        !isNullOrUnDef(item.defaultValue) &&
-        !(item.field in currentFieldsValue)
-      ) {
+      if (item.component != 'Divider' && Reflect.has(item, 'field') && item.field && !isNullOrUnDef(item.defaultValue) && !(item.field in currentFieldsValue)) {
         obj[item.field] = item.defaultValue;
       }
     });

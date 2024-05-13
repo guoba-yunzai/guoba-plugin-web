@@ -1,14 +1,5 @@
 <template>
-  <BasicModal
-    title="上传图标功能说明"
-    :width="400"
-    :height="550"
-    :draggable="false"
-    :canFullscreen="false"
-    @ok="onOk"
-    @cancel="onCancel"
-    @register="registerModal"
-  >
+  <BasicModal title="上传图标功能说明" :width="400" :height="550" :draggable="false" :canFullscreen="false" @ok="onOk" @cancel="onCancel" @register="registerModal">
     <div style="text-indent: 2em">
       <p>注：该功能不是上传小图标，而是上传一整张的大图标文件，例如下图示例：</p>
       <p>注：请严格按照每10个图标为一行、每个图标的大小为100×100的格式来上传。</p>

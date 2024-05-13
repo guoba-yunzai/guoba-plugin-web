@@ -8,14 +8,7 @@
         </a>
       </template>
     </a-input>
-    <EasyCronModal
-      @register="registerModal"
-      v-model:value="editCronValue"
-      :exeStartTime="exeStartTime"
-      :hideYear="hideYear"
-      :remote="remote"
-      :hideSecond="hideSecond"
-    />
+    <EasyCronModal @register="registerModal" v-model:value="editCronValue" :exeStartTime="exeStartTime" :hideYear="hideYear" :remote="remote" :hideSecond="hideSecond" />
   </div>
 </template>
 
@@ -33,9 +26,7 @@
   const props = defineProps({
     ...cronProps,
     placeholder: propTypes.string.def('请输入cron表达式'),
-    exeStartTime: propTypes
-      .oneOfType([propTypes.number, propTypes.string, propTypes.object])
-      .def(0),
+    exeStartTime: propTypes.oneOfType([propTypes.number, propTypes.string, propTypes.object]).def(0),
   });
   const [registerModal, { openModal }] = useModal();
   const editCronValue = ref(props.value);

@@ -1,11 +1,5 @@
 <template>
-  <img
-    v-if="plugin.iconPath"
-    :class="[`${prefixCls}-img`]"
-    :src="plugin.iconPath"
-    alt=""
-    :style="imgStyle"
-  />
+  <img v-if="plugin.iconPath" :class="[`${prefixCls}-img`]" :src="plugin.iconPath" alt="" :style="imgStyle" />
   <Icon v-else-if="plugin.icon" :icon="plugin.icon" :color="plugin.iconColor" :size="size" />
   <Icon v-else icon="clarity:plugin-line" :size="size" />
 </template>

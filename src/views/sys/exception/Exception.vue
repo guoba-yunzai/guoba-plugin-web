@@ -127,12 +127,7 @@
       return () => {
         const { title, subTitle, btnText, icon, handler, status } = unref(getMapValue) || {};
         return (
-          <Result
-            class={prefixCls}
-            status={status as any}
-            title={props.title || title}
-            sub-title={props.subTitle || subTitle}
-          >
+          <Result class={prefixCls} status={status as any} title={props.title || title} sub-title={props.subTitle || subTitle}>
             {{
               extra: () =>
                 btnText && (

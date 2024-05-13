@@ -18,21 +18,12 @@
       <div v-else>
         <div class="wrap">
           <div>替换</div>
-          <div
-            class="icon"
-            :style="`background: url(${iconB64List[uploader.selected]}) 0 0 no-repeat`"
-          />
+          <div class="icon" :style="`background: url(${iconB64List[uploader.selected]}) 0 0 no-repeat`" />
         </div>
       </div>
 
       <div class="wrap">
-        <input
-          type="file"
-          id="upload1"
-          style="display: none"
-          name="icon"
-          accept="image/bmp,image/jpeg,image/png"
-        />
+        <input type="file" id="upload1" style="display: none" name="icon" accept="image/bmp,image/jpeg,image/png" />
 
         <a-button block type="info" @click="select">选择图片</a-button>
 

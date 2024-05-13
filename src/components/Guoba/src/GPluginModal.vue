@@ -20,9 +20,7 @@
       <a-row type="flex" justify="space-between">
         <a-col>
           <template v-if="['desc'].includes(activeKey)">
-            <a-button v-if="!plugin?.installed" type="primary" @click="installNow">
-              立即安装
-            </a-button>
+            <a-button v-if="!plugin?.installed" type="primary" @click="installNow"> 立即安装 </a-button>
             <a-button v-else type="primary" danger @click="uninstall">卸载</a-button>
           </template>
         </a-col>
@@ -43,7 +41,7 @@
   import type { Plugin } from '/#/guoba';
   import type { ModalProps } from '/@/components/Modal';
   import { BasicModal, useModalInner } from '/@/components/Modal';
-  import { ref, defineComponent, computed, unref, watch } from 'vue';
+  import { computed, defineComponent, ref, unref, watch } from 'vue';
   import { Description, useDescription } from '/@/components/Description';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -211,7 +209,7 @@
 
       async function installNow() {
         setLoading(true);
-        let data = await pluginApi.installPlugin(plugin.value!.link)
+        let data = await pluginApi.installPlugin(plugin.value!.link);
         setLoading(false);
         if (data.status === 'success') {
           $message.success(data.message);
@@ -224,7 +222,7 @@
 
       async function uninstall() {
         setLoading(true);
-        let data = await pluginApi.uninstallPlugin(plugin.value!.name)
+        let data = await pluginApi.uninstallPlugin(plugin.value!.name);
         setLoading(false);
         if (data.status === 'success') {
           $message.success(data.message);

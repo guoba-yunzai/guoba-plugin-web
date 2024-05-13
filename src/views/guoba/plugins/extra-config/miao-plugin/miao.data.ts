@@ -107,8 +107,7 @@ export function useThemeConfigSchemas(expand?: Partial<FormSchema>) {
       field: 'contBgColor',
       label: '整体底色',
       component: 'GColorPicker',
-      helpMessage:
-        '若无需此项可设为完全透明。注意若综合透明度较低，或颜色与主文字颜色过近或太透明可能导致阅读困难！',
+      helpMessage: '若无需此项可设为完全透明。注意若综合透明度较低，或颜色与主文字颜色过近或太透明可能导致阅读困难！',
       bottomHelpMessage: '会叠加在标题栏及帮助行之下，方便整体帮助有一个基础底色',
     }),
     merge({

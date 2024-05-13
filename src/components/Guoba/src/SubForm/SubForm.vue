@@ -65,9 +65,7 @@
     return value;
   });
   const singleValue = computed(() => {
-    return (
-      (Array.isArray(multipleValue.value) ? multipleValue.value[0] : multipleValue.value) ?? {}
-    );
+    return (Array.isArray(multipleValue.value) ? multipleValue.value[0] : multipleValue.value) ?? {};
   });
 
   const inputValue = computed(() => {

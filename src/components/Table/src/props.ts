@@ -1,14 +1,6 @@
 import type { PropType } from 'vue';
 import type { PaginationProps } from './types/pagination';
-import type {
-  BasicColumn,
-  FetchSetting,
-  TableSetting,
-  SorterResult,
-  TableCustomRecord,
-  TableRowSelection,
-  SizeType,
-} from './types/table';
+import type { BasicColumn, FetchSetting, TableSetting, SorterResult, TableCustomRecord, TableRowSelection, SizeType } from './types/table';
 import type { FormProps } from '/@/components/Form';
 
 import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const';
@@ -135,14 +127,7 @@ export const basicProps = {
     default: null,
   },
   beforeEditSubmit: {
-    type: Function as PropType<
-      (data: {
-        record: Recordable;
-        index: number;
-        key: string | number;
-        value: any;
-      }) => Promise<any>
-    >,
+    type: Function as PropType<(data: { record: Recordable; index: number; key: string | number; value: any }) => Promise<any>>,
   },
   size: {
     type: String as PropType<SizeType>,

@@ -41,10 +41,7 @@ export function deepMerge<T = any>(src: any = {}, target: any = {}): T {
   return src;
 }
 
-export function openWindow(
-  url: string,
-  opt?: { target?: TargetContext | string; noopener?: boolean; noreferrer?: boolean },
-) {
+export function openWindow(url: string, opt?: { target?: TargetContext | string; noopener?: boolean; noreferrer?: boolean }) {
   const { target = '__blank', noopener = true, noreferrer = true } = opt || {};
   const feature: string[] = [];
 

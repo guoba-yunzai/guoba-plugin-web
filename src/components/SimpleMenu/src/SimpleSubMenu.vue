@@ -1,10 +1,5 @@
 <template>
-  <MenuItem
-    :name="item.path"
-    v-if="!menuHasChildren(item) && getShowMenu"
-    v-bind="$props"
-    :class="getLevelClass"
-  >
+  <MenuItem :name="item.path" v-if="!menuHasChildren(item) && getShowMenu" v-bind="$props" :class="getLevelClass">
     <PluginIcon v-if="item.guobaMeta?.plugin" :plugin="item.guobaMeta?.plugin" :size="16" />
     <Icon v-else-if="getIcon" :icon="getIcon" :size="16" />
     <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-1 collapse-title">
@@ -17,12 +12,7 @@
       <SimpleMenuTag :item="item" :collapseParent="getIsCollapseParent" />
     </template>
   </MenuItem>
-  <SubMenu
-    :name="item.path"
-    v-if="menuHasChildren(item) && getShowMenu"
-    :class="[getLevelClass, theme]"
-    :collapsedShowTitle="collapsedShowTitle"
-  >
+  <SubMenu :name="item.path" v-if="menuHasChildren(item) && getShowMenu" :class="[getLevelClass, theme]" :collapsedShowTitle="collapsedShowTitle">
     <template #title>
       <PluginIcon v-if="item.guobaMeta?.plugin" :plugin="item.guobaMeta?.plugin" :size="16" />
       <Icon v-else-if="getIcon" :icon="getIcon" :size="16" />
@@ -36,10 +26,7 @@
       </span>
       <SimpleMenuTag :item="item" :collapseParent="!!collapse && !!parent" />
     </template>
-    <template
-      v-for="childrenItem in item.children || []"
-      :key="childrenItem.paramPath || childrenItem.path"
-    >
+    <template v-for="childrenItem in item.children || []" :key="childrenItem.paramPath || childrenItem.path">
       <SimpleSubMenu v-bind="$props" :item="childrenItem" :parent="false" />
     </template>
   </SubMenu>
@@ -97,12 +84,7 @@
       });
 
       function menuHasChildren(menuTreeItem: Menu): boolean {
-        return (
-          !menuTreeItem.meta?.hideChildrenInMenu &&
-          Reflect.has(menuTreeItem, 'children') &&
-          !!menuTreeItem.children &&
-          menuTreeItem.children.length > 0
-        );
+        return !menuTreeItem.meta?.hideChildrenInMenu && Reflect.has(menuTreeItem, 'children') && !!menuTreeItem.children && menuTreeItem.children.length > 0;
       }
 
       return {

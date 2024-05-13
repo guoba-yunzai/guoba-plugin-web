@@ -11,30 +11,21 @@
     <br />
     <div style="width: 90%">
       <Alert v-if="failed" :message="`迁移失败：${reason}`" type="error" show-icon />
-      <Alert
-        v-else-if="percent === 100"
-        message="迁移成功！快去愉快地玩耍吧！"
-        type="success"
-        show-icon
-      />
+      <Alert v-else-if="percent === 100" message="迁移成功！快去愉快地玩耍吧！" type="success" show-icon />
       <Alert v-else message="在迁移结束之前，请勿重启或关闭云崽" type="warning" show-icon />
       <br />
       迁移日志：
       <a-textarea ref="logRef" :value="logs" :auto-size="{ minRows: 10, maxRows: 10 }" />
       <a-row v-if="percent !== 100" class="footer-btn">
         <a-col :span="12">
-          <a-button v-if="failed" type="link" preIcon="ant-design:undo" @click="onBack">
-            返回重新选择配置
-          </a-button>
+          <a-button v-if="failed" type="link" preIcon="ant-design:undo" @click="onBack"> 返回重新选择配置 </a-button>
         </a-col>
         <a-col :span="12" style="text-align: right">
           <template v-if="failed"></template>
           <!--          <a-button v-if="failed" type="link" preIcon="ant-design:redo" @click="onCancel">-->
           <!--            重新尝试迁移-->
           <!--          </a-button>-->
-          <a-button v-else type="link" danger preIcon="ant-design:close-circle" @click="onCancel">
-            取消迁移
-          </a-button>
+          <a-button v-else type="link" danger preIcon="ant-design:close-circle" @click="onCancel"> 取消迁移 </a-button>
         </a-col>
       </a-row>
     </div>

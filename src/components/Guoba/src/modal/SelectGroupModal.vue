@@ -1,13 +1,6 @@
 <template>
   <FormItemRest>
-    <BasicModal
-      width="800px"
-      :title="modalTitle"
-      @ok="handleOk"
-      @register="register"
-      @visible-change="visibleChange"
-      v-bind="$attrs"
-    >
+    <BasicModal width="800px" :title="modalTitle" @ok="handleOk" @register="register" @visible-change="visibleChange" v-bind="$attrs">
       <a-row>
         <a-col :span="showSelected ? 18 : 24">
           <BasicTable
@@ -26,12 +19,7 @@
           </BasicTable>
         </a-col>
         <a-col v-if="showSelected" :span="6">
-          <BasicTable
-            v-bind="selectedTable"
-            :dataSource="selectRows"
-            :useSearchForm="true"
-            :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }"
-          >
+          <BasicTable v-bind="selectedTable" :dataSource="selectRows" :useSearchForm="true" :formConfig="{ showActionButtonGroup: false, baseRowStyle: { minHeight: '40px' } }">
             <!--操作栏-->
             <template #action="{ record }">
               <a @click="handleDeleteSelected(record)">
@@ -85,17 +73,7 @@
         size: 'small',
       };
       const getBindValue = Object.assign({}, unref(props), unref(attrs), config);
-      const [
-        {
-          rowSelection,
-          visibleChange,
-          selectValues,
-          indexColumnProps,
-          getSelectResult,
-          handleDeleteSelected,
-          selectRows,
-        },
-      ] = useSelectModal(getGroupList, getBindValue);
+      const [{ rowSelection, visibleChange, selectValues, indexColumnProps, getSelectResult, handleDeleteSelected, selectRows }] = useSelectModal(getGroupList, getBindValue);
       const tableScroll = ref<Recordable>({ x: false });
       //注册弹框
       const [register, { closeModal }] = useModalInner(async () => {

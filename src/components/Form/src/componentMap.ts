@@ -4,22 +4,7 @@ import type { ComponentType } from './types/index';
 /**
  * Component list, register here to setting it in the form
  */
-import {
-  Input,
-  Select,
-  Radio,
-  Checkbox,
-  AutoComplete,
-  Cascader,
-  DatePicker,
-  InputNumber,
-  Switch,
-  TimePicker,
-  TreeSelect,
-  Slider,
-  Rate,
-  Divider,
-} from 'ant-design-vue';
+import { Input, Select, Radio, Checkbox, AutoComplete, Cascader, DatePicker, InputNumber, Switch, TimePicker, TreeSelect, Slider, Rate, Divider } from 'ant-design-vue';
 
 import ApiRadioGroup from './components/ApiRadioGroup.vue';
 import RadioButtonGroup from './components/RadioButtonGroup.vue';

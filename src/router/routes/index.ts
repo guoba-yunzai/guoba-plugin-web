@@ -4,7 +4,7 @@ import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '/@/router/routes/basic';
 
 import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
-import {useV2Route} from "/@/views/guoba/v2/install";
+import { useV2Route } from '/@/views/guoba/v2/install';
 
 // import.meta.globEager() 直接引入所有的模块 Vite 独有的功能
 const modules = import.meta.globEager('./modules/**/*.ts');
@@ -52,10 +52,4 @@ export const GuobaRoutes: AppRouteRecordRaw[] = [
 
 // Basic routing without permission
 // 未经许可的基本路由
-export const basicRoutes = [
-  LoginRoute,
-  RootRoute,
-  REDIRECT_ROUTE,
-  PAGE_NOT_FOUND_ROUTE,
-  ...GuobaRoutes,
-];
+export const basicRoutes = [LoginRoute, RootRoute, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE, ...GuobaRoutes];

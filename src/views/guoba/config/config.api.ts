@@ -34,8 +34,5 @@ export function saveConfigData(key: string, data: Recordable) {
  * @param cardKey
  */
 export function removeCardForm(formKey: string, cardKey: string) {
-  return defHttp.delete(
-    { url: Api.configCardForm, params: { formKey, cardKey } },
-    { errorMessageMode: 'modal' },
-  );
+  return defHttp.delete({ url: Api.configCardForm, params: { formKey, cardKey } }, { errorMessageMode: 'modal' });
 }

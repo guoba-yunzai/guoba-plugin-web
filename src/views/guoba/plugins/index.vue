@@ -2,9 +2,7 @@
   <PageWrapper title="插件管理">
     <template #headerContent>
       插件列表来源：
-      <a href="https://gitee.com/yhArcadia/Yunzai-Bot-plugins-index" target="_blank">
-        Yunzai-Bot插件索引
-      </a>
+      <a href="https://gitee.com/yhArcadia/Yunzai-Bot-plugins-index" target="_blank"> Yunzai-Bot插件索引 </a>
     </template>
 
     <BasicTable @register="registerTable" :searchInfo="searchInfo">
@@ -27,20 +25,10 @@
   </PageWrapper>
 </template>
 
-<style scoped>
-.float-button {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 56px;
-  height: 56px;
-  z-index: 1000;
-}
-</style>
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
 
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { PageWrapper } from '/@/components/Page';
 
   import { useModal } from '/@/components/Modal';
@@ -115,7 +103,7 @@
           ],
           okText: '安装',
           async onOk(value) {
-            let data = await pluginApi.installPlugin(value)
+            let data = await pluginApi.installPlugin(value);
             if (data.status === 'success') {
               $message.success(data.message);
               setTimeout(() => {}, 3000);
@@ -140,3 +128,14 @@
     },
   });
 </script>
+
+<style scoped>
+  .float-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    z-index: 1000;
+  }
+</style>

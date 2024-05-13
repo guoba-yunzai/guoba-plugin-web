@@ -50,10 +50,7 @@ export function useContentHeight(
     });
   }
 
-  function calcSubtractSpace(
-    element: Element | null | undefined,
-    direction: 'all' | 'top' | 'bottom' = 'all',
-  ): number {
+  function calcSubtractSpace(element: Element | null | undefined, direction: 'all' | 'top' | 'bottom' = 'all'): number {
     function numberPx(px: string) {
       return Number(px.replace(/[^\d]/g, ''));
     }
@@ -141,13 +138,7 @@ export function useContentHeight(
       upward(anchorEl, upwardSpace);
     }
 
-    let height =
-      bottomIncludeBody -
-      unref(layoutFooterHeightRef) -
-      unref(offsetHeightRef) -
-      substractHeight -
-      substractSpaceHeight -
-      upwardSpaceHeight;
+    let height = bottomIncludeBody - unref(layoutFooterHeightRef) - unref(offsetHeightRef) - substractHeight - substractSpaceHeight - upwardSpaceHeight;
 
     // compensation height
     const calcCompensationHeight = () => {

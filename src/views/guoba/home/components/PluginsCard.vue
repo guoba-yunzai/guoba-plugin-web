@@ -10,9 +10,7 @@
         <span class="flex">
           <PluginIcon :plugin="item" :size="30" />
           <span class="text-lg ml-4 ellipsis" :title="item.title">
-            <span v-if="item.isDeleted" style="text-decoration: line-through">{{
-              item.title
-            }}</span>
+            <span v-if="item.isDeleted" style="text-decoration: line-through">{{ item.title }}</span>
             <span v-else>{{ item.title }}</span>
           </span>
         </span>

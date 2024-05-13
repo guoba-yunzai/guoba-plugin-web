@@ -34,10 +34,7 @@ export async function saveMiaoHelpCfg(helpCfg, helpList, iconB64List, mainB64) {
 }
 
 async function getImageBase64(url) {
-  let res = await defHttp.get(
-    { url, responseType: 'blob', timeout: -1 },
-    { isTransformResponse: false, isReturnNativeResponse: true, errorMessageMode: 'modal' },
-  );
+  let res = await defHttp.get({ url, responseType: 'blob', timeout: -1 }, { isTransformResponse: false, isReturnNativeResponse: true, errorMessageMode: 'modal' });
   let blob = res.data as Blob;
   return await blobToDataUrl(blob);
 }
@@ -122,10 +119,7 @@ export function getBackupList() {
 
 // 新增备份
 export function addBackup(remark) {
-  return defHttp.post(
-    { url: MiaoApi.helpBackup, params: { remark } },
-    { errorMessageMode: 'modal' },
-  );
+  return defHttp.post({ url: MiaoApi.helpBackup, params: { remark } }, { errorMessageMode: 'modal' });
 }
 
 // 还原备份

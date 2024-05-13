@@ -10,14 +10,7 @@
       <VueColorEI label="b" :value="rgba.b" :min="0" :max="255" @change="onInput" />
     </div>
     <div v-if="!disableAlpha" class="vc-chrome-field custom">
-      <VueColorEI
-        label="a"
-        :value="rgba.a"
-        :min="0"
-        :max="1"
-        :arrow-offset="0.01"
-        @change="onInput"
-      />
+      <VueColorEI label="a" :value="rgba.a" :min="0" :max="1" :arrow-offset="0.01" @change="onInput" />
     </div>
     <div class="vc-chrome-field">
       <Popover trigger="click" placement="bottom" :getPopupContainer="(n) => n.parentNode">

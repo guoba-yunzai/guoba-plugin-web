@@ -1,12 +1,5 @@
 <template>
-  <BasicDrawer
-    title="高级设置"
-    :width="drawerWidth"
-    placement="left"
-    showFooter
-    :maskStyle="{ backgroundColor: 'rgba(0,0,0,0.2)' }"
-    @register="registerDrawer"
-  >
+  <BasicDrawer title="高级设置" :width="drawerWidth" placement="left" showFooter :maskStyle="{ backgroundColor: 'rgba(0,0,0,0.2)' }" @register="registerDrawer">
     <BasicForm @register="registerForm" />
     <ThemeConfigForm
       :model="themeStyle"
@@ -20,8 +13,8 @@
     <template #footer>
       <a-row type="flex" justify="space-between">
         <a-col>
-<!--          TODO-guoba 待办事项：上传图标-->
-<!--          <a-button type="primary" @click="">上传图标</a-button>-->
+          <!--          TODO-guoba 待办事项：上传图标-->
+          <!--          <a-button type="primary" @click="">上传图标</a-button>-->
         </a-col>
         <a-col>
           <a-button @click="closeDrawer">关闭</a-button>
@@ -47,12 +40,7 @@
     themeStyle: Object as PropType<ThemeConfigType>,
     debugThemeName: String,
   });
-  const emit = defineEmits([
-    'register',
-    'update:model',
-    'update:themeStyle',
-    'update:debugThemeName',
-  ]);
+  const emit = defineEmits(['register', 'update:model', 'update:themeStyle', 'update:debugThemeName']);
 
   const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner();
   const [registerFormOrigin, { getFieldsValue, setFieldsValue, updateSchema }] = useForm({

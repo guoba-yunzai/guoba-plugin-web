@@ -126,8 +126,7 @@
           return value;
         }
 
-        const options: LabelValueOptions =
-          unref(getComponentProps)?.options ?? (unref(optionsRef) || []);
+        const options: LabelValueOptions = unref(getComponentProps)?.options ?? (unref(optionsRef) || []);
         const option = options.find((item) => `${item.value}` === `${value}`);
 
         return option?.label ?? value;
@@ -247,9 +246,7 @@
 
           if (beforeEditSubmit && isFunction(beforeEditSubmit)) {
             spinning.value = true;
-            const keys: string[] = columns
-              .map((_column) => _column.dataIndex)
-              .filter((field) => !!field) as string[];
+            const keys: string[] = columns.map((_column) => _column.dataIndex).filter((field) => !!field) as string[];
             let result: any = true;
             try {
               result = await beforeEditSubmit({
@@ -332,9 +329,7 @@
       function initCbs(cbs: 'submitCbs' | 'validCbs' | 'cancelCbs', handle: Fn) {
         if (props.record) {
           /* eslint-disable  */
-          isArray(props.record[cbs])
-            ? props.record[cbs]?.push(handle)
-            : (props.record[cbs] = [handle]);
+          isArray(props.record[cbs]) ? props.record[cbs]?.push(handle) : (props.record[cbs] = [handle]);
         }
       }
 
@@ -391,11 +386,7 @@
     render() {
       return (
         <div class={this.prefixCls}>
-          <div
-            v-show={!this.isEdit}
-            class={{ [`${this.prefixCls}__normal`]: true, 'ellipsis-cell': this.column.ellipsis }}
-            onClick={this.handleEdit}
-          >
+          <div v-show={!this.isEdit} class={{ [`${this.prefixCls}__normal`]: true, 'ellipsis-cell': this.column.ellipsis }} onClick={this.handleEdit}>
             <div class="cell-content" title={this.column.ellipsis ? this.getValues ?? '' : ''}>
               {this.column.editRender
                 ? this.column.editRender({
@@ -428,10 +419,7 @@
                 />
                 {!this.getRowEditable && (
                   <div class={`${this.prefixCls}__action`}>
-                    <CheckOutlined
-                      class={[`${this.prefixCls}__icon`, 'mx-2']}
-                      onClick={this.handleSubmitClick}
-                    />
+                    <CheckOutlined class={[`${this.prefixCls}__icon`, 'mx-2']} onClick={this.handleSubmitClick} />
                     <CloseOutlined class={`${this.prefixCls}__icon `} onClick={this.handleCancel} />
                   </div>
                 )}

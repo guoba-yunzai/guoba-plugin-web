@@ -17,13 +17,7 @@
         </template>
       </template>
       <template v-else-if="card.type === 'arrayFormCard'">
-        <ArrayForm
-          :card="card"
-          :form="forms[idx]"
-          :value="arrayForms[card.key]"
-          @redo="onRedo"
-          @submit="onSubmit"
-        />
+        <ArrayForm :card="card" :form="forms[idx]" :value="arrayForms[card.key]" @redo="onRedo" @submit="onSubmit" />
       </template>
       <CardForm v-else :card="card" :form="forms[idx]" @redo="onRedo" @submit="onSubmit" />
     </template>

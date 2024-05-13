@@ -1,18 +1,9 @@
 <template>
   <a-space class="step-action">
-    <a-button
-      preIcon="ant-design:arrow-left"
-      :disabled="getProps.prevBtn.disabled"
-      @click="() => onClickCommon('prevBtn')"
-    >
+    <a-button preIcon="ant-design:arrow-left" :disabled="getProps.prevBtn.disabled" @click="() => onClickCommon('prevBtn')">
       <span>{{ getProps.prevBtn.text }}</span>
     </a-button>
-    <a-button
-      type="primary"
-      postIcon="ant-design:arrow-right"
-      :disabled="getProps.nextBtn.disabled"
-      @click="() => onClickCommon('nextBtn')"
-    >
+    <a-button type="primary" postIcon="ant-design:arrow-right" :disabled="getProps.nextBtn.disabled" @click="() => onClickCommon('nextBtn')">
       <span>{{ getProps.nextBtn.text }}</span>
     </a-button>
   </a-space>

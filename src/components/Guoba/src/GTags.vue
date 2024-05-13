@@ -9,16 +9,7 @@
       {{ tag }}
     </a-tag>
   </template>
-  <a-input
-    v-if="inputVisible"
-    ref="inputRef"
-    v-model:value="inputValue"
-    type="text"
-    size="small"
-    :style="{ width: '78px' }"
-    @blur="handleInputConfirm"
-    @keyup.enter="handleInputConfirm"
-  />
+  <a-input v-if="inputVisible" ref="inputRef" v-model:value="inputValue" type="text" size="small" :style="{ width: '78px' }" @blur="handleInputConfirm" @keyup.enter="handleInputConfirm" />
   <a-tag v-else style="background: #fff; border-style: dashed; cursor: pointer" @click="showInput">
     <icon icon="ant-design:plus" />
     新增
