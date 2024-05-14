@@ -22,13 +22,14 @@
         <MenuItem v-if="getUseLockPage" key="lock" :text="t('layout.header.tooltipLock')" icon="ion:lock-closed-outline" />
         <MenuItem key="logout" :text="t('layout.header.dropdownItemLoginOut')" icon="ion:power-outline" />
         <MenuDivider />
+        <MenuItem key="restart-guoba" text="重启Guoba" icon="solar:restart-bold" />
         <MenuItem key="restart-bot" text="重启Bot" icon="solar:restart-bold" />
       </Menu>
     </template>
   </Dropdown>
   <LockAction @register="register" />
 </template>
-<script lang="ts">
+<script lang="tsx">
   // components
   import { Dropdown, Menu } from 'ant-design-vue';
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface';
@@ -49,10 +50,10 @@
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { botApi } from '/@/api/guoba';
+  import { botApi, sysApi } from '/@/api/guoba';
   import { sleep } from '/@/utils/common';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'restart-bot';
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'restart-bot' | 'restart-guoba';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -108,6 +109,24 @@
         });
       }
 
+      function handleRestartGuoba() {
+        createConfirm({
+          title: '重启',
+          iconType: 'warning',
+          content: (
+            <div>
+              <p style="color: #333">确定要立即重启Guoba吗？</p>
+              <p style="color: #999">不会重启Bot</p>
+            </div>
+          ),
+          async onOk() {
+            await sysApi.doRestartGuoba();
+            await sleep(1000);
+            window.location.reload();
+          },
+        });
+      }
+
       function handleMenuClick(e: MenuInfo) {
         switch (e.key as MenuEvent) {
           case 'logout':
@@ -121,6 +140,9 @@
             break;
           case 'restart-bot':
             handleRestartBot();
+            break;
+          case 'restart-guoba':
+            handleRestartGuoba();
             break;
         }
       }

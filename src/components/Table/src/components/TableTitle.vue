@@ -1,11 +1,16 @@
 <template>
   <BasicTitle :class="prefixCls" v-if="getTitle" :helpMessage="helpMessage">
-    {{ getTitle }}
+    <template v-if="getTitle.isJsx">
+      <component :is="getTitle.title" />
+    </template>
+    <template v-else>
+      {{ getTitle.title }}
+    </template>
   </BasicTitle>
 </template>
 <script lang="ts">
   import { computed, defineComponent, PropType } from 'vue';
-  import { BasicTitle } from '/@/components/Basic/index';
+  import { BasicTitle } from '/@/components/Basic';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { isFunction } from '/@/utils/is';
 
@@ -14,7 +19,7 @@
     components: { BasicTitle },
     props: {
       title: {
-        type: [Function, String] as PropType<string | ((data: Recordable) => string)>,
+        type: [Function, String, Object] as PropType<string | ((data: Recordable) => string | JSX.Element)>,
       },
       getSelectRows: {
         type: Function as PropType<() => Recordable[]>,
@@ -28,14 +33,20 @@
 
       const getTitle = computed(() => {
         const { title, getSelectRows = () => {} } = props;
-        let tit = title;
+        let tit: string | JSX.Element | ((data: Recordable) => string | JSX.Element) = title!;
 
         if (isFunction(title)) {
           tit = title({
             selectRows: getSelectRows(),
           });
         }
-        return tit;
+        // 判断是否是JSX
+        let isJsx = typeof tit !== 'string';
+
+        return {
+          title: tit,
+          isJsx,
+        };
       });
 
       return { getTitle, prefixCls };

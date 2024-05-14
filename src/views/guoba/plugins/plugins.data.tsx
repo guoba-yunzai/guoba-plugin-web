@@ -8,6 +8,7 @@ export const columns: BasicColumn[] = [
     title: '插件标题',
     dataIndex: 'title',
     width: 200,
+    slots: { customRender: 'plugin-title' },
   },
   {
     title: '插件名称',

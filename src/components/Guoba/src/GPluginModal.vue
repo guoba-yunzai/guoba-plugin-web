@@ -254,8 +254,10 @@
               });
               if (data.status === 'success') {
                 $message.success(data.message);
-                await sleep(3000);
-                window.location.reload();
+                if (autoRestart.value) {
+                  await sleep(3000);
+                  window.location.reload();
+                }
               } else {
                 $message.error(data.message);
               }

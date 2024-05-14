@@ -32,7 +32,7 @@
     },
     props: {
       title: {
-        type: [Function, String] as PropType<string | ((data: Recordable) => string)>,
+        type: [Function, String, Object] as PropType<string | ((data: Recordable) => string | JSX.Element)>,
       },
       tableSetting: {
         type: Object as PropType<TableSetting>,

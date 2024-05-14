@@ -1,8 +1,8 @@
 <template>
   <div :class="[prefixCls]">
     <Skeleton v-if="pageLoading" active />
-    <div v-else-if="isError">
-      <Exception :status="ExceptionEnum.PAGE_NOT_FOUND" subTitle="未找到该插件" btnText="返回插件列表" goPath="/plugins/index" />
+    <div v-else-if="errorRef.isError">
+      <Exception :status="errorRef.status" :title="errorRef.title" :subTitle="errorRef.message" btnText="返回插件管理" goPath="/plugins" />
     </div>
     <PageWrapper v-else :loading="loading" sticky stickyTop="-50px">
       <template #title>
@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
   import type { Plugin } from '/#/guoba';
-  import { computed, ref } from 'vue';
+  import { computed, reactive, ref } from 'vue';
   import { router } from '/@/router';
   import Icon from '/@/components/Icon';
   import { Skeleton } from 'ant-design-vue';
@@ -85,7 +85,12 @@
   const loading = ref(true);
   const pageLoading = ref(true);
 
-  const isError = ref(false);
+  const errorRef = reactive({
+    isError: false,
+    status: ExceptionEnum.PAGE_NOT_FOUND,
+    title: '404',
+    message: '未找到该插件',
+  });
 
   const name = computed(() => (router.currentRoute.value.params?.name ?? '') as string);
 
@@ -102,13 +107,25 @@
   async function loadPlugin() {
     try {
       if (!name.value) {
-        isError.value = true;
+        errorRef.isError = true;
+        errorRef.title = '非法的插件名';
+        errorRef.message = '遇到该问题请刷新页面重试！';
+        errorRef.status = ExceptionEnum.ERROR;
         return;
       }
       const plugins = await guobaStore.getPlugins();
       const find = plugins.find((item) => item.name === name.value);
       if (!find) {
-        isError.value = true;
+        errorRef.isError = true;
+        errorRef.title = '插件不存在';
+        errorRef.message = ' ';
+        return;
+      }
+      if (!find.installed) {
+        errorRef.isError = true;
+        errorRef.status = ExceptionEnum.PAGE_NOT_DATA;
+        errorRef.title = '插件未安装';
+        errorRef.message = ' ';
         return;
       }
       plugin.value = find;

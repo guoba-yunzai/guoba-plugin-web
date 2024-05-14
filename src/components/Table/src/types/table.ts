@@ -329,7 +329,7 @@ export interface BasicTableProps<T = any> {
    * Table title renderer
    * @type Function | ScopedSlot
    */
-  title?: VNodeChild | JSX.Element | string | ((data: Recordable) => string);
+  title?: VNodeChild | JSX.Element | string | ((data: Recordable) => string | JSX.Element);
 
   /**
    * Set props on per header row

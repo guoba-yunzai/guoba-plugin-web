@@ -104,15 +104,15 @@
         title: '500',
         status: `${ExceptionEnum.ERROR}`,
         subTitle: t('sys.exception.subTitle500'),
-        btnText: backHomeI18n,
-        handler: () => go(),
+        btnText: getBtnText(backHomeI18n),
+        handler: () => handleGoTo(() => go()),
       });
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_DATA, {
         title: t('sys.exception.noDataTitle'),
         subTitle: '',
-        btnText: t('common.redo'),
-        handler: () => redo(),
+        btnText: getBtnText(t('common.redo')),
+        handler: () => handleGoTo(() => redo()),
         icon: notDataSvg,
       });
 

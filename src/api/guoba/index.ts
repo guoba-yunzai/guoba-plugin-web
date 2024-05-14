@@ -8,6 +8,8 @@ const enum SystemApi {
   loginCodeCheck = '/login/code/check',
   logout = '/logout',
   homeData = '/home/data',
+
+  restartGuoba = '/sys/restart-guoba',
 }
 
 // 系统相关接口
@@ -18,6 +20,8 @@ export const sysApi = {
   doLogout() {
     return defHttp.post({ url: SystemApi.logout });
   },
+  doRestartGuoba: () => defHttp.post({ url: SystemApi.restartGuoba }),
+
   async getHomeData() {
     return await defHttp.get({ url: SystemApi.homeData });
   },
@@ -81,7 +85,5 @@ const enum BotApi {
 
 // Bot相关接口
 export const botApi = {
-  async doRestart() {
-    return await defHttp.post({ url: BotApi.restart });
-  },
+  doRestart: () => defHttp.post({ url: BotApi.restart }),
 };
