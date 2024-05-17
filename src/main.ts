@@ -15,10 +15,11 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 import { registerGuoba } from '/@/components/Guoba/register';
+import { registerCustomComponents } from '/@/customComponents';
+
+const app = createApp(App);
 
 async function bootstrap() {
-  const app = createApp(App);
-
   // Configure store
   // 配置 store
   setupStore(app);
@@ -38,6 +39,9 @@ async function bootstrap() {
   registerGlobComp(app);
 
   registerGuoba(app);
+
+  // 注册 WebComponents
+  registerCustomComponents(app);
 
   // Configure routing
   // 配置路由
@@ -61,4 +65,6 @@ async function bootstrap() {
   app.mount('#app');
 }
 
-bootstrap();
+bootstrap().then();
+
+export { app };

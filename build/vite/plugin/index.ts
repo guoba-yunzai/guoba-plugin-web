@@ -21,7 +21,13 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // have to
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('guoba-') || tag.startsWith('custom-'),
+        },
+      },
+    }),
     // have to
     vueJsx(),
     // support name

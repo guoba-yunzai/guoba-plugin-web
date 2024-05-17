@@ -19,6 +19,11 @@ interface AppState {
   projectConfig: ProjectConfig | null;
   // When the window shrinks, remember some states, and restore these states when the window is restored
   beforeMiniInfo: BeforeMiniState;
+
+  isTeleport: boolean,
+  teleportHTML: HTMLElement | null,
+  teleportText: string,
+  teleportCallback: Fn,
 }
 let timeId: TimeoutHandle;
 export const useAppStore = defineStore({
@@ -28,6 +33,11 @@ export const useAppStore = defineStore({
     pageLoading: false,
     projectConfig: Persistent.getLocal(PROJ_CFG_KEY),
     beforeMiniInfo: {},
+
+    isTeleport: false,
+    teleportHTML: null,
+    teleportText: '233',
+    teleportCallback: () => void 0,
   }),
   getters: {
     getPageLoading(): boolean {

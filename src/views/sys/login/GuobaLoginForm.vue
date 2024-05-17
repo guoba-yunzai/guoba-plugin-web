@@ -5,6 +5,26 @@
 
   <a-divider>或使用验证码登录</a-divider>
 
+<!--  <div style="border: 1px solid #cccccc; margin: 10px; padding: 10px">-->
+<!--    <guoba-button @click="() => $message.success('guoba-button')" class="xxx" btn-text="张三李四">-->
+<!--      <span>guoba-button</span>-->
+<!--    </guoba-button>-->
+<!--    <br />-->
+<!--    <br />-->
+<!--    <custom-button @click="() => $message.success('custom-button')" class="yyy">-->
+<!--      <span>custom-button</span>-->
+<!--    </custom-button>-->
+
+
+<!--    <custom-my-button-->
+<!--        @click="() => fff()"-->
+<!--        class="foo"-->
+<!--        :text="num"-->
+<!--    >-->
+<!--&lt;!&ndash;      <span>custom-my-button</span>&ndash;&gt;-->
+<!--    </custom-my-button>-->
+<!--  </div>-->
+
   <div style="margin-bottom: 16px; display: flex; align-items: center">
     <a-input style="flex-grow: 1; margin-right: 8px" placeholder="请输入验证码" v-model:value="code" :disabled="loading" />
     <a-button :disabled="isCodeButtonDisabled" @click="handleCodeLogin">
@@ -24,6 +44,13 @@
   const CODE_TIMEOUT = 300;
   const userStore = useUserStore();
   const { createMessage: $message } = useMessage();
+
+  // const num = ref(100);
+  //
+  // function fff() {
+  //   num.value++;
+  //   $message.success('custom-my-button')
+  // }
 
   const loading = ref(false);
   const code = ref('');
@@ -103,3 +130,21 @@
     }
   });
 </script>
+
+<!--<style>-->
+<!-- /* .xxx {-->
+<!--    padding: 10px;-->
+<!--    background-color: red;-->
+<!--  }-->
+
+<!--  .yyy {-->
+<!--    padding: 10px;-->
+<!--    background-color: blue;-->
+<!--  }-->
+<!--*/-->
+<!--  .my-guoba-button-3 {-->
+<!--    display: inline-block;-->
+<!--    padding: 20px;-->
+<!--    border-bottom: 4px solid green;-->
+<!--  }-->
+<!--</style>-->
