@@ -144,6 +144,7 @@ export interface GlobConfig {
   ICPNo?: string;
 }
 export interface GlobEnvConfig {
+  VITE_PUBLIC_PATH: string;
   // Site title
   VITE_GLOB_APP_TITLE: string;
   // Service interface url

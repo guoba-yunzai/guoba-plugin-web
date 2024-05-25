@@ -15,6 +15,7 @@ export function getStorageShortName() {
 }
 
 export function getAppEnvConfig() {
+  const { VITE_PUBLIC_PATH } = import.meta.env;
   const ENV_NAME = getConfigFileName(import.meta.env);
 
   const ENV = (import.meta.env.DEV
@@ -29,6 +30,7 @@ export function getAppEnvConfig() {
   }
 
   return {
+    VITE_PUBLIC_PATH,
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
     VITE_GLOB_APP_SHORT_NAME,

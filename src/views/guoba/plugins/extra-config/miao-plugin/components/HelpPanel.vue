@@ -64,11 +64,13 @@
   import { useModal } from '/@/components/Modal';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { cssExpand } from '/@/utils/common';
+  import { getAppEnvConfig } from '/@/utils/env';
   import { useDebounceFn } from '@vueuse/core';
   import { HelpTable } from './HelpComps';
   import UploadIconHelpModal from './UploadIconHelpModal.vue';
   import { getHelpIconList, getThemeConfig } from '../miao.api';
 
+  const { VITE_PUBLIC_PATH } = getAppEnvConfig();
   const props = defineProps({
     helpCfg: Object as PropType<helpCfgType>,
     helpList: Object as PropType<helpListType>,
@@ -230,7 +232,7 @@
     ret.push(`.${prefixCls} { width:${width}px; }`);
     ret.push(`.${prefixCls} .help-table .td,.help-table .th{width:${100 / colCount}%}`);
 
-    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&themeName=${props.themeName}&_v=${props.cacheVer}`;
+    let themePath = `${VITE_PUBLIC_PATH}/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&themeName=${props.themeName}&_v=${props.cacheVer}`;
     let themeBg = themePath.replace('$s', 'bg');
     let themeMain = themePath.replace('$s', 'main');
     if (props.mainB64) {

@@ -83,7 +83,9 @@
   import { usePermissionStore } from '/@/store/modules/permission';
   import { useModal } from '/@/components/Modal';
   import UploadIconHelpModal from './UploadIconHelpModal.vue';
+  import {getAppEnvConfig} from "/@/utils/env";
 
+  const { VITE_PUBLIC_PATH } = getAppEnvConfig();
   const ls = createLocalStorage();
   const permStore = usePermissionStore();
   const [registerUihModal, uihModal] = useModal();
@@ -142,7 +144,7 @@
 
   const wrapStyle = computed(() => {
     let style: Recordable = {};
-    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&_v=${props.cacheVer}`;
+    let themePath = `${VITE_PUBLIC_PATH}/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&_v=${props.cacheVer}`;
     let themeBg = themePath.replace('$s', 'bg');
     let themeMain = themePath.replace('$s', 'main');
     if (props.mainB64) {

@@ -51,6 +51,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import ThemeConfigModal from '/@/views/guoba/plugins/extra-config/miao-plugin/components/ThemeConfigModal.vue';
   import { useModal } from '/@/components/Modal';
+  import {getAppEnvConfig} from "/@/utils/env";
 
   type ThemeItem = {
     // 皮肤名称
@@ -58,6 +59,7 @@
     style: ThemeConfigType;
   };
 
+  const { VITE_PUBLIC_PATH } = getAppEnvConfig();
   const props = defineProps({
     themeNames: Array as PropType<string[]>,
   });
@@ -104,7 +106,7 @@
 
   function getThemeSrc(name, type = 'main') {
     let ver = themePicVer[name] || 1;
-    let themePath = `/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&themeName=${name}&_v=${ver}`;
+    let themePath = `${VITE_PUBLIC_PATH}/api/plugin/miao/help/theme/$s?token=${permStore.liteToken}&themeName=${name}&_v=${ver}`;
     return themePath.replace('$s', type);
   }
 
