@@ -232,6 +232,10 @@
         };
         const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
 
+        if (!Comp) {
+          return <div>未知的组件</div>;
+        }
+
         const { autoSetPlaceHolder, size } = props.formProps;
         const propsData: Recordable = {
           allowClear: true,
@@ -334,10 +338,7 @@
       }
 
       return () => {
-        const { colProps = {}, colSlot, renderColContent, component } = props.schema;
-        if (!componentMap.has(component)) {
-          return null;
-        }
+        const { colProps = {}, colSlot, renderColContent } = props.schema;
 
         const { baseColProps = {} } = props.formProps;
         const realColProps = { ...baseColProps, ...colProps };

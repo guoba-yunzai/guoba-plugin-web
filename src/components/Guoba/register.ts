@@ -4,6 +4,7 @@ import GAvatar from './src/GAvatar.vue';
 import GSpan from './src/GSpan.vue';
 import { registerPrompt } from './src/Prompt';
 import { registerV2 } from '/@/views/guoba/v2/install';
+import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
 export function registerGuoba(app: App) {
   registerV2(app);
@@ -12,20 +13,33 @@ export function registerGuoba(app: App) {
   app.component(GAvatar.name, GAvatar);
 }
 
-export async function registerGuobaComponent(componentMap: componentMapType) {
-  const { default: GTags } = await import('./src/GTags.vue');
-  const { default: GSubForm } = await import('./src/SubForm/SubForm.vue');
-  const { default: GSelectFriend } = await import('./src/GSelectFriend.vue');
-  const { default: GSelectGroup } = await import('./src/GSelectGroup.vue');
-  const { default: GColorPicker } = await import('./src/GColorPicker.vue');
+export function registerGuobaComponent(componentMap: componentMapType) {
+  componentMap.set(
+    'GTags',
+    registerAsyncComponent(() => import('./src/GTags.vue')),
+  );
+  componentMap.set(
+    'GSubForm',
+    registerAsyncComponent(() => import('./src/SubForm/SubForm.vue')),
+  );
+  componentMap.set(
+    'GSelectFriend',
+    registerAsyncComponent(() => import('./src/GSelectFriend.vue')),
+  );
+  componentMap.set(
+    'GSelectGroup',
+    registerAsyncComponent(() => import('./src/GSelectGroup.vue')),
+  );
+  componentMap.set(
+    'GColorPicker',
+    registerAsyncComponent(() => import('./src/GColorPicker.vue')),
+  );
+  componentMap.set(
+    'EasyCron',
+    registerAsyncComponent(async () => import('./src/EasyCron/EasyCronInput.vue')),
+  );
+}
 
-  componentMap.set('GTags', GTags);
-  componentMap.set('GSubForm', GSubForm);
-  componentMap.set('GSelectFriend', GSelectFriend);
-  componentMap.set('GSelectGroup', GSelectGroup);
-  componentMap.set('GColorPicker', GColorPicker);
-
-  const { default: EasyCron } = await import('./src/EasyCron/EasyCronInput.vue');
-
-  componentMap.set('EasyCron', EasyCron);
+function registerAsyncComponent(loader: Fn) {
+  return createAsyncComponent(loader, { loading: true });
 }

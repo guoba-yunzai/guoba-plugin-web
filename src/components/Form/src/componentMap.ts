@@ -17,6 +17,7 @@ import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
 import { CountdownInput } from '/@/components/CountDown';
+import { registerGuobaComponent } from '/@/components/Guoba/register';
 
 const componentMap = new Map<ComponentType, Component>();
 
@@ -67,7 +68,6 @@ export function del(compName: ComponentType) {
   componentMap.delete(compName);
 }
 
-export { componentMap };
-
-import { registerGuobaComponent } from '/@/components/Guoba/register';
 registerGuobaComponent(componentMap);
+
+export { componentMap };
