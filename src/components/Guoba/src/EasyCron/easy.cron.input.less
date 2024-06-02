@@ -2,6 +2,29 @@
 @prefix-cls: ~'@{namespace}-easy-cron-input';
 
 .@{prefix-cls} {
+  width: 100%;
+
+  .input-row {
+    @rightWidth: 46px;
+
+    .left {
+      width: 100%;
+    }
+
+    .right {
+      width: @rightWidth;
+    }
+
+    &.multiple-mode {
+      margin-bottom: 8px;
+
+      .left {
+        margin-right: 8px;
+        width: calc(100% - 8px - @rightWidth);
+      }
+    }
+  }
+
   a.open-btn {
     cursor: pointer;
 

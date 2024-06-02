@@ -1,5 +1,5 @@
 <template>
-  <BasicModal @register="registerModal" title="Cron表达式" width="800px" @ok="onOk">
+  <BasicModal @register="registerModal" title="Cron表达式" width="800px" destroyOnClose @ok="onOk">
     <EasyCron v-bind="attrs" />
   </BasicModal>
 </template>
@@ -14,12 +14,14 @@
     name: 'EasyCronModal',
     inheritAttrs: false,
     components: { BasicModal, EasyCron },
-    setup() {
+    emits: ['register', 'ok'],
+    setup(_, { emit }) {
       const attrs = useAttrs();
       const [registerModal, { closeModal }] = useModalInner();
 
       function onOk() {
         closeModal();
+        emit('ok');
       }
 
       return { attrs, registerModal, onOk };

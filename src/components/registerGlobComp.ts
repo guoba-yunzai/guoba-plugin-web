@@ -1,10 +1,11 @@
 import type { App } from 'vue';
 import { Button } from './Button';
-import { Input, Layout, Row, Col, Card, Spin, Skeleton, Tooltip, Select, Tabs, Empty, Tag, Divider, Popconfirm, Space, List, Radio, Checkbox } from 'ant-design-vue';
+import { Form, Input, Layout, Row, Col, Card, Spin, Skeleton, Tooltip, Select, Tabs, Empty, Tag, Divider, Popconfirm, Space, List, Radio, Checkbox } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon';
 
 export function registerGlobComp(app: App) {
   app
+    .use(Form)
     .use(Input)
     .use(Button)
     .use(Layout)
