@@ -2,7 +2,7 @@ import type { ComputedRef, Ref } from 'vue';
 import type { FormProps, FormSchema, FormActionType } from '../types/form';
 import type { NamePath } from 'ant-design-vue/lib/form/interface';
 import { unref, toRaw, nextTick } from 'vue';
-import { isArray, isFunction, isObject, isString, isDef, isNullOrUnDef } from '/@/utils/is';
+import {isArray, isFunction, isObject, isString, isDef, isNullOrUnDef, isEmpty} from '/@/utils/is';
 import { deepMerge } from '/@/utils';
 import { dateItemType, handleInputNumberValue, defaultValueComponents } from '../helper';
 import { dateUtil } from '/@/utils/dateUtil';
@@ -242,7 +242,31 @@ export function useFormEvents({ emit, getProps, formModel, getSchema, defaultVal
   }
 
   async function validate(nameList?: NamePath[] | undefined) {
-    return await unref(formElRef)?.validate(nameList);
+    return handleValidateValues(await unref(formElRef)?.validate(nameList));
+  }
+
+  function handleValidateValues(values: Recordable) {
+    for (const segment of unref(getSchema)) {
+      let value = values[segment.field] as any;
+      if (isEmpty(value)) continue;
+      const componentProps = segment.componentProps;
+      if (!componentProps) continue;
+
+      if (typeof value === 'string') {
+        const {
+          // 是否去除首尾空格
+          trimValue = true
+        } = componentProps as Recordable;
+
+        if (trimValue) {
+          value = (<string>value).trim();
+        }
+      }
+
+      values[segment.field] = value;
+    }
+
+    return values;
   }
 
   async function clearValidate(name?: string | string[]) {

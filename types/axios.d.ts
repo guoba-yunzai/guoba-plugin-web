@@ -27,6 +27,8 @@ export interface RequestOptions {
   retryRequest?: RetryRequest;
   // 【锅巴】是否拼接版本前缀，默认 false
   joinVersion?: boolean;
+  // 【锅巴】是否处理前后空格，默认 true
+  trimValues?: boolean;
 }
 
 export interface RetryRequest {

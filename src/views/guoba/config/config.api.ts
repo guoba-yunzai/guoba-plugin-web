@@ -25,7 +25,7 @@ export function queryConfigData(key: string) {
  * @param data
  */
 export function saveConfigData(key: string, data: Recordable) {
-  return defHttp.post({ url: Api.configData, params: { key, data } });
+  return defHttp.post({ url: Api.configData, params: { key, data } }, { trimValues: false });
 }
 
 /**

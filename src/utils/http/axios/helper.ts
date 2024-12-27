@@ -1,3 +1,4 @@
+import type { RequestOptions } from "/#/axios";
 import { isObject, isString } from '/@/utils/is';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
@@ -18,10 +19,12 @@ export function joinTimestamp(join: boolean, restful = false): string | object {
 /**
  * @description: Format request parameter time
  */
-export function formatRequestDate(params: Recordable) {
+export function formatRequestDate(params: Recordable, options: RequestOptions) {
   if (Object.prototype.toString.call(params) !== '[object Object]') {
     return;
   }
+
+  const { trimValues = true } = options;
 
   for (const key in params) {
     const format = params[key]?.format ?? null;
@@ -32,14 +35,14 @@ export function formatRequestDate(params: Recordable) {
       const value = params[key];
       if (value) {
         try {
-          params[key] = isString(value) ? value.trim() : value;
+          params[key] = trimValues ? (isString(value) ? value.trim() : value) : value;
         } catch (error: any) {
           throw new Error(error);
         }
       }
     }
     if (isObject(params[key])) {
-      formatRequestDate(params[key]);
+      formatRequestDate(params[key], options);
     }
   }
 }

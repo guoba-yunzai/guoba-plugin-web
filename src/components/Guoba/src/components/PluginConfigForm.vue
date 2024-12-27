@@ -49,7 +49,13 @@
 
       async function savePluginConfigData() {
         let values = await validate();
-        let { ok, message } = await defHttp.put({ url: url.value, params: values }, { isTransformResponse: false });
+        let { ok, message } = await defHttp.put(
+          { url: url.value, params: values },
+          {
+            trimValues: false,
+            isTransformResponse: false,
+          },
+        );
         if (ok) {
           $message.success(message || '保存成功！');
           await getPluginConfigData();

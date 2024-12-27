@@ -17,7 +17,7 @@ import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { formatRequestDate, joinTimestamp } from './helper';
 import { useUserStoreWithOut } from '/@/store/modules/user';
-import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
+// import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -103,7 +103,7 @@ const transform: AxiosTransform = {
     }
     const params = config.params || {};
     const data = config.data || false;
-    formatDate && data && !isString(data) && formatRequestDate(data);
+    formatDate && data && !isString(data) && formatRequestDate(data, options);
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
@@ -115,7 +115,7 @@ const transform: AxiosTransform = {
       }
     } else {
       if (!isString(params)) {
-        formatDate && formatRequestDate(params);
+        formatDate && formatRequestDate(params, options);
         if (Reflect.has(config, 'data') && config.data && (Object.keys(config.data).length > 0 || config.data instanceof FormData)) {
           config.data = data;
           config.params = params;
