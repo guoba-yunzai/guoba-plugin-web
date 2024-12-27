@@ -1,3 +1,5 @@
+import type { FormSchemas } from '/@/components/Form';
+
 export interface Plugin {
   // 插件名称（唯一）
   name: string;
@@ -21,6 +23,12 @@ export interface Plugin {
   // 图标路径（可选）
   iconPath?: string;
 
+  // 插件组件配置
+  schemas: FormSchemas;
+
+  // 插件硬分组 TODO 尚未实现
+  schemaGroups?: SchemaGroup[];
+
   // 是否显示在菜单中
   showInMenu?: boolean;
 
@@ -29,6 +37,16 @@ export interface Plugin {
   // 是否已删除（插件索引仓库里标记为删除线的）
   isDeleted: boolean;
   hasConfig: boolean;
+}
+
+// 插件硬分组 TODO 尚未实现
+export interface SchemaGroup {
+  // 分组唯一标识
+  name: string;
+  // 分组标题
+  title: string;
+  // 分组内的表单配置
+  schemas: FormSchemas;
 }
 
 export type Plugins = Plugin[];

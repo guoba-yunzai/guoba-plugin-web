@@ -81,6 +81,7 @@ export interface ColEx {
 }
 
 export type ComponentType =
+  | 'SOFT_GROUP_BEGIN'
   | 'GSubForm'
   | 'GColorPicker'
   | 'EasyCron'

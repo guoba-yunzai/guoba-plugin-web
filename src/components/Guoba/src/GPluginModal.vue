@@ -7,7 +7,7 @@
           <Description @register="registerDesc" :data="plugin" />
         </a-tab-pane>
         <a-tab-pane v-if="plugin?.hasConfig" tab="配置" key="config">
-          <PluginConfigForm v-if="showConfigForm" ref="configFormRef" :plugin="plugin" />
+          <PluginConfigForm v-if="!plugin?.showInMenu && showConfigForm" ref="configFormRef" :plugin="plugin" />
         </a-tab-pane>
         <a-tab-pane tab="README" key="readme">
           <div v-if="loading"></div>
@@ -54,6 +54,7 @@
   import PluginConfigForm from './components/PluginConfigForm.vue';
   import { sleep } from '/@/utils/common';
   import { parseAuthorLink } from '/@/utils/guoba';
+  import { useGo } from '/@/hooks/web/usePage';
 
   export default defineComponent({
     name: 'GPluginModal',
@@ -70,6 +71,7 @@
       const attrs = useAttrs();
       const { prefixCls } = useDesign('g-plugin-modal');
       const { createMessage: $message, createConfirm } = useMessage();
+      const go = useGo();
 
       // 当前是否正在加载中
       const loading = ref(false);
@@ -135,8 +137,16 @@
       });
 
       watch(activeKey, (val) => {
-        if (val === 'readme' && !readme.value) {
-          getReadme();
+        if (val === 'readme') {
+          if (readme.value) {
+            getReadme();
+          }
+        } else if (val === 'config') {
+          if (plugin.value?.showInMenu) {
+            // 跳转到插件详情页
+            go(`/plugin/@/${plugin.value.name}`);
+            close();
+          }
         }
       });
 

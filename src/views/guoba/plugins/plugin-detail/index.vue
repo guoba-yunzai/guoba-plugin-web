@@ -17,7 +17,7 @@
 
       <template #headerContent>
         <div class="plugin-content">
-          <div class="content-desc">{{ plugin!.description }}</div>
+          <div class="content-desc ellipsis">{{ plugin!.description }}</div>
           <!--          <div style="margin-top: 12px">-->
           <!--            <template v-for="(author, idx) of authorList">-->
           <!--              <a :href="author.link" target="_blank">{{ author.name }}</a>-->
@@ -29,12 +29,16 @@
 
       <template #footer>
         <a-row>
-          <a-col :span="12">
-            <!--            <a-tabs>-->
-            <!--              <a-tab-pane key="config" tab="配置" />-->
-            <!--            </a-tabs>-->
+          <a-col :xxl="22" :xl="22" :lg="20" :md="20" :sm="19" :xs="17">
+            <a-tabs v-if="groupList.length > 0" v-model:activeKey="activeGroupKey">
+              <a-tab-pane :key="group.name" v-for="group of groupList">
+                <template #tab>
+                  <div class="ellipsis" style="max-width: 120px">{{ group.title }}</div>
+                </template>
+              </a-tab-pane>
+            </a-tabs>
           </a-col>
-          <a-col :span="12" style="text-align: right; padding-bottom: 8px">
+          <a-col :xxl="2" :xl="2" :lg="4" :md="4" :sm="5" :xs="7" style="text-align: right; padding-bottom: 8px">
             <a-button type="primary" pre-icon="ant-design:save" @click="onSave">
               <span>保存</span>
             </a-button>
@@ -45,7 +49,7 @@
       <a-row justify="center">
         <a-col :xxl="16" :xl="18" :lg="20" :md="22" :sm="24" :xs="24">
           <a-card>
-            <PluginConfigForm ref="configFormRef" :plugin="plugin!" />
+            <PluginConfigForm ref="configFormRef" soft-grouping v-model:activeGroupKey="activeGroupKey" v-model:softGroupList="groupList" :plugin="plugin!" />
 
             <div style="text-align: center">
               <a-button type="primary" pre-icon="ant-design:save" @click="onSave">
@@ -137,6 +141,11 @@
 
   loadPlugin();
 
+  // 当前激活的分组
+  const activeGroupKey = ref('default');
+  // 分组列表
+  const groupList = ref<{ name: string; title: string }[]>([]);
+
   async function onSave() {
     try {
       loading.value = true;
@@ -174,11 +183,14 @@
     .plugin-content {
       .content-desc {
         width: 100%;
-        // 溢出显示省略号
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
+    }
+
+    .ellipsis {
+      // 溢出显示省略号
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>
