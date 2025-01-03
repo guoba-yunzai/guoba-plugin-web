@@ -6,8 +6,8 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
 import { useV2Route } from '/@/views/guoba/v2/install';
 
-// import.meta.globEager() 直接引入所有的模块 Vite 独有的功能
-const modules = import.meta.globEager('./modules/**/*.ts');
+// import.meta.glob() 直接引入所有的模块 Vite 独有的功能
+const modules = import.meta.glob<Recordable>('./modules/**/*.ts', { eager: true });
 const routeModuleList: AppRouteModule[] = [];
 
 // 加入到路由集合中

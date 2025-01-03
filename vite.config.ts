@@ -53,6 +53,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ],
     },
     server: {
+      // @ts-ignore
       https: false,
       // Listening on all local IPs
       host: true,
@@ -73,6 +74,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
        * Uncomment when minify="minify:'terser'"
        */
       terserOptions: {
+        mangle: false,
         compress: {
           keep_infinity: true,
           drop_console: VITE_DROP_CONSOLE,
@@ -86,6 +88,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
       // Turning off brotliSize display can slightly reduce packaging time
+      // @ts-ignore
       brotliSize: false,
       chunkSizeWarningLimit: 2000,
     },
