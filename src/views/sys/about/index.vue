@@ -20,7 +20,7 @@
   import { Description, DescItem, useDescription } from '/@/components/Description/index';
   import { GITHUB_URL, SITE_URL, DOC_URL } from '/@/settings/siteSetting';
 
-  const { pkg, lastBuildTime } = __APP_INFO__;
+  import { pkg, lastBuildTime } from '/@/utils/appInfo';
 
   const { dependencies, devDependencies, name, version } = pkg;
 

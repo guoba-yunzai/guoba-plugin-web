@@ -39,10 +39,11 @@
   // import LoadGist from './LoadGist.vue';
   import LoadGitee from './LoadGitee.vue';
 
+  import { pkg, lastBuildTime } from '/@/utils/appInfo';
+
   // noinspection JSUnusedGlobalSymbols
   const _components = { PageWrapper, Description, LoadGitee };
 
-  const { pkg, lastBuildTime } = __APP_INFO__;
   const { dependencies, devDependencies, name, version } = pkg;
   const schema: DescItem[] = [];
   const devSchema: DescItem[] = [];
