@@ -132,7 +132,12 @@
                     };
                   }),
                 },
-                { fieldKey, isKeyForm: form.isKeyForm, card: form.card },
+                {
+                  fieldKey,
+                  isKeyForm: form.isKeyForm,
+                  card: form.card,
+                  values: values[key],
+                },
               );
               let _register = keyForm.register!;
               keyForm.register = function (...args) {
