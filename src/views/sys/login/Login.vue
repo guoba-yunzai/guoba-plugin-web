@@ -83,7 +83,7 @@
       background-color: @dark-bg;
 
       &::before {
-        background-image: url(/@/assets/svg/login-bg-dark.svg);
+        background-image: url(/assets/svg/login-bg-dark.svg);
       }
 
       .ant-input,
@@ -129,7 +129,7 @@
       width: 100%;
       height: 100%;
       margin-left: -48%;
-      background-image: url(/@/assets/svg/login-bg.svg);
+      background-image: url(/assets/svg/login-bg.svg);
       background-position: 100%;
       background-repeat: no-repeat;
       background-size: auto 100%;
