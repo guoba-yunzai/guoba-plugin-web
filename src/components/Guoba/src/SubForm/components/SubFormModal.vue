@@ -37,8 +37,8 @@
       title: '子表单',
       width: 800,
       minHeight: 100,
-      onOk: onOk,
       ...props.modalProps,
+      onOk: onOk,
     };
   });
 

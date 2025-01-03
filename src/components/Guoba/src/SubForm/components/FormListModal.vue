@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="listModalProps" @register="registerListModal">
+  <BasicModal v-bind="getListModalProps" @register="registerListModal">
     <div style="padding: 10px">
       <a-empty v-if="modelList.length === 0" description="暂无数据，请点击下方的“新增”按钮添加" />
 
@@ -33,6 +33,11 @@
       type: Object as PropType<Recordable>,
       default: () => ({}),
     },
+    // listModalProps
+    listModalProps: {
+      type: Object as PropType<Recordable>,
+      default: () => ({}),
+    },
   });
   const emit = defineEmits(['register', 'ok']);
 
@@ -41,11 +46,12 @@
   const [registerListModal, listModal] = useModalInner(open);
   const [registerFormModal, formModal] = useModal();
 
-  const listModalProps = computed(() => {
+  const getListModalProps = computed(() => {
     return {
       title: `填写列表`,
       width: 800,
       minHeight: 400,
+      ...props.listModalProps,
       onOk: onOk,
     };
   });

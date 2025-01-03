@@ -6,7 +6,7 @@
     <div v-else class="single-mode" @click="onOpenSingleForm">
       <SettingCard :models="singleValue" />
     </div>
-    <FormListModal :modalProps="modalProps" @register="registerListModal" @ok="onListModalOk" />
+    <FormListModal :modalProps="modalProps" :listModalProps="listModalProps" @register="registerListModal" @ok="onListModalOk" />
     <SubFormModal :modalProps="modalProps" @register="registerFormModal" @ok="onFormModalOk" />
   </div>
 </template>
@@ -37,6 +37,11 @@
     alwaysArray: propTypes.bool.def(false),
     // formModalProps
     modalProps: {
+      type: Object as PropType<Recordable>,
+      default: () => ({}),
+    },
+    // listModalProps
+    listModalProps: {
       type: Object as PropType<Recordable>,
       default: () => ({}),
     },
