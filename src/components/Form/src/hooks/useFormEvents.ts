@@ -154,6 +154,8 @@ export function useFormEvents({ emit, getProps, formModel, getSchema, defaultVal
     schemaRef.value = schemaList;
   }
 
+  const DividerComponent = ['Divider', 'SOFT_GROUP_BEGIN'];
+
   async function resetSchema(data: Partial<FormSchema> | Partial<FormSchema>[]) {
     let updateData: Partial<FormSchema>[] = [];
     if (isObject(data)) {
@@ -163,7 +165,7 @@ export function useFormEvents({ emit, getProps, formModel, getSchema, defaultVal
       updateData = [...data];
     }
 
-    const hasField = updateData.every((item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field));
+    const hasField = updateData.every((item) => DividerComponent.includes(item.component!) || (Reflect.has(item, 'field') && item.field));
 
     if (!hasField) {
       error('All children of the form Schema array that need to be updated must contain the `field` field');
@@ -181,7 +183,7 @@ export function useFormEvents({ emit, getProps, formModel, getSchema, defaultVal
       updateData = [...data];
     }
 
-    const hasField = updateData.every((item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field));
+    const hasField = updateData.every((item) => DividerComponent.includes(item.component!) || (Reflect.has(item, 'field') && item.field));
 
     if (!hasField) {
       error('All children of the form Schema array that need to be updated must contain the `field` field');
