@@ -117,7 +117,9 @@
                   break;
                 }
               }
-              form.actions?.setFieldsValue(formValues);
+              if (formValues[fieldKey]) {
+                form.actions?.setFieldsValue(formValues[fieldKey]);
+              }
             };
             // console.log({ keys, newKeys, removeKeys, oldKeys });
             let newForm = newKeys.map((key) => {
@@ -125,12 +127,7 @@
               let keyForm = useNormalForm(
                 {
                   key: replaceFn(key),
-                  schemas: form.card.schemas.map((s) => {
-                    return {
-                      ...s,
-                      field: fieldKey + '.' + s.field,
-                    };
-                  }),
+                  schemas: form.card.schemas,
                 },
                 {
                   fieldKey,
@@ -196,6 +193,7 @@
               }
             }
           }
+          values = { [form.fieldKey!]: values };
           await saveConfigData(configKey, values);
           createMessage.success('保存成功~');
           await onRedo(form);
