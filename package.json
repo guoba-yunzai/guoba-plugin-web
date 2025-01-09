@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": {
     "name": "zolay",
-    "email": "im@sjlei.com",
+    "email": "moe@zozo.me",
     "url": "http://github.com/sjlei"
   },
   "scripts": {
@@ -21,7 +21,7 @@
     "log": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "clean:cache": "rimraf node_modules/.cache/ && rimraf node_modules/.vite",
     "clean:lib": "rimraf node_modules",
-    "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
+    "lint:eslint": "eslint --cache --max-warnings 0  \"{src}/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged",
@@ -52,7 +52,6 @@
     "echarts": "^5.3.2",
     "intro.js": "^5.1.0",
     "lodash-es": "^4.17.21",
-    "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^6.2.0",
     "pinia": "2.0.12",
@@ -86,7 +85,6 @@
     "@types/inquirer": "^8.2.1",
     "@types/intro.js": "^3.0.2",
     "@types/lodash-es": "^4.17.6",
-    "@types/mockjs": "^1.0.6",
     "@types/node": "^17.0.25",
     "@types/nprogress": "^0.2.0",
     "@types/qrcode": "^1.4.2",
@@ -138,7 +136,6 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-mkcert": "^1.17.6",
-    "vite-plugin-mock": "^2.9.6",
     "vite-plugin-purge-icons": "^0.10.0",
     "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-style-import": "^2.0.0",
