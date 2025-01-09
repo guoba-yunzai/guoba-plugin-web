@@ -69,7 +69,6 @@
     "vue-picture-cropper": "^0.5.1",
     "vue-router": "^4.0.14",
     "vue-types": "^4.1.1",
-    "xlsx": "^0.18.5",
     "cron-parser": "^4.6.0",
     "clamp": "^1.0.1",
     "tinycolor2": "^1.1.2"
