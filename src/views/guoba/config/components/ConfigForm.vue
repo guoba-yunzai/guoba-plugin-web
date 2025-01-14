@@ -211,10 +211,11 @@
         await onSubmit({
           ...form,
           key: key,
+          fieldKey: 'INTEGER__' + key,
           // @ts-ignored
           actions: {
             ...form.actions,
-            validate: async () => ({ ['INTEGER__' + key]: { __place__: 0 } }),
+            validate: async () => ({ __place__: 0 }),
           },
         });
       }
