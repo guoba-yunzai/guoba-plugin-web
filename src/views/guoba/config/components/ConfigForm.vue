@@ -193,7 +193,9 @@
               }
             }
           }
-          values = { [form.fieldKey!]: values };
+          if (form.fieldKey) {
+            values = { [form.fieldKey]: values };
+          }
           await saveConfigData(configKey, values);
           createMessage.success('保存成功~');
           await onRedo(form);
