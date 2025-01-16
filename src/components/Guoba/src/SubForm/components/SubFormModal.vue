@@ -37,6 +37,7 @@
       title: '子表单',
       width: 800,
       minHeight: 100,
+      destroyOnClose: true,
       ...props.modalProps,
       onOk: onOk,
     };
