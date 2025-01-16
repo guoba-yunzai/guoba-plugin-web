@@ -12,6 +12,12 @@
     </template>
 
     <BasicTable @register="registerTable" :searchInfo="searchInfo" :rowSelection="rowSelection">
+      <template #formAdvanceAfter>
+        <a-button type="primary" preIcon="ant-design:plus" @click="onInstall">
+          <span>安装自定义插件</span>
+        </a-button>
+      </template>
+
       <template #bodyCell="{ column, record }">
         <TableAction
           v-if="column.key === 'action'"
@@ -29,8 +35,6 @@
       </template>
     </BasicTable>
     <GPluginModal @register="registerModal" @success="handleSuccess" />
-
-    <a-button type="primary" shape="circle" preIcon="ant-design:plus" class="float-button" @click="onInstall" />
   </PageWrapper>
 </template>
 
@@ -322,12 +326,4 @@
 </script>
 
 <style scoped>
-  .float-button {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    width: 56px;
-    height: 56px;
-    z-index: 1000;
-  }
 </style>
