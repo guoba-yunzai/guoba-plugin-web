@@ -8,7 +8,7 @@
   import type { Plugin } from '/#/guoba';
   import type { FormSchemas } from '/@/components/Form';
   import { BasicForm, useForm } from '/@/components/Form';
-  import { computed, defineComponent, PropType, ref } from 'vue';
+  import { computed, defineComponent, PropType, ref, provide } from 'vue';
   import lodash from 'lodash-es';
   import { defHttp } from '/@/utils/http/axios';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -154,6 +154,8 @@
           createErrorModal({ title: '错误', content: message || '保存失败！' });
         }
       }
+
+      provide('doFormSubmit', savePluginConfigData);
 
       return {
         registerForm: (...args) => {

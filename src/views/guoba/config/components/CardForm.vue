@@ -19,7 +19,7 @@
     <a-spin :spinning="form.loading">
       <BasicForm @register="form.register" />
       <div style="text-align: center">
-        <a-button type="primary" pre-icon="ant-design:save" @click="() => emit('submit', form)">
+        <a-button type="primary" pre-icon="ant-design:save" @click="onSubmit">
           <span>保存</span>
         </a-button>
         <template v-if="isDefault">
@@ -43,7 +43,7 @@
 
 <script lang="ts">
   import type { PropType } from 'vue';
-  import { computed, defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref, provide } from 'vue';
   import type { IConfigCard, FormType } from '../types';
   import { propTypes } from '/@/utils/propTypes';
   import { BasicForm } from '/@/components/Form';
@@ -104,6 +104,12 @@
         emit('delCard', { form: props.form });
       }
 
+      function onSubmit() {
+        emit('submit', props.form);
+      }
+
+      provide('doFormSubmit', onSubmit);
+
       return {
         emit,
         prefixCls,
@@ -112,6 +118,7 @@
         addBtnText,
 
         onClickTitle,
+        onSubmit,
         onAddCard,
         onRemoveCard,
       };

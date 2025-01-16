@@ -6,7 +6,7 @@
     <div v-else class="single-mode" @click="onOpenSingleForm">
       <SettingCard :models="singleValue" />
     </div>
-    <FormListModal :modalProps="modalProps" :listModalProps="listModalProps" @register="registerListModal" @ok="onListModalOk" />
+    <FormListModal :loading="loading" :modalProps="modalProps" :listModalProps="listModalProps" @register="registerListModal" @ok="onListModalOk" @save="onListModalSave" />
     <SubFormModal :modalProps="modalProps" @register="registerFormModal" @ok="onFormModalOk" />
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script setup lang="ts">
   import type { PropType } from 'vue';
   import type { FormSchemas } from '/@/components/Form';
-  import { ref, computed, watch, provide, nextTick } from 'vue';
+  import { ref, computed, watch, provide, nextTick, inject } from 'vue';
   import { propTypes } from '/@/utils/propTypes';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useModal } from '/@/components/Modal';
@@ -50,6 +50,7 @@
   const { prefixCls } = useDesign('g-sub-form');
 
   const inputRef = ref();
+  const loading = ref(false);
 
   const schemasRef = computed(() => props.schemas);
   const getAlwaysArray = computed(() => props.alwaysArray || props.multiple);
@@ -103,6 +104,19 @@
 
   function onListModalOk(list) {
     emit('change', list);
+  }
+
+  const doFormSubmit = inject<() => Promise<any>>('doFormSubmit', async () => alert('如果看到这个提示，说明没有正确提供 doSubmit'));
+
+  async function onListModalSave(list) {
+    try {
+      loading.value = true;
+      onListModalOk(list);
+      await nextTick();
+      await doFormSubmit();
+    } finally {
+      loading.value = false;
+    }
   }
 
   const [registerFormModal, formModal] = useModal();

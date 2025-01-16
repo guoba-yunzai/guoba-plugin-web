@@ -1,19 +1,20 @@
 <template>
   <BasicModal v-bind="getListModalProps" @register="registerListModal">
-    <div style="padding: 10px">
+    <a-spin :spinning="loading" style="padding: 10px">
       <a-empty v-if="modelList.length === 0" description="暂无数据，请点击下方的“新增”按钮添加" />
 
       <template v-for="(models, idx) of modelList">
         <SettingCard :models="models" allowRemove @click="onEdit(models, idx)" @remove="onRemove(models, idx)" />
       </template>
-    </div>
+    </a-spin>
     <template #footer>
       <a-row type="flex" justify="space-between">
         <a-col>
-          <a-button type="primary" preIcon="ant-design:plus" @click="onAdd">新增</a-button>
+          <a-button type="primary" preIcon="ant-design:plus" :loading="loading" @click="onAdd">新增</a-button>
         </a-col>
         <a-col>
-          <a-button @click="onCancel">关闭</a-button>
+          <a-button :loading="loading" @click="onCancel">关闭</a-button>
+          <a-button type="primary" preIcon="ant-design:save" :loading="loading" @click="onSave">保存</a-button>
         </a-col>
       </a-row>
     </template>
@@ -22,12 +23,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, inject, ref, PropType } from 'vue';
+  import { computed, ref, PropType } from 'vue';
   import { BasicModal, useModalInner, useModal } from '/@/components/Modal';
   import SettingCard from './SettingCard.vue';
   import SubFormModal from './SubFormModal.vue';
 
   const props = defineProps({
+    loading: {
+      type: Boolean,
+      default: false,
+    },
     // formModalProps
     modalProps: {
       type: Object as PropType<Recordable>,
@@ -39,7 +44,7 @@
       default: () => ({}),
     },
   });
-  const emit = defineEmits(['register', 'ok']);
+  const emit = defineEmits(['register', 'ok', 'save']);
 
   const modelList = ref<Recordable[]>([]);
 
@@ -79,6 +84,10 @@
   async function onOk() {
     emit('ok', modelList.value);
     listModal.closeModal();
+  }
+
+  function onSave() {
+    emit('save', modelList.value);
   }
 
   function onCancel() {
