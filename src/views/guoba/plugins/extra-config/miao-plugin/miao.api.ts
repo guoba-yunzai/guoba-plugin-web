@@ -143,14 +143,17 @@ export function getThemeList() {
 }
 
 // 获取皮肤配置
-export function getThemeConfig(themeName: string) {
-  return defHttp.get(
+export async function getThemeConfig(themeName: string) {
+  const cfg = await defHttp.get(
     {
       url: MiaoApi.themeConfig,
       params: { themeName: themeName || 'default' },
     },
     { errorMessageMode: 'modal' },
   );
+  // 补充默认值
+  cfg.descShadow = cfg.descShadow ?? 'none';
+  return cfg;
 }
 
 // 保存皮肤配置

@@ -99,6 +99,12 @@ export function useThemeConfigSchemas(expand?: Partial<FormSchema>) {
       bottomHelpMessage: '默认"none"，填写示例："0px 0px 1px rgba(6, 21, 31, .9)"',
     }),
     merge({
+      field: 'descShadow',
+      label: '描述文字阴影',
+      component: 'Input',
+      bottomHelpMessage: '默认"none"，填写示例："0px 0px 1px rgba(6, 21, 31, .9)"',
+    }),
+    merge({
       field: 'descColor',
       label: '描述文字颜色',
       component: 'GColorPicker',

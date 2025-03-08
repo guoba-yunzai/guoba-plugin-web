@@ -35,6 +35,9 @@ export interface ThemeConfigType {
   // 主文字阴影： 横向距离 垂直距离 阴影大小 阴影颜色
   // fontShadow: '0px 0px 1px rgba(6, 21, 31, .9)',
   fontShadow: 'none' | string;
+  // 描述文字阴影： 横向距离 垂直距离 阴影大小 阴影颜色
+  // descShadow: '0px 0px 1px rgba(6, 21, 31, .9)',
+  descShadow: 'none' | string;
   // 描述文字颜色
   descColor: string;
 
